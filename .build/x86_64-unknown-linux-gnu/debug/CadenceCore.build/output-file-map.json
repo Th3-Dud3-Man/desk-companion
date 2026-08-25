@@ -1,0 +1,83 @@
+{
+  "": {
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/master.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Model/Enums.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Enums.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Enums.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Enums~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Enums.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Model/Money.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Money.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Money.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Money~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Money.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Storage/CadenceStore.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceStore.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceStore.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceStore~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceStore.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Storage/CalendarRepository.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarRepository.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarRepository.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarRepository~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarRepository.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Storage/ConsultationRepository.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ConsultationRepository.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ConsultationRepository.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ConsultationRepository~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ConsultationRepository.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Storage/PatientRepository.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientRepository.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientRepository.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientRepository~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientRepository.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Storage/PaymentRepository.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PaymentRepository.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PaymentRepository.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PaymentRepository~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PaymentRepository.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Storage/SQLite.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/SQLite.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/SQLite.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/SQLite~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/SQLite.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Storage/Schema.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Schema.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Schema.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Schema~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Schema.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Storage/Settings.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Settings.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Settings.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Settings~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Settings.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Support/CalendarSupport.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSupport.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSupport.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSupport~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSupport.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Support/TextNormaliser.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/TextNormaliser.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/TextNormaliser.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/TextNormaliser~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/TextNormaliser.swiftdeps"
+  }
+}

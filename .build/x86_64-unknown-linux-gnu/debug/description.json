@@ -1,0 +1,903 @@
+{
+  "builtTestProducts" : [
+    {
+      "binaryPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.xctest",
+      "packagePath" : "/home/user/desk-companion",
+      "productName" : "CadencePackageTests"
+    }
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+    "CadencePackageDiscoveredTests"
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.CadenceCore-x86_64-unknown-linux-gnu-debug.module" : {
+      "executable" : "/opt/swift/usr/bin/swiftc",
+      "fileList" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/sources",
+      "importPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Model/Enums.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Model/Money.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/CadenceStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/CalendarRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/ConsultationRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/PatientRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/PaymentRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/SQLite.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/Schema.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/Settings.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Support/CalendarSupport.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Support/TextNormaliser.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/swift-version-6A52383ED409C6A7.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "CadenceCore",
+      "moduleOutputPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCore.swiftmodule",
+      "objects" : [
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Enums.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Money.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceStore.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarRepository.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ConsultationRepository.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientRepository.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PaymentRepository.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/SQLite.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Schema.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Settings.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSupport.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/TextNormaliser.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "x86_64-unknown-linux-gnu",
+        "-enable-batch-mode",
+        "-index-store-path",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j4",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-Xcc",
+        "-fmodule-map-file=/home/user/desk-companion/Sources/CSQLite/module.modulemap",
+        "-module-cache-path",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-swift-version",
+        "5",
+        "-g",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "desk_companion",
+        "-Xcc",
+        "-fno-omit-frame-pointer"
+      ],
+      "outputFileMapPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Enums.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Money.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceStore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarRepository.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ConsultationRepository.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientRepository.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PaymentRepository.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/SQLite.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Schema.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Settings.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSupport.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/TextNormaliser.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCore.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Model/Enums.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Model/Money.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Storage/CadenceStore.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Storage/CalendarRepository.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Storage/ConsultationRepository.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Storage/PatientRepository.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Storage/PaymentRepository.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Storage/SQLite.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Storage/Schema.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Storage/Settings.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Support/CalendarSupport.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Support/TextNormaliser.swift"
+      ],
+      "tempsPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.CadenceCoreTests-x86_64-unknown-linux-gnu-debug.module" : {
+      "executable" : "/opt/swift/usr/bin/swiftc",
+      "fileList" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/sources",
+      "importPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/PlaceholderTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/swift-version-6A52383ED409C6A7.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCore.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "CadenceCoreTests",
+      "moduleOutputPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCoreTests.swiftmodule",
+      "objects" : [
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "x86_64-unknown-linux-gnu",
+        "-enable-batch-mode",
+        "-index-store-path",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j4",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-Xcc",
+        "-fmodule-map-file=/home/user/desk-companion/Sources/CSQLite/module.modulemap",
+        "-module-cache-path",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-swift-version",
+        "5",
+        "-g",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "desk_companion",
+        "-Xcc",
+        "-fno-omit-frame-pointer"
+      ],
+      "outputFileMapPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCoreTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/home/user/desk-companion/Tests/CadenceCoreTests/PlaceholderTests.swift"
+      ],
+      "tempsPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.CadencePackageDiscoveredTests-x86_64-unknown-linux-gnu-debug.module" : {
+      "executable" : "/opt/swift/usr/bin/swiftc",
+      "fileList" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/sources",
+      "importPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/CadenceCoreTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/all-discovered-tests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/swift-version-6A52383ED409C6A7.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCoreTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "CadencePackageDiscoveredTests",
+      "moduleOutputPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageDiscoveredTests.swiftmodule",
+      "objects" : [
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/CadenceCoreTests.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/all-discovered-tests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "x86_64-unknown-linux-gnu",
+        "-enable-batch-mode",
+        "-index-store-path",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j4",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-Xcc",
+        "-fmodule-map-file=/home/user/desk-companion/Sources/CSQLite/module.modulemap",
+        "-module-cache-path",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-g",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "desk_companion",
+        "-Xcc",
+        "-fno-omit-frame-pointer"
+      ],
+      "outputFileMapPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/CadenceCoreTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/all-discovered-tests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageDiscoveredTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/CadenceCoreTests.swift",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/all-discovered-tests.swift"
+      ],
+      "tempsPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.CadencePackageTests-x86_64-unknown-linux-gnu-debug.module" : {
+      "executable" : "/opt/swift/usr/bin/swiftc",
+      "fileList" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/sources",
+      "importPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.derived/runner.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/swift-version-6A52383ED409C6A7.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCoreTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageDiscoveredTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "CadencePackageTests",
+      "moduleOutputPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageTests.swiftmodule",
+      "objects" : [
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/runner.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "x86_64-unknown-linux-gnu",
+        "-enable-batch-mode",
+        "-index-store-path",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j4",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-Xcc",
+        "-fmodule-map-file=/home/user/desk-companion/Sources/CSQLite/module.modulemap",
+        "-module-cache-path",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-g",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "desk_companion",
+        "-Xcc",
+        "-fno-omit-frame-pointer"
+      ],
+      "outputFileMapPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/runner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.derived/runner.swift"
+      ],
+      "tempsPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "CadenceCore" : [
+      "/opt/swift/usr/bin/swiftc",
+      "-module-name",
+      "CadenceCore",
+      "-package-name",
+      "desk_companion",
+      "-incremental",
+      "-c",
+      "/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Model/Enums.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Model/Money.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Storage/CadenceStore.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Storage/CalendarRepository.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Storage/ConsultationRepository.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Storage/PatientRepository.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Storage/PaymentRepository.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Storage/SQLite.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Storage/Schema.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Storage/Settings.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Support/CalendarSupport.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Support/TextNormaliser.swift",
+      "-I",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules",
+      "-target",
+      "x86_64-unknown-linux-gnu",
+      "-enable-batch-mode",
+      "-index-store-path",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j4",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-Xcc",
+      "-fmodule-map-file=/home/user/desk-companion/Sources/CSQLite/module.modulemap",
+      "-module-cache-path",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-swift-version",
+      "5",
+      "-g",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "desk_companion",
+      "-Xcc",
+      "-fno-omit-frame-pointer",
+      "-driver-use-frontend-path",
+      "/opt/swift/usr/bin/swiftc"
+    ],
+    "CadenceCoreTests" : [
+      "/opt/swift/usr/bin/swiftc",
+      "-module-name",
+      "CadenceCoreTests",
+      "-package-name",
+      "desk_companion",
+      "-incremental",
+      "-c",
+      "/home/user/desk-companion/Tests/CadenceCoreTests/PlaceholderTests.swift",
+      "-I",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules",
+      "-target",
+      "x86_64-unknown-linux-gnu",
+      "-enable-batch-mode",
+      "-index-store-path",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j4",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-Xcc",
+      "-fmodule-map-file=/home/user/desk-companion/Sources/CSQLite/module.modulemap",
+      "-module-cache-path",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-swift-version",
+      "5",
+      "-g",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "desk_companion",
+      "-Xcc",
+      "-fno-omit-frame-pointer",
+      "-driver-use-frontend-path",
+      "/opt/swift/usr/bin/swiftc"
+    ],
+    "CadencePackageDiscoveredTests" : [
+      "/opt/swift/usr/bin/swiftc",
+      "-module-name",
+      "CadencePackageDiscoveredTests",
+      "-package-name",
+      "desk_companion",
+      "-incremental",
+      "-c",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/CadenceCoreTests.swift",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/all-discovered-tests.swift",
+      "-I",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules",
+      "-target",
+      "x86_64-unknown-linux-gnu",
+      "-enable-batch-mode",
+      "-index-store-path",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j4",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-Xcc",
+      "-fmodule-map-file=/home/user/desk-companion/Sources/CSQLite/module.modulemap",
+      "-module-cache-path",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-g",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "desk_companion",
+      "-Xcc",
+      "-fno-omit-frame-pointer",
+      "-driver-use-frontend-path",
+      "/opt/swift/usr/bin/swiftc"
+    ],
+    "CadencePackageTests" : [
+      "/opt/swift/usr/bin/swiftc",
+      "-module-name",
+      "CadencePackageTests",
+      "-package-name",
+      "desk_companion",
+      "-incremental",
+      "-c",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.derived/runner.swift",
+      "-I",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules",
+      "-target",
+      "x86_64-unknown-linux-gnu",
+      "-enable-batch-mode",
+      "-index-store-path",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j4",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-Xcc",
+      "-fmodule-map-file=/home/user/desk-companion/Sources/CSQLite/module.modulemap",
+      "-module-cache-path",
+      "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-g",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "desk_companion",
+      "-Xcc",
+      "-fno-omit-frame-pointer",
+      "-driver-use-frontend-path",
+      "/opt/swift/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "CadenceCore" : [
+      "CSQLite"
+    ],
+    "CadenceCoreTests" : [
+      "CadenceCore",
+      "CSQLite"
+    ],
+    "CadencePackageDiscoveredTests" : [
+      "CadenceCoreTests",
+      "CadenceCore",
+      "CSQLite"
+    ],
+    "CadencePackageTests" : [
+      "CadencePackageDiscoveredTests",
+      "CadenceCoreTests",
+      "CadenceCore",
+      "CSQLite"
+    ]
+  },
+  "testDiscoveryCommands" : {
+    "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/all-discovered-tests.swift" : {
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swift.o"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/CadenceCoreTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/all-discovered-tests.swift"
+        }
+      ]
+    }
+  },
+  "testEntryPointCommands" : {
+    "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.derived/runner.swift" : {
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageDiscoveredTests.swiftmodule"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.derived/runner.swift"
+        }
+      ]
+    }
+  },
+  "writeCommands" : {
+    "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Model/Enums.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Model/Money.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/CadenceStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/CalendarRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/ConsultationRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/PatientRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/PaymentRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/SQLite.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/Schema.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Storage/Settings.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Support/CalendarSupport.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Support/TextNormaliser.swift"
+        }
+      ],
+      "outputFilePath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/sources"
+    },
+    "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/PlaceholderTests.swift"
+        }
+      ],
+      "outputFilePath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/sources"
+    },
+    "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/CadenceCoreTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/all-discovered-tests.swift"
+        }
+      ],
+      "outputFilePath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/sources"
+    },
+    "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.derived/runner.swift"
+        }
+      ],
+      "outputFilePath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/sources"
+    },
+    "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceCore.swiftmodule.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceStore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarRepository.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSupport.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ConsultationRepository.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Enums.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Money.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientRepository.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PaymentRepository.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/SQLite.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Schema.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Settings.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/TextNormaliser.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CadenceCoreTests.swiftmodule.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/CadenceCoreTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/CadencePackageDiscoveredTests.swiftmodule.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/all-discovered-tests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/CadencePackageTests.swiftmodule.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/runner.swift.o"
+        }
+      ],
+      "outputFilePath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.product/Objects.LinkFileList"
+    },
+    "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/swift-version-6A52383ED409C6A7.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/opt/swift/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/swift-version-6A52383ED409C6A7.txt"
+    }
+  }
+}

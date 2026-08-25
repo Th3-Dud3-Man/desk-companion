@@ -1,0 +1,167 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "CadenceCore-x86_64-unknown-linux-gnu-debug.module": ["<CadenceCore-x86_64-unknown-linux-gnu-debug.module>"]
+  "CadenceCoreTests-x86_64-unknown-linux-gnu-debug.module": ["<CadenceCoreTests-x86_64-unknown-linux-gnu-debug.module>"]
+  "CadencePackageDiscoveredTests-x86_64-unknown-linux-gnu-debug.module": ["<CadencePackageDiscoveredTests-x86_64-unknown-linux-gnu-debug.module>"]
+  "CadencePackageTests-x86_64-unknown-linux-gnu-debug.module": ["<CadencePackageTests-x86_64-unknown-linux-gnu-debug.module>"]
+  "CadencePackageTests-x86_64-unknown-linux-gnu-debug.test": ["<CadencePackageTests-x86_64-unknown-linux-gnu-debug.test>"]
+  "PackageStructure": ["<PackageStructure>"]
+  "main": ["<CadenceCore-x86_64-unknown-linux-gnu-debug.module>"]
+  "test": ["<CadenceCore-x86_64-unknown-linux-gnu-debug.module>","<CadenceCoreTests-x86_64-unknown-linux-gnu-debug.module>","<CadencePackageTests-x86_64-unknown-linux-gnu-debug.test>"]
+default: "main"
+nodes:
+  "/home/user/desk-companion/Sources/CSQLite/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+  "/home/user/desk-companion/Sources/CadenceCore/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+  "/home/user/desk-companion/Tests/CadenceCoreTests/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+commands:
+  "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceCore.swiftmodule.o":
+    tool: shell
+    inputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCore.swiftmodule"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceCore.swiftmodule.o"]
+    description: "Wrapping AST for CadenceCore for debugging"
+    args: ["/opt/swift/usr/bin/swiftc","-modulewrap","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCore.swiftmodule","-o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceCore.swiftmodule.o","-target","x86_64-unknown-linux-gnu"]
+
+  "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift","/home/user/desk-companion/Sources/CadenceCore/Model/Enums.swift","/home/user/desk-companion/Sources/CadenceCore/Model/Money.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/CadenceStore.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/CalendarRepository.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/ConsultationRepository.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/PatientRepository.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/PaymentRepository.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/SQLite.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/Schema.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/Settings.swift","/home/user/desk-companion/Sources/CadenceCore/Support/CalendarSupport.swift","/home/user/desk-companion/Sources/CadenceCore/Support/TextNormaliser.swift"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/sources"]
+    description: "Write auxiliary file /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/sources"
+
+  "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CadenceCoreTests.swiftmodule.o":
+    tool: shell
+    inputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCoreTests.swiftmodule"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CadenceCoreTests.swiftmodule.o"]
+    description: "Wrapping AST for CadenceCoreTests for debugging"
+    args: ["/opt/swift/usr/bin/swiftc","-modulewrap","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCoreTests.swiftmodule","-o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CadenceCoreTests.swiftmodule.o","-target","x86_64-unknown-linux-gnu"]
+
+  "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/home/user/desk-companion/Tests/CadenceCoreTests/PlaceholderTests.swift"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/sources"]
+    description: "Write auxiliary file /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/sources"
+
+  "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/CadencePackageDiscoveredTests.swiftmodule.o":
+    tool: shell
+    inputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageDiscoveredTests.swiftmodule"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/CadencePackageDiscoveredTests.swiftmodule.o"]
+    description: "Wrapping AST for CadencePackageDiscoveredTests for debugging"
+    args: ["/opt/swift/usr/bin/swiftc","-modulewrap","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageDiscoveredTests.swiftmodule","-o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/CadencePackageDiscoveredTests.swiftmodule.o","-target","x86_64-unknown-linux-gnu"]
+
+  "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/CadenceCoreTests.swift","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/all-discovered-tests.swift"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/sources"]
+    description: "Write auxiliary file /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/sources"
+
+  "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/all-discovered-tests.swift":
+    tool: test-discovery-tool
+    inputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swift.o"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/CadenceCoreTests.swift","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/all-discovered-tests.swift"]
+
+  "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/CadencePackageTests.swiftmodule.o":
+    tool: shell
+    inputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageTests.swiftmodule"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/CadencePackageTests.swiftmodule.o"]
+    description: "Wrapping AST for CadencePackageTests for debugging"
+    args: ["/opt/swift/usr/bin/swiftc","-modulewrap","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageTests.swiftmodule","-o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/CadencePackageTests.swiftmodule.o","-target","x86_64-unknown-linux-gnu"]
+
+  "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.derived/runner.swift"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/sources"]
+    description: "Write auxiliary file /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/sources"
+
+  "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.derived/runner.swift":
+    tool: test-entry-point-tool
+    inputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageDiscoveredTests.swiftmodule"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.derived/runner.swift"]
+
+  "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.product/Objects.LinkFileList":
+    tool: write-auxiliary-file
+    inputs: ["<link-file-list>","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceCore.swiftmodule.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceStore.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSupport.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ConsultationRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Enums.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Money.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PaymentRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/SQLite.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Schema.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Settings.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/TextNormaliser.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CadenceCoreTests.swiftmodule.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/CadenceCoreTests.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/CadencePackageDiscoveredTests.swiftmodule.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/all-discovered-tests.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/CadencePackageTests.swiftmodule.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/runner.swift.o"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.product/Objects.LinkFileList"
+
+  "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/swift-version-6A52383ED409C6A7.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/opt/swift/usr/bin/swiftc"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/swift-version-6A52383ED409C6A7.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/swift-version-6A52383ED409C6A7.txt"
+
+  "<CadenceCore-x86_64-unknown-linux-gnu-debug.module>":
+    tool: phony
+    inputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Enums.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Money.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceStore.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ConsultationRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PaymentRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/SQLite.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Schema.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Settings.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSupport.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/TextNormaliser.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCore.swiftmodule"]
+    outputs: ["<CadenceCore-x86_64-unknown-linux-gnu-debug.module>"]
+
+  "<CadenceCoreTests-x86_64-unknown-linux-gnu-debug.module>":
+    tool: phony
+    inputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCoreTests.swiftmodule"]
+    outputs: ["<CadenceCoreTests-x86_64-unknown-linux-gnu-debug.module>"]
+
+  "<CadencePackageDiscoveredTests-x86_64-unknown-linux-gnu-debug.module>":
+    tool: phony
+    inputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/CadenceCoreTests.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/all-discovered-tests.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageDiscoveredTests.swiftmodule"]
+    outputs: ["<CadencePackageDiscoveredTests-x86_64-unknown-linux-gnu-debug.module>"]
+
+  "<CadencePackageTests-x86_64-unknown-linux-gnu-debug.module>":
+    tool: phony
+    inputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/runner.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageTests.swiftmodule"]
+    outputs: ["<CadencePackageTests-x86_64-unknown-linux-gnu-debug.module>"]
+
+  "<CadencePackageTests-x86_64-unknown-linux-gnu-debug.test>":
+    tool: phony
+    inputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.xctest"]
+    outputs: ["<CadencePackageTests-x86_64-unknown-linux-gnu-debug.test>"]
+
+  "C.CadenceCore-x86_64-unknown-linux-gnu-debug.module":
+    tool: shell
+    inputs: ["/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift","/home/user/desk-companion/Sources/CadenceCore/Model/Enums.swift","/home/user/desk-companion/Sources/CadenceCore/Model/Money.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/CadenceStore.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/CalendarRepository.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/ConsultationRepository.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/PatientRepository.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/PaymentRepository.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/SQLite.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/Schema.swift","/home/user/desk-companion/Sources/CadenceCore/Storage/Settings.swift","/home/user/desk-companion/Sources/CadenceCore/Support/CalendarSupport.swift","/home/user/desk-companion/Sources/CadenceCore/Support/TextNormaliser.swift","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/swift-version-6A52383ED409C6A7.txt","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/sources"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Enums.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Money.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceStore.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ConsultationRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PaymentRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/SQLite.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Schema.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Settings.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSupport.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/TextNormaliser.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCore.swiftmodule"]
+    description: "Compiling Swift Module 'CadenceCore' (13 sources)"
+    args: ["/opt/swift/usr/bin/swiftc","-module-name","CadenceCore","-emit-dependencies","-emit-module","-emit-module-path","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCore.swiftmodule","-output-file-map","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/output-file-map.json","-parse-as-library","-incremental","-c","@/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/sources","-I","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules","-target","x86_64-unknown-linux-gnu","-enable-batch-mode","-index-store-path","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/index/store","-Onone","-enable-testing","-j4","-DSWIFT_PACKAGE","-DDEBUG","-Xcc","-fmodule-map-file=/home/user/desk-companion/Sources/CSQLite/module.modulemap","-module-cache-path","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/ModuleCache","-parseable-output","-parse-as-library","-swift-version","5","-g","-Xcc","-fPIC","-Xcc","-g","-package-name","desk_companion","-Xcc","-fno-omit-frame-pointer"]
+
+  "C.CadenceCoreTests-x86_64-unknown-linux-gnu-debug.module":
+    tool: shell
+    inputs: ["/home/user/desk-companion/Tests/CadenceCoreTests/PlaceholderTests.swift","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/swift-version-6A52383ED409C6A7.txt","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCore.swiftmodule","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/sources"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCoreTests.swiftmodule"]
+    description: "Compiling Swift Module 'CadenceCoreTests' (1 sources)"
+    args: ["/opt/swift/usr/bin/swiftc","-module-name","CadenceCoreTests","-emit-dependencies","-emit-module","-emit-module-path","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCoreTests.swiftmodule","-output-file-map","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/output-file-map.json","-parse-as-library","-incremental","-c","@/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/sources","-I","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules","-target","x86_64-unknown-linux-gnu","-enable-batch-mode","-index-store-path","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/index/store","-Onone","-enable-testing","-j4","-DSWIFT_PACKAGE","-DDEBUG","-Xcc","-fmodule-map-file=/home/user/desk-companion/Sources/CSQLite/module.modulemap","-module-cache-path","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/ModuleCache","-parseable-output","-parse-as-library","-swift-version","5","-g","-Xcc","-fPIC","-Xcc","-g","-package-name","desk_companion","-Xcc","-fno-omit-frame-pointer"]
+
+  "C.CadencePackageDiscoveredTests-x86_64-unknown-linux-gnu-debug.module":
+    tool: shell
+    inputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/CadenceCoreTests.swift","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.derived/all-discovered-tests.swift","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/swift-version-6A52383ED409C6A7.txt","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCoreTests.swiftmodule","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/sources"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/CadenceCoreTests.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/all-discovered-tests.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageDiscoveredTests.swiftmodule"]
+    description: "Compiling Swift Module 'CadencePackageDiscoveredTests' (2 sources)"
+    args: ["/opt/swift/usr/bin/swiftc","-module-name","CadencePackageDiscoveredTests","-emit-dependencies","-emit-module","-emit-module-path","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageDiscoveredTests.swiftmodule","-output-file-map","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/output-file-map.json","-parse-as-library","-incremental","-c","@/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/sources","-I","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules","-target","x86_64-unknown-linux-gnu","-enable-batch-mode","-index-store-path","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/index/store","-Onone","-enable-testing","-j4","-DSWIFT_PACKAGE","-DDEBUG","-Xcc","-fmodule-map-file=/home/user/desk-companion/Sources/CSQLite/module.modulemap","-module-cache-path","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/ModuleCache","-parseable-output","-parse-as-library","-g","-Xcc","-fPIC","-Xcc","-g","-package-name","desk_companion","-Xcc","-fno-omit-frame-pointer"]
+
+  "C.CadencePackageTests-x86_64-unknown-linux-gnu-debug.module":
+    tool: shell
+    inputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.derived/runner.swift","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/swift-version-6A52383ED409C6A7.txt","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCoreTests.swiftmodule","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageDiscoveredTests.swiftmodule","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/sources"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/runner.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageTests.swiftmodule"]
+    description: "Compiling Swift Module 'CadencePackageTests' (1 sources)"
+    args: ["/opt/swift/usr/bin/swiftc","-module-name","CadencePackageTests","-emit-dependencies","-emit-module","-emit-module-path","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadencePackageTests.swiftmodule","-output-file-map","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/output-file-map.json","-parse-as-library","-incremental","-c","@/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/sources","-I","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules","-target","x86_64-unknown-linux-gnu","-enable-batch-mode","-index-store-path","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/index/store","-Onone","-enable-testing","-j4","-DSWIFT_PACKAGE","-DDEBUG","-Xcc","-fmodule-map-file=/home/user/desk-companion/Sources/CSQLite/module.modulemap","-module-cache-path","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/ModuleCache","-parseable-output","-parse-as-library","-g","-Xcc","-fPIC","-Xcc","-g","-package-name","desk_companion","-Xcc","-fno-omit-frame-pointer"]
+
+  "C.CadencePackageTests-x86_64-unknown-linux-gnu-debug.test":
+    tool: shell
+    inputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceCore.swiftmodule.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceStore.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSupport.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ConsultationRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Enums.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Money.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PaymentRepository.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/SQLite.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Schema.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Settings.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/TextNormaliser.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CadenceCoreTests.swiftmodule.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/CadenceCoreTests.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/CadencePackageDiscoveredTests.swiftmodule.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageDiscoveredTests.build/all-discovered-tests.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/CadencePackageTests.swiftmodule.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.build/runner.swift.o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.product/Objects.LinkFileList"]
+    outputs: ["/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.xctest"]
+    description: "Linking ./.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.xctest"
+    args: ["/opt/swift/usr/bin/swiftc","-L","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug","-o","/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.xctest","-module-name","CadencePackageTests","-emit-executable","-Xlinker","-rpath=$ORIGIN","@/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadencePackageTests.product/Objects.LinkFileList","-target","x86_64-unknown-linux-gnu","-g"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/home/user/desk-companion/Sources/CSQLite/","/home/user/desk-companion/Sources/CadenceCore/","/home/user/desk-companion/Tests/CadenceCoreTests/","/home/user/desk-companion/Package.swift","/home/user/desk-companion/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+

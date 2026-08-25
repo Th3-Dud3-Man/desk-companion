@@ -1,0 +1,11 @@
+{
+  "": {
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/master.swiftdeps"
+  },
+  "/home/user/desk-companion/Tests/CadenceCoreTests/PlaceholderTests.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swiftdeps"
+  }
+}

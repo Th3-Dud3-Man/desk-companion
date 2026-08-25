@@ -1,0 +1,13 @@
+/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift
+/home/user/desk-companion/Sources/CadenceCore/Model/Enums.swift
+/home/user/desk-companion/Sources/CadenceCore/Model/Money.swift
+/home/user/desk-companion/Sources/CadenceCore/Storage/CadenceStore.swift
+/home/user/desk-companion/Sources/CadenceCore/Storage/CalendarRepository.swift
+/home/user/desk-companion/Sources/CadenceCore/Storage/ConsultationRepository.swift
+/home/user/desk-companion/Sources/CadenceCore/Storage/PatientRepository.swift
+/home/user/desk-companion/Sources/CadenceCore/Storage/PaymentRepository.swift
+/home/user/desk-companion/Sources/CadenceCore/Storage/SQLite.swift
+/home/user/desk-companion/Sources/CadenceCore/Storage/Schema.swift
+/home/user/desk-companion/Sources/CadenceCore/Storage/Settings.swift
+/home/user/desk-companion/Sources/CadenceCore/Support/CalendarSupport.swift
+/home/user/desk-companion/Sources/CadenceCore/Support/TextNormaliser.swift
