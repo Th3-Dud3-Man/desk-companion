@@ -36,7 +36,7 @@ jobs:
         run: swift --version && xcodebuild -version
 
       - name: Build every target
-        run: swift build -v 2>&1 | tail -40
+        run: swift build
 
       - name: Run the test suite
         run: swift test

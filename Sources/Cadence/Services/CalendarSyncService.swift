@@ -73,7 +73,8 @@ final class CalendarSyncService: ObservableObject {
         changeObserver = NotificationCenter.default.addObserver(
             forName: .EKEventStoreChanged, object: eventStore, queue: .main
         ) { [weak self] _ in
-            Task { @MainActor in await self?.synchronise(trigger: .calendarChanged) }
+            guard let self else { return }
+            Task { @MainActor in await self.synchronise(trigger: .calendarChanged) }
         }
     }
 

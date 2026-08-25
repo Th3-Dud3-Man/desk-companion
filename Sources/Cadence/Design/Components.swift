@@ -43,11 +43,11 @@ struct CadenceButtonStyle: ButtonStyle {
     var fullWidth = false
 
     func makeBody(configuration: Configuration) -> some View {
-        Body(configuration: configuration, variant: variant, size: size, fullWidth: fullWidth)
+        ButtonSurface(configuration: configuration, variant: variant, size: size, fullWidth: fullWidth)
     }
 
     @MainActor
-    private struct Body: View {
+    private struct ButtonSurface: View {
         let configuration: ButtonStyleConfiguration
         let variant: Variant
         let size: Size
