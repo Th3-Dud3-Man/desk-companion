@@ -3,6 +3,7 @@ import CadenceCore
 
 /// The menu bar. Every item here does something; there are no placeholders, and
 /// every shortcut matches the one shown in the interface.
+@MainActor
 struct CadenceCommands: Commands {
     @ObservedObject var bootstrap: AppBootstrap
 

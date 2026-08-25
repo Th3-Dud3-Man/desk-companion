@@ -3,6 +3,7 @@ import CadenceCore
 
 /// Three steps, all skippable. The point is to reach a working day as fast as
 /// possible, not to collect information Cadence can work out on its own.
+@MainActor
 struct OnboardingView: View {
     @EnvironmentObject private var model: AppModel
     @Environment(\.dismiss) private var dismiss
@@ -205,8 +206,12 @@ struct OnboardingView: View {
         model.save(settings: settings)
 
         if wantsDemoData {
-            try? DemoData.install(into: model.store)
-            model.reload()
+            do {
+                try DemoData.install(into: model.store)
+                model.reload()
+            } catch {
+                model.report(error)
+            }
         }
         model.isOnboarding = false
         dismiss()

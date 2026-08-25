@@ -6,14 +6,15 @@ struct PaletteResult: Identifiable {
     let group: String
     let symbol: String
     let title: String
-    var subtitle: String?
-    var trailing: String?
+    var subtitle: String? = nil
+    var trailing: String? = nil
     let run: () -> Void
 }
 
 /// ⌘K. One field that reaches every patient, every appointment, every payment and
 /// every action in the application, so nothing is ever more than a few keystrokes
 /// away — and so the menus never have to grow to accommodate rarely used commands.
+@MainActor
 struct CommandPaletteView: View {
     @EnvironmentObject private var model: AppModel
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -73,8 +74,8 @@ struct CommandPaletteView: View {
         ScrollViewReader { proxy in
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 0) {
-                    ForEach(Array(grouped.enumerated()), id: \.element.0) { _, section in
-                        Text(section.0)
+                    ForEach(grouped) { section in
+                        Text(section.id)
                             .font(Typo.sectionLabel)
                             .tracking(0.7)
                             .textCase(.uppercase)
@@ -83,7 +84,7 @@ struct CommandPaletteView: View {
                             .padding(.top, Space.lg)
                             .padding(.bottom, Space.xs)
 
-                        ForEach(section.1) { result in
+                        ForEach(section.items) { result in
                             let index = results.firstIndex { $0.id == result.id } ?? 0
                             PaletteRow(result: result, isHighlighted: index == highlighted)
                                 .id(result.id)
@@ -123,14 +124,19 @@ struct CommandPaletteView: View {
         query = ""
     }
 
-    private var grouped: [(String, [PaletteResult])] {
+    struct ResultGroup: Identifiable {
+        let id: String
+        let items: [PaletteResult]
+    }
+
+    private var grouped: [ResultGroup] {
         var order: [String] = []
         var buckets: [String: [PaletteResult]] = [:]
         for result in results {
             if buckets[result.group] == nil { order.append(result.group) }
             buckets[result.group, default: []].append(result)
         }
-        return order.map { ($0, buckets[$0] ?? []) }
+        return order.map { ResultGroup(id: $0, items: buckets[$0] ?? []) }
     }
 
     // MARK: Results
@@ -236,6 +242,7 @@ struct CommandPaletteView: View {
     }
 }
 
+@MainActor
 private struct PaletteRow: View {
     let result: PaletteResult
     let isHighlighted: Bool

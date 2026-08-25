@@ -1,6 +1,7 @@
 import SwiftUI
 import CadenceCore
 
+@MainActor
 struct RootView: View {
     @EnvironmentObject private var bootstrap: AppBootstrap
 
@@ -22,6 +23,7 @@ struct RootView: View {
 
 /// Shown when the database cannot be opened. It never falls back to a temporary
 /// store: losing a day of work silently would be far worse than refusing to start.
+@MainActor
 struct StartupFailureView: View {
     let message: String
     @EnvironmentObject private var bootstrap: AppBootstrap
@@ -63,6 +65,7 @@ struct StartupFailureView: View {
 
 /// The window: a sidebar, a destination, and the two things that float above them —
 /// the undo toast and the command palette.
+@MainActor
 struct WorkspaceView: View {
     @EnvironmentObject private var model: AppModel
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -78,13 +81,13 @@ struct WorkspaceView: View {
                 destinationView
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .sheet(item: Binding(get: { model.activeSheet }, set: { model.activeSheet = $0 })) { sheet in
+                sheetView(for: sheet)
+            }
         }
         .navigationTitle(model.destination.title)
         .overlay(alignment: .bottom) { toastLayer }
         .overlay { paletteLayer }
-        .sheet(item: Binding(get: { model.activeSheet }, set: { model.activeSheet = $0 })) { sheet in
-            sheetView(for: sheet)
-        }
         .task {
             if !model.settings.hasCompletedOnboarding { model.isOnboarding = true }
             await model.calendarSync.synchronise(trigger: .launch)
@@ -165,6 +168,7 @@ struct WorkspaceView: View {
 
 // MARK: - Sidebar
 
+@MainActor
 struct SidebarView: View {
     @EnvironmentObject private var model: AppModel
 
@@ -212,6 +216,7 @@ struct SidebarView: View {
     }
 }
 
+@MainActor
 private struct SidebarRow: View {
     let destination: Destination
     let badge: Int?
@@ -243,6 +248,7 @@ private struct SidebarRow: View {
 }
 
 /// Always-visible, always-honest state of the calendar connection.
+@MainActor
 struct SyncStatusPill: View {
     @EnvironmentObject private var model: AppModel
 

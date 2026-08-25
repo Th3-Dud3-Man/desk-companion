@@ -6,6 +6,7 @@ import CadenceCore
 /// Seven columns of what is actually booked, rather than a proportional grid: a
 /// psychologist's week is a list of slots, and the empty stretches between them do
 /// not need to be drawn to scale to be understood.
+@MainActor
 struct AgendaView: View {
     @EnvironmentObject private var model: AppModel
     @State private var anchor = Date()
@@ -110,6 +111,7 @@ struct AgendaView: View {
     }
 }
 
+@MainActor
 private struct DayColumn: View {
     @EnvironmentObject private var model: AppModel
     let day: Date
@@ -173,6 +175,7 @@ private struct DayColumn: View {
     }
 }
 
+@MainActor
 private struct AgendaCard: View {
     @EnvironmentObject private var model: AppModel
     let consultation: Consultation

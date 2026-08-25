@@ -135,7 +135,7 @@ final class PDFRenderer: NSObject, WKNavigationDelegate {
         printInfo.isHorizontallyCentered = false
         printInfo.isVerticallyCentered = false
         printInfo.jobDisposition = .save
-        printInfo.dictionary()[NSPrintInfo.AttributeKey.jobSavingURL] = url
+        printInfo.dictionary().setValue(url, forKey: NSPrintInfo.AttributeKey.jobSavingURL.rawValue)
 
         let operation = webView.printOperation(with: printInfo)
         operation.showsPrintPanel = false
@@ -148,8 +148,9 @@ final class PDFRenderer: NSObject, WKNavigationDelegate {
         guard succeeded else { throw Failure.printFailed }
 
         // Never claim success without checking: a zero-byte PDF is a failed export.
-        let size = (try? FileManager.default.attributesOfItem(atPath: url.path)[.size] as? Int) ?? 0
-        guard (size ?? 0) > 0 else { throw Failure.emptyResult }
+        let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
+        let size = (attributes?[.size] as? NSNumber)?.intValue ?? 0
+        guard size > 0 else { throw Failure.emptyResult }
     }
 
     nonisolated func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

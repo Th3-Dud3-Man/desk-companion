@@ -57,6 +57,7 @@ enum StatsPeriod: String, CaseIterable, Identifiable {
 
 /// Not an accounting package: a small set of figures that answer "how is the
 /// practice doing?", each one traceable to the records behind it.
+@MainActor
 struct FinancesView: View {
     @EnvironmentObject private var model: AppModel
 
@@ -351,6 +352,7 @@ struct FinancesView: View {
 
 /// A plain column chart. No library, no animation, no decoration — it exists to be
 /// read at a glance.
+@MainActor
 struct RevenueChart: View {
     let totals: [DailyTotal]
     let currencyCode: String

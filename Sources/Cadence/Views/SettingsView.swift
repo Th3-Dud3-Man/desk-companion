@@ -2,6 +2,7 @@ import SwiftUI
 import AppKit
 import CadenceCore
 
+@MainActor
 struct SettingsView: View {
     @EnvironmentObject private var model: AppModel
 
@@ -49,6 +50,7 @@ struct SettingsView: View {
 
 // MARK: - Practice
 
+@MainActor
 struct PracticeSettingsPane: View {
     @EnvironmentObject private var model: AppModel
     @State private var draft = PracticeSettings.default
@@ -115,6 +117,7 @@ struct PracticeSettingsPane: View {
 
 // MARK: - Calendars
 
+@MainActor
 struct CalendarSettingsPane: View {
     @EnvironmentObject private var model: AppModel
 
@@ -224,6 +227,7 @@ struct CalendarSettingsPane: View {
     }
 }
 
+@MainActor
 private struct CalendarRow: View {
     @EnvironmentObject private var model: AppModel
     let subscription: CalendarSubscription
@@ -273,6 +277,7 @@ private struct CalendarRow: View {
 
 // MARK: - Payments
 
+@MainActor
 struct PaymentSettingsPane: View {
     @EnvironmentObject private var model: AppModel
     @State private var draft = PracticeSettings.default
@@ -381,6 +386,7 @@ struct PaymentSettingsPane: View {
 
 // MARK: - Data
 
+@MainActor
 struct DataSettingsPane: View {
     @EnvironmentObject private var model: AppModel
     @EnvironmentObject private var bootstrap: AppBootstrap
@@ -481,7 +487,7 @@ struct DataSettingsPane: View {
             Button("Annuler", role: .cancel) {}
             Button("Supprimer", role: .destructive) { removeDemo() }
         } message: {
-            let inventory = (try? DemoData.inventory(in: model.store)) ?? (0, 0, 0)
+            let inventory = (try? DemoData.inventory(in: model.store)) ?? (patients: 0, consultations: 0, payments: 0)
             Text("\(inventory.patients) patients, \(inventory.consultations) rendez-vous et \(inventory.payments) paiements de démonstration seront supprimés. Vos données réelles ne sont pas concernées.")
         }
         .alert(
@@ -545,6 +551,7 @@ struct DataSettingsPane: View {
 
 // MARK: - Shared pieces
 
+@MainActor
 struct SettingsHeader: View {
     let title: String
     let subtitle: String
@@ -562,6 +569,7 @@ struct SettingsHeader: View {
     }
 }
 
+@MainActor
 struct SettingsCard<Content: View>: View {
     @ViewBuilder var content: () -> Content
 

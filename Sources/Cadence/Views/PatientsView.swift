@@ -1,6 +1,7 @@
 import SwiftUI
 import CadenceCore
 
+@MainActor
 struct PatientsView: View {
     @EnvironmentObject private var model: AppModel
     @State private var query = ""
@@ -93,6 +94,7 @@ struct PatientsView: View {
     }
 }
 
+@MainActor
 private struct PatientListRow: View {
     @EnvironmentObject private var model: AppModel
     let patient: Patient
@@ -139,6 +141,7 @@ private struct PatientListRow: View {
 
 // MARK: - Record
 
+@MainActor
 struct PatientRecord: View {
     @EnvironmentObject private var model: AppModel
     let profile: PatientProfile
@@ -471,6 +474,7 @@ struct PatientRecord: View {
 }
 
 /// Shows how sure the habit engine is, without pretending to a precision it lacks.
+@MainActor
 struct ConfidenceBar: View {
     let confidence: Double
 

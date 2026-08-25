@@ -7,6 +7,7 @@ import CadenceCore
 /// grid spends most of its height on the gaps between appointments, and a working
 /// day should fit on one screen. Everything the user needs to *do* is reachable
 /// without leaving this view.
+@MainActor
 struct TodayView: View {
     @EnvironmentObject private var model: AppModel
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -144,6 +145,7 @@ struct TodayView: View {
 
 // MARK: - Header
 
+@MainActor
 struct DayHeader: View {
     @EnvironmentObject private var model: AppModel
 
@@ -232,6 +234,7 @@ struct DayHeader: View {
 }
 
 /// Calendar events that could not be attached to a patient. Shown, never ignored.
+@MainActor
 struct UnassignedBanner: View {
     @EnvironmentObject private var model: AppModel
     let items: [DayItem]
@@ -258,6 +261,7 @@ struct UnassignedBanner: View {
 }
 
 /// The line that separates what has happened from what is still to come.
+@MainActor
 struct NowSeparator: View {
     let now: Date
 

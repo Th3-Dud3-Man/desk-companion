@@ -3,6 +3,7 @@ import CadenceCore
 
 /// The right-hand rail: what the day has produced and what is still outstanding.
 /// It answers "am I done?" without the user counting rows.
+@MainActor
 struct DaySummaryRail: View {
     @EnvironmentObject private var model: AppModel
 
@@ -152,6 +153,7 @@ struct DaySummaryRail: View {
     }
 }
 
+@MainActor
 struct ProgressBar: View {
     let fraction: Double
 
@@ -169,6 +171,7 @@ struct ProgressBar: View {
     }
 }
 
+@MainActor
 struct CountLabel: View {
     let symbol: String
     let tint: Color

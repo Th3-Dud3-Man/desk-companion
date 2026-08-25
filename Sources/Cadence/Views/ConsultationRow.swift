@@ -6,6 +6,7 @@ import CadenceCore
 /// The whole product is judged on this component: marking someone present and
 /// recording their usual payment has to be two clicks, or one keystroke each,
 /// without a dialog, a navigation, or a moment's thought.
+@MainActor
 struct ConsultationRow: View {
     @EnvironmentObject private var model: AppModel
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -215,6 +216,7 @@ struct ConsultationRow: View {
 
 // MARK: - Recorded payment
 
+@MainActor
 struct PaymentBadge: View {
     let payment: Payment
     let settings: PracticeSettings
@@ -246,6 +248,7 @@ struct PaymentBadge: View {
 /// The habitual payment is one button. Everything else — another method, another
 /// amount, deferring — is one click away but visually secondary, because in the
 /// overwhelming majority of sessions the first button is the right one.
+@MainActor
 struct PaymentStrip: View {
     @EnvironmentObject private var model: AppModel
     let item: DayItem
@@ -347,6 +350,7 @@ struct PaymentStrip: View {
 
 // MARK: - Sync issues
 
+@MainActor
 struct SyncIssueNote: View {
     @EnvironmentObject private var model: AppModel
     let consultation: Consultation
@@ -385,6 +389,7 @@ struct SyncIssueNote: View {
 
 // MARK: - Row menu
 
+@MainActor
 struct RowMenuButton: View {
     let item: DayItem
     let isVisible: Bool
@@ -407,6 +412,7 @@ struct RowMenuButton: View {
     }
 }
 
+@MainActor
 struct RowMenu: View {
     @EnvironmentObject private var model: AppModel
     let item: DayItem

@@ -3,13 +3,14 @@ import CadenceCore
 
 /// Shared chrome for every sheet: same header, same footer, same keys.
 /// ⏎ confirms, ⎋ cancels — everywhere, without exception.
+@MainActor
 struct SheetChrome<Content: View>: View {
     let title: String
-    var subtitle: String?
+    var subtitle: String? = nil
     var confirmTitle: String = "Enregistrer"
     var isConfirmEnabled: Bool = true
-    var destructiveTitle: String?
-    var onDestructive: (() -> Void)?
+    var destructiveTitle: String? = nil
+    var onDestructive: (() -> Void)? = nil
     let onCancel: () -> Void
     let onConfirm: () -> Void
     @ViewBuilder var content: () -> Content
@@ -66,9 +67,10 @@ struct SheetChrome<Content: View>: View {
 }
 
 /// A labelled row inside a sheet. Keeps every form aligned identically.
+@MainActor
 struct FormRow<Content: View>: View {
     let label: String
-    var hint: String?
+    var hint: String? = nil
     @ViewBuilder var content: () -> Content
 
     var body: some View {
@@ -90,6 +92,7 @@ struct FormRow<Content: View>: View {
 
 // MARK: - Consultation editor
 
+@MainActor
 struct ConsultationEditor: View {
     enum Mode {
         case create(suggestedStart: Date)
@@ -210,6 +213,7 @@ struct ConsultationEditor: View {
 
 // MARK: - Patient picker
 
+@MainActor
 struct PatientPicker: View {
     @EnvironmentObject private var model: AppModel
     @Binding var selection: UUID?
@@ -266,6 +270,7 @@ struct PatientPicker: View {
 
 // MARK: - Patient editor
 
+@MainActor
 struct PatientEditor: View {
     @EnvironmentObject private var model: AppModel
     @Environment(\.dismiss) private var dismiss
@@ -379,6 +384,7 @@ struct PatientEditor: View {
 
 // MARK: - Payment editor
 
+@MainActor
 struct PaymentEditor: View {
     @EnvironmentObject private var model: AppModel
     @Environment(\.dismiss) private var dismiss
@@ -460,6 +466,7 @@ struct PaymentEditor: View {
 }
 
 /// Amount entry that accepts what people actually type: `70`, `70,50`, `70.5`.
+@MainActor
 struct AmountField: View {
     @Binding var text: String
 
@@ -496,6 +503,7 @@ struct AmountField: View {
     }
 }
 
+@MainActor
 struct MethodPicker: View {
     @Binding var selection: String
     let methods: [PaymentMethod]
@@ -513,29 +521,41 @@ struct MethodPicker: View {
 
 // MARK: - Shortcuts
 
+@MainActor
 struct ShortcutsSheet: View {
     @Environment(\.dismiss) private var dismiss
 
-    private let groups: [(String, [(String, String)])] = [
-        ("Navigation", [
-            ("⌘1 … ⌘5", "Aller à une section"),
-            ("⌘T", "Revenir à aujourd'hui"),
-            ("⌥⌘← / ⌥⌘→", "Jour précédent / suivant"),
-            ("⌘K", "Recherche et actions"),
+    struct Shortcut: Identifiable {
+        let keys: String
+        let action: String
+        var id: String { keys + action }
+    }
+
+    struct ShortcutGroup: Identifiable {
+        let id: String
+        let shortcuts: [Shortcut]
+    }
+
+    private let groups: [ShortcutGroup] = [
+        ShortcutGroup(id: "Navigation", shortcuts: [
+            Shortcut(keys: "⌘1 … ⌘5", action: "Aller à une section"),
+            Shortcut(keys: "⌘T", action: "Revenir à aujourd'hui"),
+            Shortcut(keys: "⌥⌘← / ⌥⌘→", action: "Jour précédent / suivant"),
+            Shortcut(keys: "⌘K", action: "Recherche et actions"),
         ]),
-        ("Journée", [
-            ("↑ / ↓", "Se déplacer dans la journée"),
-            ("P", "Marquer présent"),
-            ("A", "Marquer absent"),
-            ("⏎", "Valider le paiement proposé"),
-            ("⎋", "Désélectionner"),
+        ShortcutGroup(id: "Journée", shortcuts: [
+            Shortcut(keys: "↑ / ↓", action: "Se déplacer dans la journée"),
+            Shortcut(keys: "P", action: "Marquer présent"),
+            Shortcut(keys: "A", action: "Marquer absent"),
+            Shortcut(keys: "⏎", action: "Valider le paiement proposé"),
+            Shortcut(keys: "⎋", action: "Désélectionner"),
         ]),
-        ("Général", [
-            ("⌘N", "Nouveau rendez-vous"),
-            ("⇧⌘N", "Nouveau patient"),
-            ("⌘R", "Synchroniser l'agenda"),
-            ("⌘Z / ⇧⌘Z", "Annuler / rétablir"),
-            ("⌘,", "Réglages"),
+        ShortcutGroup(id: "Général", shortcuts: [
+            Shortcut(keys: "⌘N", action: "Nouveau rendez-vous"),
+            Shortcut(keys: "⇧⌘N", action: "Nouveau patient"),
+            Shortcut(keys: "⌘R", action: "Synchroniser l'agenda"),
+            Shortcut(keys: "⌘Z / ⇧⌘Z", action: "Annuler / rétablir"),
+            Shortcut(keys: "⌘,", action: "Réglages"),
         ]),
     ]
 
@@ -547,17 +567,17 @@ struct ShortcutsSheet: View {
             onCancel: { dismiss() },
             onConfirm: { dismiss() }
         ) {
-            ForEach(groups, id: \.0) { group in
+            ForEach(groups) { group in
                 VStack(alignment: .leading, spacing: Space.md) {
-                    SectionLabel(text: group.0)
+                    SectionLabel(text: group.id)
                     VStack(spacing: Space.sm) {
-                        ForEach(group.1, id: \.0) { shortcut in
+                        ForEach(group.shortcuts) { shortcut in
                             HStack(spacing: Space.lg) {
-                                Text(shortcut.0)
+                                Text(shortcut.keys)
                                     .font(Typo.captionStrong)
                                     .foregroundStyle(Ink.textPrimary)
                                     .frame(width: 110, alignment: .leading)
-                                Text(shortcut.1)
+                                Text(shortcut.action)
                                     .font(Typo.caption)
                                     .foregroundStyle(Ink.textSecondary)
                                 Spacer(minLength: 0)

@@ -1,4 +1,5 @@
 import SwiftUI
+import CadenceCore
 
 // MARK: - Buttons
 
@@ -45,8 +46,9 @@ struct CadenceButtonStyle: ButtonStyle {
         Body(configuration: configuration, variant: variant, size: size, fullWidth: fullWidth)
     }
 
+    @MainActor
     private struct Body: View {
-        let configuration: Configuration
+        let configuration: ButtonStyleConfiguration
         let variant: Variant
         let size: Size
         let fullWidth: Bool
@@ -132,6 +134,7 @@ extension ButtonStyle where Self == CadenceButtonStyle {
 
 /// State is never carried by colour alone: every chip pairs a tint with a glyph
 /// and a word, so it survives both a monochrome screen and colour blindness.
+@MainActor
 struct StatusChip: View {
     let status: ConsultationStatusPresentation
     var compact = false
@@ -192,6 +195,7 @@ struct ConsultationStatusPresentation {
 
 // MARK: - Patient avatar
 
+@MainActor
 struct PatientAvatar: View {
     let monogram: String
     let seed: Int
@@ -226,6 +230,7 @@ struct PatientAvatar: View {
 }
 
 /// Stands in for an appointment with nobody attached to it yet.
+@MainActor
 struct UnknownAvatar: View {
     var size: CGFloat = 28
 
@@ -250,6 +255,7 @@ struct UnknownAvatar: View {
 
 /// The faint dot grid that gives the work surface its texture. Drawn once per
 /// resize, at low enough contrast that it never competes with content.
+@MainActor
 struct DotGrid: View {
     var spacing: CGFloat = 22
     var body: some View {
@@ -276,6 +282,7 @@ struct DotGrid: View {
 }
 
 /// The standard page background: warm canvas plus the dot grid.
+@MainActor
 struct WorkSurface: View {
     var body: some View {
         ZStack {
@@ -288,6 +295,7 @@ struct WorkSurface: View {
 
 // MARK: - Small parts
 
+@MainActor
 struct SectionLabel: View {
     let text: String
     var body: some View {
@@ -299,6 +307,7 @@ struct SectionLabel: View {
     }
 }
 
+@MainActor
 struct Hairline: View {
     var body: some View {
         Rectangle()
@@ -309,6 +318,7 @@ struct Hairline: View {
 }
 
 /// A keyboard hint, e.g. ⏎ next to the suggested payment.
+@MainActor
 struct KeyHint: View {
     let keys: String
     var body: some View {
@@ -330,10 +340,11 @@ struct KeyHint: View {
 }
 
 /// One headline figure. Used on the day rail and across the statistics screen.
+@MainActor
 struct MetricTile: View {
     let label: String
     let value: String
-    var note: String?
+    var note: String? = nil
     var tone: Tone = .neutral
     var isCompact = false
 
@@ -373,6 +384,7 @@ struct MetricTile: View {
 }
 
 /// A proportion bar, used for the payment-method split.
+@MainActor
 struct ShareBar: View {
     let slices: [(colour: Color, share: Double)]
     var height: CGFloat = 6
@@ -396,12 +408,13 @@ struct ShareBar: View {
 }
 
 /// Nothing here — but always with a reason and a way forward.
+@MainActor
 struct EmptyState: View {
     let symbol: String
     let title: String
-    var message: String?
-    var actionTitle: String?
-    var action: (() -> Void)?
+    var message: String? = nil
+    var actionTitle: String? = nil
+    var action: (() -> Void)? = nil
 
     var body: some View {
         VStack(spacing: Space.lg) {
@@ -436,10 +449,11 @@ struct EmptyState: View {
 }
 
 /// Inline error, never a modal alert: the user keeps working while they read it.
+@MainActor
 struct InlineError: View {
     let message: String
-    var retryTitle: String?
-    var retry: (() -> Void)?
+    var retryTitle: String? = nil
+    var retry: (() -> Void)? = nil
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: Space.md) {
@@ -464,6 +478,7 @@ struct InlineError: View {
 }
 
 /// Progress that does not pretend to know how long it will take.
+@MainActor
 struct LoadingLine: View {
     let message: String
     var body: some View {
@@ -481,10 +496,11 @@ struct LoadingLine: View {
 
 // MARK: - Text field
 
+@MainActor
 struct CadenceTextField: View {
     let placeholder: String
     @Binding var text: String
-    var symbol: String?
+    var symbol: String? = nil
     var isMultiline = false
 
     @FocusState private var isFocused: Bool
@@ -530,10 +546,11 @@ struct CadenceTextField: View {
 
 /// The counterweight to having no confirmation dialogs: every action says what it
 /// did and how to take it back.
+@MainActor
 struct ToastView: View {
     let message: String
-    var undoTitle: String?
-    var onUndo: (() -> Void)?
+    var undoTitle: String? = nil
+    var onUndo: (() -> Void)? = nil
 
     var body: some View {
         HStack(spacing: Space.lg) {

@@ -72,8 +72,6 @@ public enum DemoData {
     /// How many past sessions each persona gets, in order. Thomas is deliberately new.
     private static let sessionCounts = [10, 9, 6, 4, 8, 5, 1, 3]
 
-    public static var isInstallable = true
-
     /// Writes the sample practice. Returns how many patients were created.
     @discardableResult
     public static func install(into store: CadenceStore, now: Date = Date(), calendar: Calendar = .cadence) throws -> Int {

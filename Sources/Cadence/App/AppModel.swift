@@ -128,16 +128,18 @@ final class AppModel: ObservableObject {
             try? backups.createDailySnapshotIfNeeded()
         }
 
+        // Keeps the "maintenant" line and the countdowns honest without polling
+        // the database, and rolls the view over at midnight for anyone who leaves
+        // the application open overnight.
         clockTimer = Timer.publish(every: 30, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] date in
                 guard let self else { return }
+                let previous = self.now
                 self.now = date
-                // Crossing midnight while the app is open should move the day on.
-                if !Calendar.cadence.isDate(self.selectedDay, inSameDayAs: date),
-                   Calendar.cadence.isDateInToday(self.selectedDay) == false,
-                   self.isShowingToday == false {
-                    return
+                if !Calendar.cadence.isDate(previous, inSameDayAs: date),
+                   Calendar.cadence.isDate(self.selectedDay, inSameDayAs: previous) {
+                    self.select(day: date)
                 }
             }
 

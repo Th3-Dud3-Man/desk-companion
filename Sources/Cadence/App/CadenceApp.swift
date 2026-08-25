@@ -57,6 +57,7 @@ final class CadenceAppDelegate: NSObject, NSApplicationDelegate {
 }
 
 @main
+@MainActor
 struct CadenceApp: App {
     @NSApplicationDelegateAdaptor(CadenceAppDelegate.self) private var delegate
     @StateObject private var bootstrap = AppBootstrap()
