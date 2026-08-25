@@ -417,7 +417,25 @@ struct RowMenu: View {
     @EnvironmentObject private var model: AppModel
     let item: DayItem
 
+    // Grouped so the builder stays within its ten-child limit, and so the menu reads
+    // in the order the work actually happens: attendance, money, then the record.
     var body: some View {
+        Group {
+            attendanceActions
+            paymentActions
+        }
+        Divider()
+        Group {
+            patientActions
+        }
+        Divider()
+        Group {
+            appointmentActions
+        }
+    }
+
+    @ViewBuilder
+    private var attendanceActions: some View {
         if !item.consultation.status.isResolved {
             Button("Marquer présent") { model.mark(.attended, for: item) }
             Button("Marquer absent") { model.mark(.absent, for: item) }
@@ -429,7 +447,10 @@ struct RowMenu: View {
         } else if item.consultation.status != .attended {
             Button("Démarrer la séance") { model.startSession(item) }
         }
+    }
 
+    @ViewBuilder
+    private var paymentActions: some View {
         if item.consultation.status == .attended, item.payment == nil {
             Button("Enregistrer \(item.advice.primary.money.formatted())") {
                 model.recordPayment(item.advice.primary, for: item)
@@ -437,34 +458,21 @@ struct RowMenu: View {
         }
 
         if item.consultation.status == .absent {
-            // Some practices bill late cancellations; Cadence never asks, but allows it.
-            Button("Facturer l'absence…") {
-                model.present(.editPayment(
-                    Payment(
-                        consultationID: item.consultation.id,
-                        patientID: item.patient?.id ?? UUID(),
-                        amountCents: item.advice.primary.amountCents,
-                        currencyCode: model.settings.currencyCode,
-                        methodID: item.advice.primary.methodID
-                    ),
-                    patientName: item.title
-                ))
-            }
-            .disabled(item.patient == nil)
+            // Some practices bill late cancellations. Cadence never asks for it,
+            // but it does not stand in the way either.
+            Button("Facturer l'absence…") { model.present(.editPayment(absenceCharge, patientName: item.title)) }
+                .disabled(item.patient == nil)
         }
 
         if let payment = item.payment {
             Divider()
-            Button("Modifier le paiement…") {
-                model.present(.editPayment(payment, patientName: item.title))
-            }
-            Button("Supprimer le paiement") {
-                model.deletePayment(payment, patientName: item.title)
-            }
+            Button("Modifier le paiement…") { model.present(.editPayment(payment, patientName: item.title)) }
+            Button("Supprimer le paiement") { model.deletePayment(payment, patientName: item.title) }
         }
+    }
 
-        Divider()
-
+    @ViewBuilder
+    private var patientActions: some View {
         if item.consultation.isUnassigned {
             Menu("Associer à…") {
                 ForEach(model.patients) { patient in
@@ -485,12 +493,24 @@ struct RowMenu: View {
                 }
             }
         }
+    }
 
-        Divider()
+    @ViewBuilder
+    private var appointmentActions: some View {
         Button("Modifier le rendez-vous…") { model.present(.editConsultation(item.consultation)) }
         if item.consultation.status != .cancelled {
             Button("Annuler le rendez-vous") { model.mark(.cancelled, for: item) }
         }
         Button("Supprimer le rendez-vous") { model.deleteConsultation(item.consultation) }
+    }
+
+    private var absenceCharge: Payment {
+        Payment(
+            consultationID: item.consultation.id,
+            patientID: item.patient?.id ?? UUID(),
+            amountCents: item.advice.primary.amountCents,
+            currencyCode: model.settings.currencyCode,
+            methodID: item.advice.primary.methodID
+        )
     }
 }

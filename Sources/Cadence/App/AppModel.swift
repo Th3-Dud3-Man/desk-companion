@@ -123,9 +123,11 @@ final class AppModel: ObservableObject {
 
         reload()
 
-        // A snapshot on the first launch of the day, quietly, in the background.
-        Task.detached(priority: .background) { [backups] in
-            try? backups.createDailySnapshotIfNeeded()
+        // A snapshot on the first launch of the day, quietly, off the main thread.
+        // The store takes its own lock, so this is safe alongside the interface.
+        let backupManager = backups
+        DispatchQueue.global(qos: .utility).async {
+            try? backupManager.createDailySnapshotIfNeeded()
         }
 
         // Keeps the "maintenant" line and the countdowns honest without polling

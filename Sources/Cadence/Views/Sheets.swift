@@ -219,8 +219,6 @@ struct PatientPicker: View {
     @Binding var selection: UUID?
     var allowsNone = false
 
-    @State private var query = ""
-
     var body: some View {
         Menu {
             if allowsNone {
