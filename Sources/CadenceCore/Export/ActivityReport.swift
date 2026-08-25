@@ -110,7 +110,7 @@ public enum ActivityReport {
         <meta charset="utf-8">
         <title>\(escape(input.title))</title>
         <style>
-          @page { size: A4; margin: 16mm 14mm; }
+          @page { size: A4; margin: 0; }   /* margins come from the print job */
           * { box-sizing: border-box; }
           body {
             font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;

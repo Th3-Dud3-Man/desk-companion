@@ -32,6 +32,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/CalendarSync.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/DemoData.swift"
         },
         {
@@ -128,6 +132,7 @@
       "moduleOutputPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCore.swiftmodule",
       "objects" : [
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/BackupManager.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSync.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/DemoData.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/HabitEngine.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientMatcher.swift.o",
@@ -184,6 +189,10 @@
         {
           "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/BackupManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSync.swift.o"
         },
         {
           "kind" : "file",
@@ -277,6 +286,7 @@
       "prepareForIndexing" : false,
       "sources" : [
         "/home/user/desk-companion/Sources/CadenceCore/Domain/BackupManager.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Domain/CalendarSync.swift",
         "/home/user/desk-companion/Sources/CadenceCore/Domain/DemoData.swift",
         "/home/user/desk-companion/Sources/CadenceCore/Domain/HabitEngine.swift",
         "/home/user/desk-companion/Sources/CadenceCore/Domain/PatientMatcher.swift",
@@ -310,6 +320,10 @@
         {
           "kind" : "file",
           "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/AcceptanceScenarioTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/CalendarSyncTests.swift"
         },
         {
           "kind" : "file",
@@ -349,6 +363,7 @@
       "moduleOutputPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCoreTests.swiftmodule",
       "objects" : [
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/AcceptanceScenarioTests.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CalendarSyncTests.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/DomainTests.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ExportAndBackupTests.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/HabitEngineTests.swift.o",
@@ -392,6 +407,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CalendarSyncTests.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/DomainTests.swift.o"
         },
         {
@@ -418,6 +437,7 @@
       "prepareForIndexing" : false,
       "sources" : [
         "/home/user/desk-companion/Tests/CadenceCoreTests/AcceptanceScenarioTests.swift",
+        "/home/user/desk-companion/Tests/CadenceCoreTests/CalendarSyncTests.swift",
         "/home/user/desk-companion/Tests/CadenceCoreTests/DomainTests.swift",
         "/home/user/desk-companion/Tests/CadenceCoreTests/ExportAndBackupTests.swift",
         "/home/user/desk-companion/Tests/CadenceCoreTests/HabitEngineTests.swift",
@@ -601,6 +621,7 @@
       "-incremental",
       "-c",
       "/home/user/desk-companion/Sources/CadenceCore/Domain/BackupManager.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Domain/CalendarSync.swift",
       "/home/user/desk-companion/Sources/CadenceCore/Domain/DemoData.swift",
       "/home/user/desk-companion/Sources/CadenceCore/Domain/HabitEngine.swift",
       "/home/user/desk-companion/Sources/CadenceCore/Domain/PatientMatcher.swift",
@@ -663,6 +684,7 @@
       "-incremental",
       "-c",
       "/home/user/desk-companion/Tests/CadenceCoreTests/AcceptanceScenarioTests.swift",
+      "/home/user/desk-companion/Tests/CadenceCoreTests/CalendarSyncTests.swift",
       "/home/user/desk-companion/Tests/CadenceCoreTests/DomainTests.swift",
       "/home/user/desk-companion/Tests/CadenceCoreTests/ExportAndBackupTests.swift",
       "/home/user/desk-companion/Tests/CadenceCoreTests/HabitEngineTests.swift",
@@ -809,6 +831,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CalendarSyncTests.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/DomainTests.swift.o"
         },
         {
@@ -867,6 +893,10 @@
         {
           "kind" : "file",
           "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/BackupManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/CalendarSync.swift"
         },
         {
           "kind" : "file",
@@ -968,6 +998,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/CalendarSyncTests.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/DomainTests.swift"
         },
         {
@@ -1058,6 +1092,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSync.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ConsultationRepository.swift.o"
         },
         {
@@ -1127,6 +1165,10 @@
         {
           "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CadenceCoreTests.swiftmodule.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CalendarSyncTests.swift.o"
         },
         {
           "kind" : "file",

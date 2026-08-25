@@ -1,4 +1,5 @@
 /home/user/desk-companion/Sources/CadenceCore/Domain/BackupManager.swift
+/home/user/desk-companion/Sources/CadenceCore/Domain/CalendarSync.swift
 /home/user/desk-companion/Sources/CadenceCore/Domain/DemoData.swift
 /home/user/desk-companion/Sources/CadenceCore/Domain/HabitEngine.swift
 /home/user/desk-companion/Sources/CadenceCore/Domain/PatientMatcher.swift

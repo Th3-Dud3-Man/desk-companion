@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>fr_FR</string>
+    <key>CFBundleExecutable</key>
+    <string>Cadence</string>
+    <key>CFBundleIconFile</key>
+    <string>Cadence</string>
+    <key>CFBundleIdentifier</key>
+    <string>fr.cadence.Cadence</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>Cadence</string>
+    <key>CFBundleDisplayName</key>
+    <string>Cadence</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>14.0</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.productivity</string>
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>NSSupportsAutomaticTermination</key>
+    <false/>
+    <key>NSSupportsSuddenTermination</key>
+    <false/>
+    <key>NSHumanReadableCopyright</key>
+    <string>Cadence — application locale. Vos données restent sur ce Mac.</string>
+
+    <!-- Shown verbatim in the macOS permission prompt. macOS 14 and later reads the
+         first key; the second keeps the wording correct on earlier systems. -->
+    <key>NSCalendarsFullAccessUsageDescription</key>
+    <string>Cadence lit les calendriers que vous sélectionnez pour retrouver vos rendez-vous. Elle n'y écrit jamais et n'envoie aucune donnée sur Internet.</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>Cadence lit les calendriers que vous sélectionnez pour retrouver vos rendez-vous. Elle n'y écrit jamais et n'envoie aucune donnée sur Internet.</string>
+</dict>
+</plist>

@@ -1,0 +1,66 @@
+name: Build
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # The domain layer imports nothing but Foundation and the system SQLite, so it is
+  # held to compiling and passing its whole suite on Linux as well as macOS.
+  core-linux:
+    name: Core · Linux
+    runs-on: ubuntu-latest
+    container: swift:6.0-noble
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install SQLite headers
+        run: apt-get update && apt-get install -y --no-install-recommends libsqlite3-dev
+      - name: Build
+        run: swift build --target CadenceCore
+      - name: Test
+        run: swift test
+
+  app-macos:
+    name: Application · macOS
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Toolchain
+        run: swift --version && xcodebuild -version
+
+      - name: Build every target
+        run: swift build -v 2>&1 | tail -40
+
+      - name: Run the test suite
+        run: swift test
+
+      - name: Assemble Cadence.app
+        run: ./build.sh --release
+
+      - name: Verify the bundle
+        run: |
+          set -euo pipefail
+          APP=build/Cadence.app
+          test -x "$APP/Contents/MacOS/Cadence"
+          test -f "$APP/Contents/Info.plist"
+          test -f "$APP/Contents/Resources/Cadence.icns"
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Contents/Info.plist"
+          /usr/libexec/PlistBuddy -c 'Print :NSCalendarsFullAccessUsageDescription' "$APP/Contents/Info.plist"
+          codesign --verify --verbose "$APP"
+          echo "Bundle size: $(du -sh "$APP" | cut -f1)"
+
+      - name: Package the artifact
+        run: ditto -c -k --keepParent build/Cadence.app build/Cadence.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Cadence-app
+          path: build/Cadence.zip
+          if-no-files-found: error

@@ -29,6 +29,8 @@
 -lsqlite3
 -lsqlite3
 -lsqlite3
+-lsqlite3
+-lsqlite3
 -lswiftSwiftOnoneSupport
 -lswiftCore
 -lswift_Concurrency

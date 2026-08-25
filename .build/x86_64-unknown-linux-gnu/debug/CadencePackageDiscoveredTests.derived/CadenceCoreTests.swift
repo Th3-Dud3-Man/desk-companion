@@ -28,6 +28,25 @@ fileprivate extension BackupTests {
     ]
 }
 
+fileprivate extension CalendarSyncTests {
+    @available(*, deprecated, message: "Not actually deprecated. Marked as deprecated to allow inclusion of deprecated tests (which test deprecated functionality) without warnings")
+    static nonisolated(unsafe) let __allTests__CalendarSyncTests = [
+        ("testARenamedEventUpdatesTheTitle", testARenamedEventUpdatesTheTitle),
+        ("testAnAbsenceIsAlsoProtected", testAnAbsenceIsAlsoProtected),
+        ("testDeletingAnEventWithRecordedWorkKeepsTheRecord", testDeletingAnEventWithRecordedWorkKeepsTheRecord),
+        ("testDeletingAnUntouchedEventRemovesItQuietly", testDeletingAnUntouchedEventRemovesItQuietly),
+        ("testEventsAreImportedAndMatchedToPatients", testEventsAreImportedAndMatchedToPatients),
+        ("testEventsFromCalendarsTheUserDidNotChooseAreIgnored", testEventsFromCalendarsTheUserDidNotChooseAreIgnored),
+        ("testManualAppointmentsAreNeverTouchedBySynchronisation", testManualAppointmentsAreNeverTouchedBySynchronisation),
+        ("testMovingAnAppointmentThatAlreadyHasAPaymentRaisesAConflict", testMovingAnAppointmentThatAlreadyHasAPaymentRaisesAConflict),
+        ("testMovingAnUntouchedAppointmentUpdatesItInPlace", testMovingAnUntouchedAppointmentUpdatesItInPlace),
+        ("testRecurringOccurrencesAreDistinctRowsNotDuplicates", testRecurringOccurrencesAreDistinctRowsNotDuplicates),
+        ("testSynchronisingTwiceChangesNothing", testSynchronisingTwiceChangesNothing),
+        ("testTheUserCanKeepEitherSideOfAConflict", testTheUserCanKeepEitherSideOfAConflict),
+        ("testTurningACalendarOffRemovesOnlyUntouchedAppointments", testTurningACalendarOffRemovesOnlyUntouchedAppointments)
+    ]
+}
+
 fileprivate extension DemoDataTests {
     @available(*, deprecated, message: "Not actually deprecated. Marked as deprecated to allow inclusion of deprecated tests (which test deprecated functionality) without warnings")
     static nonisolated(unsafe) let __allTests__DemoDataTests = [
@@ -151,6 +170,7 @@ func __CadenceCoreTests__allTests() -> [XCTestCaseEntry] {
     return [
         testCase(AcceptanceScenarioTests.__allTests__AcceptanceScenarioTests),
         testCase(BackupTests.__allTests__BackupTests),
+        testCase(CalendarSyncTests.__allTests__CalendarSyncTests),
         testCase(DemoDataTests.__allTests__DemoDataTests),
         testCase(ExportTests.__allTests__ExportTests),
         testCase(FormattingTests.__allTests__FormattingTests),

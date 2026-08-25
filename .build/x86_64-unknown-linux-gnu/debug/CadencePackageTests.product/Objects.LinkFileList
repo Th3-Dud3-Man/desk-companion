@@ -5,6 +5,7 @@
 /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceStore.swift.o
 /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarRepository.swift.o
 /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSupport.swift.o
+/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CalendarSync.swift.o
 /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ConsultationRepository.swift.o
 /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/DemoData.swift.o
 /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o
@@ -23,6 +24,7 @@
 /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/UndoStack.swift.o
 /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/AcceptanceScenarioTests.swift.o
 /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CadenceCoreTests.swiftmodule.o
+/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CalendarSyncTests.swift.o
 /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/DomainTests.swift.o
 /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ExportAndBackupTests.swift.o
 /home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/HabitEngineTests.swift.o
