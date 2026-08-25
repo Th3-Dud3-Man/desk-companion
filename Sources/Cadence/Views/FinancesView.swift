@@ -99,7 +99,7 @@ struct FinancesView: View {
         .onAppear { anchor = model.selectedDay; load() }
         .onChange(of: period) { _, _ in load() }
         .onChange(of: anchor) { _, _ in load() }
-        .onChange(of: model.undoRevision) { _, _ in load() }
+        .onChange(of: model.dataRevision) { _, _ in load() }
     }
 
     // MARK: Header
@@ -230,16 +230,16 @@ struct FinancesView: View {
                     .foregroundStyle(Ink.textTertiary)
             } else {
                 ShareBar(
-                    slices: statistics.byMethod.enumerated().map { index, method in
-                        (colour: Ink.monogramTint(seed: index * 7 + 3), share: method.share)
+                    slices: statistics.byMethod.map { method in
+                        (colour: Ink.monogramTint(seed: Patient.seed(for: method.methodID)), share: method.share)
                     },
                     height: 8
                 )
                 VStack(spacing: Space.md) {
-                    ForEach(Array(statistics.byMethod.enumerated()), id: \.element.methodID) { index, method in
+                    ForEach(statistics.byMethod) { method in
                         HStack(spacing: Space.md) {
                             Circle()
-                                .fill(Ink.monogramTint(seed: index * 7 + 3))
+                                .fill(Ink.monogramTint(seed: Patient.seed(for: method.methodID)))
                                 .frame(width: 8, height: 8)
                             Text(method.label)
                                 .font(Typo.body)

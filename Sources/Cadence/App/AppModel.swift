@@ -63,7 +63,8 @@ struct DayItem: Identifiable, Equatable {
 struct ToastMessage: Identifiable, Equatable {
     let id = UUID()
     let text: String
-    var undoLabel: String?
+    var undoLabel: String? = nil
+    var redoLabel: String? = nil
 }
 
 /// The single source of view state.
@@ -99,7 +100,9 @@ final class AppModel: ObservableObject {
     /// Ticks so the "now" line and countdowns stay honest without polling the store.
     @Published private(set) var now: Date = Date()
 
-    @Published private(set) var undoRevision = 0
+    /// Bumped by every reload. Screens holding derived state watch this rather
+    /// than trying to observe each collection they depend on.
+    @Published private(set) var dataRevision = 0
 
     // MARK: Collaborators
 
@@ -205,10 +208,18 @@ final class AppModel: ObservableObject {
             } else {
                 selectedProfile = nil
             }
-            undoRevision = undoStack.revision
+            dataRevision &+= 1
         } catch {
             report(error)
         }
+    }
+
+    /// Finds a patient by identifier, archived ones included. The published list
+    /// deliberately hides archived patients, so it cannot be the only source.
+    func patient(id: UUID?) -> Patient? {
+        guard let id else { return nil }
+        if let cached = patients.first(where: { $0.id == id }) { return cached }
+        return try? store.patient(id: id)
     }
 
     func selectPatient(_ id: UUID?) {
@@ -252,51 +263,35 @@ final class AppModel: ObservableObject {
     // MARK: - Attendance
 
     func mark(_ status: ConsultationStatus, for item: DayItem) {
-        let previous = item.consultation.status
-        guard previous != status else { return }
-        let id = item.consultation.id
+        let before = item.consultation
+        guard before.status != status else { return }
+        let presentation = ConsultationStatusPresentation.of(status)
 
         perform(
-            label: "\(ConsultationStatusPresentation.of(status).label) · \(item.title)",
-            confirmation: "\(item.title) · \(ConsultationStatusPresentation.of(status).label.lowercased())",
-            action: { try self.store.setStatus(status, forConsultation: id) },
-            revert: { try self.store.setStatus(previous, forConsultation: id) }
+            label: "\(presentation.label) · \(item.title)",
+            confirmation: "\(item.title) · \(presentation.label.lowercased())",
+            action: { try self.store.setStatus(status, forConsultation: before.id) },
+            revert: { try self.store.upsertConsultationSilently(before) }
         )
     }
 
     func startSession(_ item: DayItem) {
-        let id = item.consultation.id
-        let previousStatus = item.consultation.status
-        let previousStart = item.consultation.actualStart
-
+        let before = item.consultation
         perform(
             label: "Démarrage · \(item.title)",
             confirmation: "Séance démarrée · \(item.title)",
-            action: { try self.store.startConsultation(id) },
-            revert: {
-                try self.store.setStatus(previousStatus, forConsultation: id)
-                if previousStart == nil { try self.store.clearActualTimes(id) }
-            }
+            action: { try self.store.startConsultation(before.id) },
+            revert: { try self.store.upsertConsultationSilently(before) }
         )
     }
 
     func endSession(_ item: DayItem) {
-        let id = item.consultation.id
-        let previousStatus = item.consultation.status
-        let previousEnd = item.consultation.actualEnd
-
+        let before = item.consultation
         perform(
             label: "Fin de séance · \(item.title)",
             confirmation: "Séance terminée · \(item.title)",
-            action: { try self.store.endConsultation(id) },
-            revert: {
-                try self.store.setStatus(previousStatus, forConsultation: id)
-                if previousEnd == nil {
-                    guard var consultation = try self.store.consultation(id: id) else { return }
-                    consultation.actualEnd = nil
-                    try self.store.upsertConsultationSilently(consultation)
-                }
-            }
+            action: { try self.store.endConsultation(before.id) },
+            revert: { try self.store.upsertConsultationSilently(before) }
         )
     }
 
@@ -344,7 +339,7 @@ final class AppModel: ObservableObject {
         perform(
             label: "Paiement de \(payment.money.formatted()) · \(patientName)",
             confirmation: "\(payment.money.formatted()) · \(settings.methodLabel(payment.methodID)) enregistré",
-            action: { try self.store.updatePayment(snapshot) },
+            action: { try self.store.recordPayment(snapshot) },
             revert: { try self.store.deletePaymentSilently(snapshot.id) },
             replay: { try self.store.restorePayment(snapshot) }
         )
@@ -470,7 +465,7 @@ final class AppModel: ObservableObject {
     func assign(patientID: UUID?, to consultation: Consultation) {
         let previous = consultation.patientID
         let id = consultation.id
-        let name = patientID.flatMap { identifier in patients.first { $0.id == identifier }?.displayName } ?? "aucun patient"
+        let name = patient(id: patientID)?.displayName ?? "aucun patient"
         perform(
             label: "Association du rendez-vous",
             confirmation: "Rendez-vous associé à \(name)",
@@ -535,7 +530,8 @@ final class AppModel: ObservableObject {
         do {
             if let label = try undoStack.undo() {
                 reload()
-                showToast("Annulé · \(label)")
+                toast = ToastMessage(text: "Annulé · \(label)", undoLabel: nil, redoLabel: "Rétablir")
+                scheduleToastDismissal()
             }
         } catch {
             report(error)
@@ -557,6 +553,10 @@ final class AppModel: ObservableObject {
 
     func showToast(_ text: String, undoLabel: String? = "Annuler") {
         toast = ToastMessage(text: text, undoLabel: undoStack.canUndo ? undoLabel : nil)
+        scheduleToastDismissal()
+    }
+
+    private func scheduleToastDismissal() {
         toastDismissal?.cancel()
         toastDismissal = Task { @MainActor in
             try? await Task.sleep(nanoseconds: 5_500_000_000)

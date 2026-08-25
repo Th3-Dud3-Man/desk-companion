@@ -13,9 +13,6 @@ public struct PracticeSettings: Hashable, Sendable {
     /// Calendar window pulled on each synchronisation.
     public var syncPastDays: Int
     public var syncFutureDays: Int
-    /// First and last hour shown on the day rail.
-    public var dayStartHour: Int
-    public var dayEndHour: Int
     public var hasCompletedOnboarding: Bool
     /// Blur the window content when the app loses focus, for consultations in the room.
     public var privacyBlurWhenInactive: Bool
@@ -29,8 +26,6 @@ public struct PracticeSettings: Hashable, Sendable {
         paymentMethods: PaymentMethod.builtIn,
         syncPastDays: 60,
         syncFutureDays: 180,
-        dayStartHour: 8,
-        dayEndHour: 20,
         hasCompletedOnboarding: false,
         privacyBlurWhenInactive: false
     )
@@ -68,8 +63,6 @@ extension CadenceStore {
         static let paymentMethods = "practice.paymentMethods"
         static let syncPastDays = "sync.pastDays"
         static let syncFutureDays = "sync.futureDays"
-        static let dayStartHour = "ui.dayStartHour"
-        static let dayEndHour = "ui.dayEndHour"
         static let onboardingDone = "app.onboardingCompleted"
         static let privacyBlur = "privacy.blurWhenInactive"
         static let lastBackupDay = "backup.lastDay"
@@ -118,8 +111,6 @@ extension CadenceStore {
         settings.defaultDurationMinutes = values[SettingKey.defaultDuration].flatMap(Int.init) ?? settings.defaultDurationMinutes
         settings.syncPastDays = values[SettingKey.syncPastDays].flatMap(Int.init) ?? settings.syncPastDays
         settings.syncFutureDays = values[SettingKey.syncFutureDays].flatMap(Int.init) ?? settings.syncFutureDays
-        settings.dayStartHour = values[SettingKey.dayStartHour].flatMap(Int.init) ?? settings.dayStartHour
-        settings.dayEndHour = values[SettingKey.dayEndHour].flatMap(Int.init) ?? settings.dayEndHour
         settings.hasCompletedOnboarding = (values[SettingKey.onboardingDone] as NSString?)?.boolValue ?? false
         settings.privacyBlurWhenInactive = (values[SettingKey.privacyBlur] as NSString?)?.boolValue ?? false
 
@@ -141,8 +132,6 @@ extension CadenceStore {
             try setRawSetting(SettingKey.defaultDuration, String(settings.defaultDurationMinutes))
             try setRawSetting(SettingKey.syncPastDays, String(settings.syncPastDays))
             try setRawSetting(SettingKey.syncFutureDays, String(settings.syncFutureDays))
-            try setRawSetting(SettingKey.dayStartHour, String(settings.dayStartHour))
-            try setRawSetting(SettingKey.dayEndHour, String(settings.dayEndHour))
             try setRawSetting(SettingKey.onboardingDone, settings.hasCompletedOnboarding ? "true" : "false")
             try setRawSetting(SettingKey.privacyBlur, settings.privacyBlurWhenInactive ? "true" : "false")
             if let data = try? JSONEncoder().encode(settings.paymentMethods),

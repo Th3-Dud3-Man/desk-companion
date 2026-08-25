@@ -75,20 +75,6 @@ struct PracticeSettingsPane: View {
                     .frame(width: 140)
                 }
 
-                FormRow(label: "Amplitude de la journée",
-                        hint: "Utilisée pour cadrer l'affichage de la journée.") {
-                    HStack(spacing: Space.md) {
-                        Picker("", selection: $draft.dayStartHour) {
-                            ForEach(5...12, id: \.self) { Text("\($0) h").tag($0) }
-                        }
-                        .labelsHidden().frame(width: 90)
-                        Text("→").foregroundStyle(Ink.textTertiary)
-                        Picker("", selection: $draft.dayEndHour) {
-                            ForEach(14...23, id: \.self) { Text("\($0) h").tag($0) }
-                        }
-                        .labelsHidden().frame(width: 90)
-                    }
-                }
             }
 
             SettingsCard {

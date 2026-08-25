@@ -51,9 +51,6 @@ final class CalendarSyncService: ObservableObject {
     @Published private(set) var lastOutcome: CalendarSyncOutcome?
     @Published private(set) var lastError: String?
     @Published private(set) var subscriptions: [CalendarSubscription] = []
-    /// True when the last attempt could not reach the account's server; local data
-    /// still works, which is the whole point of the design.
-    @Published private(set) var isOffline = false
 
     /// Called after a synchronisation changes anything, so the model can refresh.
     var onChange: (() -> Void)?
@@ -163,9 +160,12 @@ final class CalendarSyncService: ObservableObject {
     // MARK: Synchronising
 
     enum Trigger {
-        case launch, userAction, calendarChanged, dayChanged
-
-        var isSilent: Bool { self != .userAction }
+        /// Opening the application.
+        case launch
+        /// The user asked for it, so failures are worth saying out loud.
+        case userAction
+        /// macOS told us the calendar database changed.
+        case calendarChanged
     }
 
     func synchronise(trigger: Trigger = .userAction) async {
@@ -202,7 +202,6 @@ final class CalendarSyncService: ObservableObject {
             )
             lastOutcome = outcome
             lastSyncAt = now
-            isOffline = false
             for id in enabledIDs {
                 try? store.updateCalendarStatus(id, status: .synced, message: outcome.summary, syncedAt: now)
             }
@@ -272,7 +271,6 @@ final class CalendarSyncService: ObservableObject {
         if !access.canRead { return access == .notDetermined ? "Agenda non connecté" : "Accès refusé" }
         if !hasEnabledCalendars { return "Aucun calendrier sélectionné" }
         if let lastError { return lastError }
-        if isOffline { return "Hors ligne · données locales" }
         if let lastSyncAt { return "À jour · \(CadenceFormat.since(lastSyncAt))" }
         return "Jamais synchronisé"
     }
@@ -281,7 +279,6 @@ final class CalendarSyncService: ObservableObject {
         if isSyncing { return "arrow.triangle.2.circlepath" }
         if !access.canRead { return "calendar.badge.exclamationmark" }
         if lastError != nil { return "exclamationmark.triangle.fill" }
-        if isOffline { return "wifi.slash" }
         if lastSyncAt != nil { return "checkmark.circle.fill" }
         return "calendar"
     }

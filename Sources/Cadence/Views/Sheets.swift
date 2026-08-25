@@ -187,8 +187,7 @@ struct ConsultationEditor: View {
 
     private func save() {
         let end = start.addingTimeInterval(Double(durationMinutes) * 60)
-        let title = patientID
-            .flatMap { identifier in model.patients.first { $0.id == identifier }?.displayName }
+        let title = model.patient(id: patientID)?.displayName
             ?? manualTitle.trimmingCharacters(in: .whitespaces)
 
         switch mode {
@@ -261,8 +260,7 @@ struct PatientPicker: View {
     }
 
     private var selectedPatient: Patient? {
-        guard let selection else { return nil }
-        return model.patients.first { $0.id == selection }
+        model.patient(id: selection)
     }
 }
 

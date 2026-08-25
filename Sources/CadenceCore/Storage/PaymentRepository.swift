@@ -91,6 +91,18 @@ extension CadenceStore {
         return payment
     }
 
+    /// Records a payment the caller has already composed (a different amount, a
+    /// late-cancellation charge). Same audit entry as the one-click path.
+    @discardableResult
+    public func recordPayment(_ payment: Payment) throws -> Payment {
+        try write {
+            try insert(payment)
+            try log(.paymentRecorded, entityType: "payment", entityID: payment.id,
+                    detail: "\(payment.money.formatted()) · \(payment.methodID)")
+        }
+        return payment
+    }
+
     /// Re-inserts a payment exactly as given. Used by undo.
     public func restorePayment(_ payment: Payment) throws {
         try write { try insert(payment) }

@@ -73,15 +73,15 @@ struct DaySummaryRail: View {
         VStack(alignment: .leading, spacing: Space.md) {
             SectionLabel(text: "Moyens de paiement")
             ShareBar(
-                slices: statistics.byMethod.enumerated().map { index, method in
-                    (colour: Ink.monogramTint(seed: index * 7 + 3), share: method.share)
+                slices: statistics.byMethod.map { method in
+                    (colour: Ink.monogramTint(seed: Patient.seed(for: method.methodID)), share: method.share)
                 }
             )
             VStack(spacing: Space.sm) {
-                ForEach(Array(statistics.byMethod.enumerated()), id: \.element.methodID) { index, method in
+                ForEach(statistics.byMethod) { method in
                     HStack(spacing: Space.md) {
                         Circle()
-                            .fill(Ink.monogramTint(seed: index * 7 + 3))
+                            .fill(Ink.monogramTint(seed: Patient.seed(for: method.methodID)))
                             .frame(width: 7, height: 7)
                         Text(method.label)
                             .font(Typo.caption)

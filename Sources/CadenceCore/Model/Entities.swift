@@ -161,10 +161,6 @@ public struct Consultation: Identifiable, Hashable, Sendable {
 
     public var isUnassigned: Bool { patientID == nil }
 
-    public func overlapsDay(_ day: Date, calendar: Calendar = .cadence) -> Bool {
-        calendar.isDate(scheduledStart, inSameDayAs: day)
-    }
-
     /// True while the session is running: started, not finished.
     public var isRunning: Bool { status == .inProgress }
 }

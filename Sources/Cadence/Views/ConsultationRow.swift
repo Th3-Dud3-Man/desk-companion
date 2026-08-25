@@ -122,7 +122,7 @@ struct ConsultationRow: View {
         HStack(spacing: Space.md) {
             switch status {
             case .scheduled, .confirmed:
-                if isHovered || isSelected || isNext {
+                if isHovered || isSelected || needsAttentionNow {
                     HStack(spacing: Space.sm) {
                         Button("Présent") { model.mark(.attended, for: item) }
                             .buttonStyle(.cadence(.primary, size: .small))
@@ -178,6 +178,13 @@ struct ConsultationRow: View {
 
     private var isPast: Bool {
         model.isShowingToday && consultation.scheduledEnd < model.now
+    }
+
+    /// Rows the user has to deal with keep their actions on screen rather than
+    /// waiting for a hover: the next appointment, and anything whose slot has
+    /// already passed without being resolved. Hovering reveals the rest.
+    private var needsAttentionNow: Bool {
+        isNext || (isPast && !status.isResolved)
     }
 
     private var markerColour: Color {

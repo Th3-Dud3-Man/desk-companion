@@ -551,6 +551,8 @@ struct ToastView: View {
     let message: String
     var undoTitle: String? = nil
     var onUndo: (() -> Void)? = nil
+    var redoTitle: String? = nil
+    var onRedo: (() -> Void)? = nil
 
     var body: some View {
         HStack(spacing: Space.lg) {
@@ -563,6 +565,16 @@ struct ToastView: View {
                     HStack(spacing: Space.sm) {
                         Text(undoTitle)
                         KeyHint(keys: "⌘Z")
+                    }
+                }
+                .buttonStyle(.cadence(.ghost, size: .small))
+            }
+            if let redoTitle, let onRedo {
+                Divider().frame(height: 16)
+                Button(action: onRedo) {
+                    HStack(spacing: Space.sm) {
+                        Text(redoTitle)
+                        KeyHint(keys: "⇧⌘Z")
                     }
                 }
                 .buttonStyle(.cadence(.ghost, size: .small))

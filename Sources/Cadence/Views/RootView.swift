@@ -1,4 +1,6 @@
 import SwiftUI
+import AppKit
+import Combine
 import CadenceCore
 
 @MainActor
@@ -86,8 +88,10 @@ struct WorkspaceView: View {
             }
         }
         .navigationTitle(model.destination.title)
+        .overlay(alignment: .top) { failureLayer }
         .overlay(alignment: .bottom) { toastLayer }
         .overlay { paletteLayer }
+        .modifier(PrivacyCover(isEnabled: model.settings.privacyBlurWhenInactive))
         .task {
             if !model.settings.hasCompletedOnboarding { model.isOnboarding = true }
             await model.calendarSync.synchronise(trigger: .launch)
@@ -109,15 +113,28 @@ struct WorkspaceView: View {
         }
     }
 
+    /// Errors are shown where the user is looking, whichever screen that is, and
+    /// never as a modal alert that interrupts what they were doing.
+    @ViewBuilder
+    private var failureLayer: some View {
+        if let failure = model.failure {
+            InlineError(message: failure, retryTitle: "Fermer") { model.failure = nil }
+                .frame(maxWidth: 560)
+                .padding(.top, Space.lg)
+                .transition(reduceMotion ? .opacity : .move(edge: .top).combined(with: .opacity))
+                .animation(Motion.respectful(Motion.standard, reduceMotion: reduceMotion), value: failure)
+        }
+    }
+
     @ViewBuilder
     private var toastLayer: some View {
         if let toast = model.toast {
             ToastView(
                 message: toast.text,
                 undoTitle: toast.undoLabel,
-                onUndo: toast.undoLabel == nil ? nil : {
-                    model.performUndo()
-                }
+                onUndo: toast.undoLabel == nil ? nil : { model.performUndo() },
+                redoTitle: toast.redoLabel,
+                onRedo: toast.redoLabel == nil ? nil : { model.performRedo() }
             )
             .padding(.bottom, Space.xxxl)
             .transition(
@@ -293,5 +310,52 @@ struct SyncStatusPill: View {
         if sync.isSyncing { return Ink.textSecondary }
         if sync.lastSyncAt != nil { return Ink.accent }
         return Ink.textTertiary
+    }
+}
+
+/// Hides the window's contents whenever Cadence is not the active application.
+///
+/// The realistic risk in a consulting room is not a remote attacker: it is the
+/// patient sitting across the desk while their therapist switches to another
+/// window. An opaque cover — not a blur, which stays partly readable — closes that
+/// gap, and costs nothing when the setting is off.
+struct PrivacyCover: ViewModifier {
+    let isEnabled: Bool
+
+    @State private var isCovered = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func body(content: Content) -> some View {
+        content
+            .overlay {
+                if isEnabled && isCovered { cover }
+            }
+            .animation(Motion.respectful(Motion.quick, reduceMotion: reduceMotion), value: isCovered)
+            .onReceive(NotificationCenter.default.publisher(for: NSApplication.didResignActiveNotification)) { _ in
+                isCovered = true
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+                isCovered = false
+            }
+    }
+
+    private var cover: some View {
+        ZStack {
+            Ink.canvas
+            VStack(spacing: Space.lg) {
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 22, weight: .light))
+                    .foregroundStyle(Ink.textTertiary)
+                Text("Contenu masqué")
+                    .font(Typo.heading)
+                    .foregroundStyle(Ink.textSecondary)
+                Text("Revenez dans Cadence pour l'afficher.")
+                    .font(Typo.caption)
+                    .foregroundStyle(Ink.textTertiary)
+            }
+        }
+        .ignoresSafeArea()
+        .transition(.opacity)
+        .accessibilityLabel("Contenu masqué pendant que Cadence est en arrière-plan")
     }
 }

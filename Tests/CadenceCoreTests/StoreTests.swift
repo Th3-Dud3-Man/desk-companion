@@ -140,7 +140,7 @@ final class StoreTests: CadenceTestCase {
         settings.practiceName = "Cabinet du Parc"
         settings.defaultAmountCents = 7_500
         settings.defaultMethodID = "cash"
-        settings.dayStartHour = 7
+        settings.privacyBlurWhenInactive = true
         settings.hasCompletedOnboarding = true
         settings.paymentMethods = [
             PaymentMethod(id: "cash", label: "Espèces", symbol: "banknote"),
@@ -154,7 +154,7 @@ final class StoreTests: CadenceTestCase {
         XCTAssertEqual(reloaded.practiceName, "Cabinet du Parc")
         XCTAssertEqual(reloaded.defaultAmountCents, 7_500)
         XCTAssertEqual(reloaded.defaultMethodID, "cash")
-        XCTAssertEqual(reloaded.dayStartHour, 7)
+        XCTAssertTrue(reloaded.privacyBlurWhenInactive)
         XCTAssertTrue(reloaded.hasCompletedOnboarding)
         XCTAssertEqual(reloaded.paymentMethods.count, 3)
         XCTAssertEqual(reloaded.methodLabel("card"), "CB", "a renamed method must be reflected everywhere")

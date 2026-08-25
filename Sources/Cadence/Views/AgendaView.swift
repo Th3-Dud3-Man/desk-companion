@@ -42,7 +42,7 @@ struct AgendaView: View {
         }
         .onAppear { anchor = model.selectedDay; load() }
         .onChange(of: anchor) { _, _ in load() }
-        .onChange(of: model.undoRevision) { _, _ in load() }
+        .onChange(of: model.dataRevision) { _, _ in load() }
         .onChange(of: model.selectedDay) { _, newValue in
             if !week.contains(newValue) { anchor = newValue }
         }

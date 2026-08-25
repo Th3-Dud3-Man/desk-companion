@@ -66,22 +66,10 @@ extension CadenceStore {
         ).compactMap(Self.decodeConsultation)
     }
 
-    public func consultationsNeedingAttention(in range: DateRange) throws -> [Consultation] {
-        try consultations(in: range, includeCancelled: false).filter { !$0.status.isResolved }
-    }
-
     public func consultationsWithSyncIssues() throws -> [Consultation] {
         try database.query(
             "SELECT * FROM consultation WHERE sync_state IN ('conflict', 'orphaned') ORDER BY scheduled_start DESC;"
         ).compactMap(Self.decodeConsultation)
-    }
-
-    /// Earliest and latest scheduled consultation, used to bound the agenda navigation.
-    public func consultationDateBounds() throws -> (first: Date, last: Date)? {
-        guard let row = try database.query(
-            "SELECT MIN(scheduled_start) AS first_start, MAX(scheduled_start) AS last_start FROM consultation;"
-        ).first, let first = row.date("first_start"), let last = row.date("last_start") else { return nil }
-        return (first, last)
     }
 
     /// Days in `range` that hold at least one consultation — lets the agenda mark
