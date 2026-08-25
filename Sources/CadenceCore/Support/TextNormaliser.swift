@@ -55,10 +55,11 @@ public enum TextNormaliser {
         let normalised = normalise(stripped)
         let words = normalised.split(separator: " ").map(String.init)
 
-        // Remove noise words and bare numbers (times, durations, session counts).
+        // Remove scheduling noise. Anything starting with a digit is a time, a
+        // duration or an ordinal ("14h00", "9h", "2eme") — never a person's name.
         let meaningful = words.filter { word in
             if noiseWords.contains(word) { return false }
-            if word.allSatisfy(\.isNumber) { return false }
+            if word.first?.isNumber == true { return false }
             if word.count == 1 { return false }
             return true
         }

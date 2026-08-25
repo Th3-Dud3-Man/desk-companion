@@ -2,6 +2,60 @@
   "": {
     "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/master.swiftdeps"
   },
+  "/home/user/desk-companion/Sources/CadenceCore/Domain/BackupManager.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/BackupManager.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/BackupManager.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/BackupManager~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/BackupManager.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Domain/DemoData.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/DemoData.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/DemoData.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/DemoData~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/DemoData.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Domain/HabitEngine.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/HabitEngine.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/HabitEngine.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/HabitEngine~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/HabitEngine.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Domain/PatientMatcher.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientMatcher.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientMatcher.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientMatcher~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientMatcher.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Domain/PatientProfile.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientProfile.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientProfile.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientProfile~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientProfile.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Domain/Statistics.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Statistics.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Statistics.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Statistics~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Statistics.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Domain/UndoStack.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/UndoStack.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/UndoStack.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/UndoStack~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/UndoStack.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Export/ActivityReport.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ActivityReport.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ActivityReport.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ActivityReport~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ActivityReport.swiftdeps"
+  },
+  "/home/user/desk-companion/Sources/CadenceCore/Export/CSVExport.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CSVExport.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CSVExport.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CSVExport~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CSVExport.swiftdeps"
+  },
   "/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift": {
     "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.d",
     "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o",

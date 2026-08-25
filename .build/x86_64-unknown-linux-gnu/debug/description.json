@@ -28,6 +28,42 @@
       "inputs" : [
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/BackupManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/DemoData.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/HabitEngine.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/PatientMatcher.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/PatientProfile.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/Statistics.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/UndoStack.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Export/ActivityReport.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Export/CSVExport.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift"
         },
         {
@@ -91,6 +127,15 @@
       "moduleName" : "CadenceCore",
       "moduleOutputPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCore.swiftmodule",
       "objects" : [
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/BackupManager.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/DemoData.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/HabitEngine.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientMatcher.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientProfile.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Statistics.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/UndoStack.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ActivityReport.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CSVExport.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Enums.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Money.swift.o",
@@ -136,6 +181,42 @@
       ],
       "outputFileMapPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/output-file-map.json",
       "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/BackupManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/DemoData.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/HabitEngine.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientMatcher.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientProfile.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Statistics.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/UndoStack.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ActivityReport.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CSVExport.swift.o"
+        },
         {
           "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o"
@@ -195,6 +276,15 @@
       ],
       "prepareForIndexing" : false,
       "sources" : [
+        "/home/user/desk-companion/Sources/CadenceCore/Domain/BackupManager.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Domain/DemoData.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Domain/HabitEngine.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Domain/PatientMatcher.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Domain/PatientProfile.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Domain/Statistics.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Domain/UndoStack.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Export/ActivityReport.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Export/CSVExport.swift",
         "/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift",
         "/home/user/desk-companion/Sources/CadenceCore/Model/Enums.swift",
         "/home/user/desk-companion/Sources/CadenceCore/Model/Money.swift",
@@ -219,7 +309,27 @@
       "inputs" : [
         {
           "kind" : "file",
-          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/PlaceholderTests.swift"
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/AcceptanceScenarioTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/DomainTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/ExportAndBackupTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/HabitEngineTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/StoreTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/TestSupport.swift"
         },
         {
           "kind" : "file",
@@ -238,7 +348,12 @@
       "moduleName" : "CadenceCoreTests",
       "moduleOutputPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCoreTests.swiftmodule",
       "objects" : [
-        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swift.o"
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/AcceptanceScenarioTests.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/DomainTests.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ExportAndBackupTests.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/HabitEngineTests.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/StoreTests.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/TestSupport.swift.o"
       ],
       "otherArguments" : [
         "-target",
@@ -273,7 +388,27 @@
       "outputs" : [
         {
           "kind" : "file",
-          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swift.o"
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/AcceptanceScenarioTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/DomainTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ExportAndBackupTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/HabitEngineTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/StoreTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/TestSupport.swift.o"
         },
         {
           "kind" : "file",
@@ -282,7 +417,12 @@
       ],
       "prepareForIndexing" : false,
       "sources" : [
-        "/home/user/desk-companion/Tests/CadenceCoreTests/PlaceholderTests.swift"
+        "/home/user/desk-companion/Tests/CadenceCoreTests/AcceptanceScenarioTests.swift",
+        "/home/user/desk-companion/Tests/CadenceCoreTests/DomainTests.swift",
+        "/home/user/desk-companion/Tests/CadenceCoreTests/ExportAndBackupTests.swift",
+        "/home/user/desk-companion/Tests/CadenceCoreTests/HabitEngineTests.swift",
+        "/home/user/desk-companion/Tests/CadenceCoreTests/StoreTests.swift",
+        "/home/user/desk-companion/Tests/CadenceCoreTests/TestSupport.swift"
       ],
       "tempsPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build",
       "wholeModuleOptimization" : false
@@ -460,6 +600,15 @@
       "desk_companion",
       "-incremental",
       "-c",
+      "/home/user/desk-companion/Sources/CadenceCore/Domain/BackupManager.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Domain/DemoData.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Domain/HabitEngine.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Domain/PatientMatcher.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Domain/PatientProfile.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Domain/Statistics.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Domain/UndoStack.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Export/ActivityReport.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Export/CSVExport.swift",
       "/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift",
       "/home/user/desk-companion/Sources/CadenceCore/Model/Enums.swift",
       "/home/user/desk-companion/Sources/CadenceCore/Model/Money.swift",
@@ -513,7 +662,12 @@
       "desk_companion",
       "-incremental",
       "-c",
-      "/home/user/desk-companion/Tests/CadenceCoreTests/PlaceholderTests.swift",
+      "/home/user/desk-companion/Tests/CadenceCoreTests/AcceptanceScenarioTests.swift",
+      "/home/user/desk-companion/Tests/CadenceCoreTests/DomainTests.swift",
+      "/home/user/desk-companion/Tests/CadenceCoreTests/ExportAndBackupTests.swift",
+      "/home/user/desk-companion/Tests/CadenceCoreTests/HabitEngineTests.swift",
+      "/home/user/desk-companion/Tests/CadenceCoreTests/StoreTests.swift",
+      "/home/user/desk-companion/Tests/CadenceCoreTests/TestSupport.swift",
       "-I",
       "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules",
       "-target",
@@ -651,7 +805,27 @@
       "inputs" : [
         {
           "kind" : "file",
-          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swift.o"
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/AcceptanceScenarioTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/DomainTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ExportAndBackupTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/HabitEngineTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/StoreTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/TestSupport.swift.o"
         }
       ],
       "outputs" : [
@@ -689,6 +863,42 @@
         {
           "kind" : "virtual",
           "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/BackupManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/DemoData.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/HabitEngine.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/PatientMatcher.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/PatientProfile.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/Statistics.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Domain/UndoStack.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Export/ActivityReport.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Export/CSVExport.swift"
         },
         {
           "kind" : "file",
@@ -754,7 +964,27 @@
         },
         {
           "kind" : "file",
-          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/PlaceholderTests.swift"
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/AcceptanceScenarioTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/DomainTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/ExportAndBackupTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/HabitEngineTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/StoreTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/TestSupport.swift"
         }
       ],
       "outputFilePath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/sources"
@@ -800,6 +1030,18 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ActivityReport.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/BackupManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CSVExport.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CadenceCore.swiftmodule.o"
         },
         {
@@ -820,6 +1062,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/DemoData.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o"
         },
         {
@@ -828,7 +1074,19 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/HabitEngine.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Money.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientMatcher.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/PatientProfile.swift.o"
         },
         {
           "kind" : "file",
@@ -852,7 +1110,19 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Statistics.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/TextNormaliser.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/UndoStack.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/AcceptanceScenarioTests.swift.o"
         },
         {
           "kind" : "file",
@@ -860,7 +1130,23 @@
         },
         {
           "kind" : "file",
-          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/PlaceholderTests.swift.o"
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/DomainTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ExportAndBackupTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/HabitEngineTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/StoreTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/TestSupport.swift.o"
         },
         {
           "kind" : "file",

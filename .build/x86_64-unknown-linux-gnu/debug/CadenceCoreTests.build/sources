@@ -1,1 +1,6 @@
-/home/user/desk-companion/Tests/CadenceCoreTests/PlaceholderTests.swift
+/home/user/desk-companion/Tests/CadenceCoreTests/AcceptanceScenarioTests.swift
+/home/user/desk-companion/Tests/CadenceCoreTests/DomainTests.swift
+/home/user/desk-companion/Tests/CadenceCoreTests/ExportAndBackupTests.swift
+/home/user/desk-companion/Tests/CadenceCoreTests/HabitEngineTests.swift
+/home/user/desk-companion/Tests/CadenceCoreTests/StoreTests.swift
+/home/user/desk-companion/Tests/CadenceCoreTests/TestSupport.swift
