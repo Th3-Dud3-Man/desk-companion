@@ -3,6 +3,13 @@ import CadenceCore
 
 /// The menu bar. Every item here does something; there are no placeholders, and
 /// every shortcut matches the one shown in the interface.
+///
+/// The `@MainActor` here produces one compiler warning, because SwiftUI declares
+/// `Commands.body` without isolation while `View.body` has it. It is kept
+/// deliberately: menus are built and invoked on the main thread, and this type
+/// reads main-actor state, so the annotation describes reality. Dropping it to
+/// silence the warning would mean either lying about the isolation or unpicking
+/// it from the model, which would be worse than the warning.
 @MainActor
 struct CadenceCommands: Commands {
     @ObservedObject var bootstrap: AppBootstrap

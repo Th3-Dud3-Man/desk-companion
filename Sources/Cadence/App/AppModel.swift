@@ -130,7 +130,14 @@ final class AppModel: ObservableObject {
         // The store takes its own lock, so this is safe alongside the interface.
         let backupManager = backups
         DispatchQueue.global(qos: .utility).async {
-            try? backupManager.createDailySnapshotIfNeeded()
+            do {
+                _ = try backupManager.createDailySnapshotIfNeeded()
+            } catch {
+                // A failed snapshot must not stop the day, but it must not pass
+                // unnoticed either — it is the one thing standing between a bad
+                // afternoon and a lost history.
+                NSLog("Cadence: la sauvegarde quotidienne a échoué — %@", String(describing: error))
+            }
         }
 
         // Keeps the "maintenant" line and the countdowns honest without polling
@@ -423,10 +430,18 @@ final class AppModel: ObservableObject {
     }
 
     @discardableResult
-    func createConsultation(patientID: UUID?, title: String, start: Date, end: Date, location: String? = nil) -> Consultation? {
+    func createConsultation(
+        patientID: UUID?,
+        title: String,
+        start: Date,
+        end: Date,
+        location: String? = nil,
+        notes: String? = nil
+    ) -> Consultation? {
         do {
             let consultation = try store.createConsultation(
-                patientID: patientID, title: title, start: start, end: end, location: location
+                patientID: patientID, title: title, start: start, end: end,
+                location: location, notes: notes
             )
             let id = consultation.id
             undoStack.register(
@@ -610,9 +625,11 @@ final class AppModel: ObservableObject {
 
     func present(_ sheet: AppSheet) { activeSheet = sheet }
 
-    func requestNewConsultation(at date: Date? = nil) {
-        let suggested = date ?? defaultSlotForNewConsultation()
-        activeSheet = .newConsultation(suggested)
+    func requestNewConsultation(at date: Date? = nil, for patientID: UUID? = nil) {
+        activeSheet = .newConsultation(
+            start: date ?? defaultSlotForNewConsultation(),
+            patientID: patientID
+        )
     }
 
     func requestNewPatient() { activeSheet = .newPatient }
@@ -639,7 +656,7 @@ final class AppModel: ObservableObject {
 /// Everything that can appear over the workspace. One enum, so two sheets can never
 /// fight over the screen.
 enum AppSheet: Identifiable, Equatable {
-    case newConsultation(Date)
+    case newConsultation(start: Date, patientID: UUID?)
     case newPatient
     case editPatient(Patient)
     case editConsultation(Consultation)
@@ -648,7 +665,8 @@ enum AppSheet: Identifiable, Equatable {
 
     var id: String {
         switch self {
-        case .newConsultation(let date): return "new-consultation-\(date.timeIntervalSince1970)"
+        case .newConsultation(let start, let patientID):
+            return "new-consultation-\(start.timeIntervalSince1970)-\(patientID?.uuidString ?? "none")"
         case .newPatient: return "new-patient"
         case .editPatient(let patient): return "edit-patient-\(patient.id)"
         case .editConsultation(let consultation): return "edit-consultation-\(consultation.id)"

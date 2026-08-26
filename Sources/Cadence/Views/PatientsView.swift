@@ -217,7 +217,7 @@ struct PatientRecord: View {
 
             HStack(spacing: Space.md) {
                 Button("Nouveau rendez-vous") {
-                    model.requestNewConsultation(at: nil)
+                    model.requestNewConsultation(at: nil, for: patient.id)
                 }
                 .buttonStyle(.cadence(.secondary, size: .small))
 

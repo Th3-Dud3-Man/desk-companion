@@ -110,6 +110,16 @@ struct ConsultationRow: View {
                         .foregroundStyle(Ink.textSecondary)
                         .lineLimit(1)
                 }
+                if let note = consultation.notes, !note.isEmpty {
+                    HStack(spacing: Space.xs) {
+                        Image(systemName: "text.alignleft")
+                            .font(.system(size: 8.5, weight: .medium))
+                        Text(note)
+                            .lineLimit(1)
+                    }
+                    .font(Typo.caption)
+                    .foregroundStyle(Ink.textTertiary)
+                }
             }
 
             Spacer(minLength: Space.md)
@@ -159,7 +169,7 @@ struct ConsultationRow: View {
                 StatusChip(status: .of(status))
             }
 
-            RowMenuButton(item: item, isVisible: isHovered || isSelected)
+            RowMenuButton(item: item, isVisible: isHovered || isSelected || consultation.isUnassigned)
         }
     }
 

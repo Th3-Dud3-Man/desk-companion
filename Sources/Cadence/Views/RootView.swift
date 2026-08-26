@@ -162,8 +162,8 @@ struct WorkspaceView: View {
     @ViewBuilder
     private func sheetView(for sheet: AppSheet) -> some View {
         switch sheet {
-        case .newConsultation(let date):
-            ConsultationEditor(mode: .create(suggestedStart: date))
+        case .newConsultation(let start, let patientID):
+            ConsultationEditor(mode: .create(suggestedStart: start, patientID: patientID))
                 .environmentObject(model)
         case .editConsultation(let consultation):
             ConsultationEditor(mode: .edit(consultation))

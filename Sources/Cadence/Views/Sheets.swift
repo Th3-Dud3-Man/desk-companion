@@ -95,7 +95,7 @@ struct FormRow<Content: View>: View {
 @MainActor
 struct ConsultationEditor: View {
     enum Mode {
-        case create(suggestedStart: Date)
+        case create(suggestedStart: Date, patientID: UUID?)
         case edit(Consultation)
     }
 
@@ -172,8 +172,9 @@ struct ConsultationEditor: View {
         guard !didLoad else { return }
         didLoad = true
         switch mode {
-        case .create(let suggested):
+        case .create(let suggested, let suggestedPatient):
             start = suggested
+            patientID = suggestedPatient
             durationMinutes = model.settings.defaultDurationMinutes
         case .edit(let consultation):
             patientID = consultation.patientID
@@ -194,7 +195,8 @@ struct ConsultationEditor: View {
         case .create:
             model.createConsultation(
                 patientID: patientID, title: title, start: start, end: end,
-                location: location.isEmpty ? nil : location
+                location: location.isEmpty ? nil : location,
+                notes: notes.isEmpty ? nil : notes
             )
         case .edit(let original):
             var updated = original
