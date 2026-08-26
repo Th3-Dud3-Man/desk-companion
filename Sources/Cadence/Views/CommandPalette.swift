@@ -147,6 +147,7 @@ struct CommandPaletteView: View {
         if !trimmed.isEmpty {
             output += patients(matching: trimmed)
             output += consultations(matching: trimmed)
+            output += payments(matching: trimmed)
         }
         return output
     }
@@ -236,6 +237,49 @@ struct CommandPaletteView: View {
                     trailing: nil
                 ) {
                     model.select(day: consultation.scheduledStart)
+                    model.destination = .today
+                }
+            }
+    }
+}
+
+@MainActor
+extension CommandPaletteView {
+
+    /// Payments are searchable by patient and by amount, so "90" answers
+    /// "who paid ninety euros, and when?" without leaving the keyboard.
+    fileprivate func payments(matching query: String) -> [PaletteResult] {
+        let window = DateRange(
+            start: Calendar.cadence.date(byAdding: .month, value: -18, to: Date()) ?? Date(),
+            end: Calendar.cadence.date(byAdding: .day, value: 1, to: Date()) ?? Date()
+        )
+        let all = (try? model.store.payments(in: window)) ?? []
+        guard !all.isEmpty else { return [] }
+        let names = (try? model.store.patients(ids: Array(Set(all.map(\.patientID))))) ?? [:]
+
+        let digits = query.filter { $0.isNumber }
+        let matching = all.filter { payment in
+            let name = names[payment.patientID]?.displayName ?? ""
+            if TextNormaliser.matches(name, query: query) { return true }
+            if TextNormaliser.matches(CadenceFormat.numericDate(payment.paidAt), query: query) { return true }
+            // An amount typed without decimals should find 70 € as readily as 70,00 €.
+            if !digits.isEmpty, String(payment.amountCents / 100).hasPrefix(digits) { return true }
+            return false
+        }
+
+        return matching
+            .sorted { $0.paidAt > $1.paidAt }
+            .prefix(4)
+            .map { payment in
+                let name = names[payment.patientID]?.displayName ?? "Patient supprimé"
+                return PaletteResult(
+                    id: "payment.\(payment.id)",
+                    group: "Paiements",
+                    symbol: model.settings.methodSymbol(payment.methodID),
+                    title: "\(payment.money.formatted()) · \(name)",
+                    subtitle: "\(model.settings.methodLabel(payment.methodID)) · \(CadenceFormat.numericDate(payment.paidAt))"
+                ) {
+                    model.select(day: payment.paidAt)
                     model.destination = .today
                 }
             }
