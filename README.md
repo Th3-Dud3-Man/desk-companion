@@ -101,6 +101,13 @@ c'est macOS qui gère le compte, Cadence lit ce que le système expose.
 | `⌘Z` / `⇧⌘Z` | Annuler / rétablir |
 | `⌘/` | Rappel des raccourcis |
 
+### Le rapport d'activité
+
+Produit à partir des données réellement saisies, prêt à imprimer ou à transmettre.
+Le rendu ci-dessous est celui du jeu de démonstration, généré par le code du dépôt :
+
+<img src="docs/images/rapport-activite.png" width="620" alt="Rapport d'activité mensuel">
+
 ## Vos données
 
 Un fichier SQLite dans `~/Library/Application Support/Cadence/`, et rien d'autre.
