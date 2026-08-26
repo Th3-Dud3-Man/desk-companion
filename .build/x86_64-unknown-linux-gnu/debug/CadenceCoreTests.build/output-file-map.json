@@ -8,6 +8,12 @@
     "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/AcceptanceScenarioTests~partial.swiftmodule",
     "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/AcceptanceScenarioTests.swiftdeps"
   },
+  "/home/user/desk-companion/Tests/CadenceCoreTests/ArtifactGenerator.swift": {
+    "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ArtifactGenerator.d",
+    "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ArtifactGenerator.swift.o",
+    "swiftmodule": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ArtifactGenerator~partial.swiftmodule",
+    "swift-dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ArtifactGenerator.swiftdeps"
+  },
   "/home/user/desk-companion/Tests/CadenceCoreTests/CalendarSyncTests.swift": {
     "dependencies": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CalendarSyncTests.d",
     "object": "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CalendarSyncTests.swift.o",

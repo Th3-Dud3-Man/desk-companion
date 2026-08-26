@@ -323,6 +323,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/ArtifactGenerator.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/CalendarSyncTests.swift"
         },
         {
@@ -363,6 +367,7 @@
       "moduleOutputPath" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/Modules/CadenceCoreTests.swiftmodule",
       "objects" : [
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/AcceptanceScenarioTests.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ArtifactGenerator.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CalendarSyncTests.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/DomainTests.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ExportAndBackupTests.swift.o",
@@ -407,6 +412,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ArtifactGenerator.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/CalendarSyncTests.swift.o"
         },
         {
@@ -437,6 +446,7 @@
       "prepareForIndexing" : false,
       "sources" : [
         "/home/user/desk-companion/Tests/CadenceCoreTests/AcceptanceScenarioTests.swift",
+        "/home/user/desk-companion/Tests/CadenceCoreTests/ArtifactGenerator.swift",
         "/home/user/desk-companion/Tests/CadenceCoreTests/CalendarSyncTests.swift",
         "/home/user/desk-companion/Tests/CadenceCoreTests/DomainTests.swift",
         "/home/user/desk-companion/Tests/CadenceCoreTests/ExportAndBackupTests.swift",
@@ -684,6 +694,7 @@
       "-incremental",
       "-c",
       "/home/user/desk-companion/Tests/CadenceCoreTests/AcceptanceScenarioTests.swift",
+      "/home/user/desk-companion/Tests/CadenceCoreTests/ArtifactGenerator.swift",
       "/home/user/desk-companion/Tests/CadenceCoreTests/CalendarSyncTests.swift",
       "/home/user/desk-companion/Tests/CadenceCoreTests/DomainTests.swift",
       "/home/user/desk-companion/Tests/CadenceCoreTests/ExportAndBackupTests.swift",
@@ -828,6 +839,10 @@
         {
           "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/AcceptanceScenarioTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ArtifactGenerator.swift.o"
         },
         {
           "kind" : "file",
@@ -998,6 +1013,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/ArtifactGenerator.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/Tests/CadenceCoreTests/CalendarSyncTests.swift"
         },
         {
@@ -1161,6 +1180,10 @@
         {
           "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/AcceptanceScenarioTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCoreTests.build/ArtifactGenerator.swift.o"
         },
         {
           "kind" : "file",

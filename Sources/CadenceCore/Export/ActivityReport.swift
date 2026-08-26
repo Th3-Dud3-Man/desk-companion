@@ -55,12 +55,12 @@ public enum ActivityReport {
         var evolution = ""
         if let comparison = input.comparison, let change = comparison.revenueChange {
             let percentage = Int((change * 100).rounded())
-            let sign = percentage > 0 ? "+" : ""
-            let direction = percentage >= 0 ? "up" : "down"
+            let text = percentage == 0 ? "stable" : "\(percentage > 0 ? "+" : "")\(percentage) %"
+            let direction = percentage == 0 ? "" : (percentage > 0 ? "up" : "down")
             evolution = """
             <div class="kpi">
               <div class="kpi-label">Évolution</div>
-              <div class="kpi-value \(direction)">\(sign)\(percentage) %</div>
+              <div class="kpi-value \(direction)">\(text)</div>
               <div class="kpi-note">vs. période précédente (\(money(comparison.previous.revenueCents)))</div>
             </div>
             """

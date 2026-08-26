@@ -191,9 +191,9 @@ struct FinancesView: View {
             let percentage = Int((change * 100).rounded())
             MetricTile(
                 label: "Évolution",
-                value: "\(percentage > 0 ? "+" : "")\(percentage) %",
+                value: percentage == 0 ? "stable" : "\(percentage > 0 ? "+" : "")\(percentage) %",
                 note: "vs. \(period.previousLabel) (\(comparison.previous.revenue(currencyCode: model.settings.currencyCode).formatted()))",
-                tone: percentage >= 0 ? .positive : .negative
+                tone: percentage == 0 ? .neutral : (percentage > 0 ? .positive : .negative)
             )
         } else {
             MetricTile(

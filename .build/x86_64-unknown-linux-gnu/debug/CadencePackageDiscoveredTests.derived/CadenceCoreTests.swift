@@ -56,6 +56,16 @@ fileprivate extension DemoDataTests {
     ]
 }
 
+fileprivate extension ExportReconciliationTests {
+    @available(*, deprecated, message: "Not actually deprecated. Marked as deprecated to allow inclusion of deprecated tests (which test deprecated functionality) without warnings")
+    static nonisolated(unsafe) let __allTests__ExportReconciliationTests = [
+        ("testTheConsultationsExportCoversEverySlotInThePeriod", testTheConsultationsExportCoversEverySlotInThePeriod),
+        ("testThePatientsExportReportsTheHabitsTheApplicationActsOn", testThePatientsExportReportsTheHabitsTheApplicationActsOn),
+        ("testThePaymentsExportContainsEveryPaymentExactlyOnce", testThePaymentsExportContainsEveryPaymentExactlyOnce),
+        ("testTheReportTotalEqualsTheSumOfItsOwnLines", testTheReportTotalEqualsTheSumOfItsOwnLines)
+    ]
+}
+
 fileprivate extension ExportTests {
     @available(*, deprecated, message: "Not actually deprecated. Marked as deprecated to allow inclusion of deprecated tests (which test deprecated functionality) without warnings")
     static nonisolated(unsafe) let __allTests__ExportTests = [
@@ -172,6 +182,7 @@ func __CadenceCoreTests__allTests() -> [XCTestCaseEntry] {
         testCase(BackupTests.__allTests__BackupTests),
         testCase(CalendarSyncTests.__allTests__CalendarSyncTests),
         testCase(DemoDataTests.__allTests__DemoDataTests),
+        testCase(ExportReconciliationTests.__allTests__ExportReconciliationTests),
         testCase(ExportTests.__allTests__ExportTests),
         testCase(FormattingTests.__allTests__FormattingTests),
         testCase(HabitEngineTests.__allTests__HabitEngineTests),

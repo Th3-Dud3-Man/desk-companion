@@ -1,4 +1,5 @@
 /home/user/desk-companion/Tests/CadenceCoreTests/AcceptanceScenarioTests.swift
+/home/user/desk-companion/Tests/CadenceCoreTests/ArtifactGenerator.swift
 /home/user/desk-companion/Tests/CadenceCoreTests/CalendarSyncTests.swift
 /home/user/desk-companion/Tests/CadenceCoreTests/DomainTests.swift
 /home/user/desk-companion/Tests/CadenceCoreTests/ExportAndBackupTests.swift
