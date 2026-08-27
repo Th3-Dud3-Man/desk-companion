@@ -586,3 +586,254 @@ struct ToastView: View {
         .accessibilityElement(children: .combine)
     }
 }
+
+// MARK: - Attendance
+
+/// Presence as a control rather than a label.
+///
+/// The status used to be a read-only chip: once you clicked Présent the buttons
+/// disappeared and the only way back was a hidden menu. A misclick is the most
+/// common thing that happens in a busy day, so the control stays on screen in
+/// every state — and clicking the segment that is already active clears it.
+@MainActor
+struct AttendanceControl: View {
+    enum Size {
+        case regular, large
+
+        var height: CGFloat { self == .large ? 34 : 26 }
+        var font: Font { self == .large ? Typo.bodyStrong : Typo.captionStrong }
+        var iconSize: CGFloat { self == .large ? 12 : 10 }
+        var padding: CGFloat { self == .large ? Space.lg : Space.md }
+    }
+
+    let status: ConsultationStatus
+    var size: Size = .regular
+    let onPresent: () -> Void
+    let onAbsent: () -> Void
+    /// Called when the active segment is clicked again — the misclick escape hatch.
+    let onClear: () -> Void
+
+    var body: some View {
+        HStack(spacing: 0) {
+            segment(
+                title: "Présent",
+                symbol: "checkmark.circle.fill",
+                isActive: status == .attended || status == .inProgress,
+                tint: Ink.accent,
+                background: Ink.accentSoft,
+                action: { status == .attended ? onClear() : onPresent() },
+                hint: status == .attended ? "Annuler la présence" : "Marquer présent (P)"
+            )
+
+            Rectangle()
+                .fill(Ink.hairline)
+                .frame(width: 1)
+                .padding(.vertical, 4)
+
+            segment(
+                title: "Absent",
+                symbol: "xmark.circle.fill",
+                isActive: status == .absent,
+                tint: Ink.danger,
+                background: Ink.dangerSoft,
+                action: { status == .absent ? onClear() : onAbsent() },
+                hint: status == .absent ? "Annuler l'absence" : "Marquer absent (A)"
+            )
+        }
+        .frame(height: size.height)
+        .background(
+            RoundedRectangle(cornerRadius: Radius.control, style: .continuous)
+                .fill(Ink.surface)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: Radius.control, style: .continuous)
+                .strokeBorder(Ink.hairlineStrong, lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: Radius.control, style: .continuous))
+    }
+
+    private func segment(
+        title: String,
+        symbol: String,
+        isActive: Bool,
+        tint: Color,
+        background: Color,
+        action: @escaping () -> Void,
+        hint: String
+    ) -> some View {
+        AttendanceSegment(
+            title: title, symbol: symbol, isActive: isActive,
+            tint: tint, background: background, size: size, action: action
+        )
+        .help(hint)
+        .accessibilityLabel(hint)
+        .accessibilityAddTraits(isActive ? [.isSelected] : [])
+    }
+}
+
+@MainActor
+private struct AttendanceSegment: View {
+    let title: String
+    let symbol: String
+    let isActive: Bool
+    let tint: Color
+    let background: Color
+    let size: AttendanceControl.Size
+    let action: () -> Void
+
+    @State private var isHovering = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: Space.xs) {
+                Image(systemName: isActive ? symbol : symbol.replacingOccurrences(of: ".fill", with: ""))
+                    .font(.system(size: size.iconSize, weight: .semibold))
+                Text(title)
+                    .font(size.font)
+            }
+            .foregroundStyle(isActive ? tint : (isHovering ? Ink.textPrimary : Ink.textSecondary))
+            .padding(.horizontal, size.padding)
+            .frame(maxHeight: .infinity)
+            .background(isActive ? background : (isHovering ? Ink.surfaceHover : Color.clear))
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .onHover { isHovering = $0 }
+        .animation(Motion.respectful(Motion.instant, reduceMotion: reduceMotion), value: isActive)
+        .animation(Motion.respectful(Motion.instant, reduceMotion: reduceMotion), value: isHovering)
+    }
+}
+
+/// Start and stop a session. Separate from attendance on purpose: being present and
+/// having a measured session are two different facts, and one should not imply the
+/// other. Clicking it while running offers to stop; the menu can clear the times.
+@MainActor
+struct SessionButton: View {
+    let isRunning: Bool
+    let elapsed: String?
+    let action: () -> Void
+
+    @State private var isHovering = false
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: Space.sm) {
+                Image(systemName: isRunning ? "stop.circle.fill" : "play.circle")
+                    .font(.system(size: 13, weight: .medium))
+                if let elapsed {
+                    Text(elapsed)
+                        .font(Typo.captionNumeric)
+                }
+            }
+            .foregroundStyle(isRunning ? Ink.textOnAccent : (isHovering ? Ink.accent : Ink.textSecondary))
+            .padding(.horizontal, isRunning ? Space.md : Space.sm)
+            .frame(height: 26)
+            .background(
+                RoundedRectangle(cornerRadius: Radius.control, style: .continuous)
+                    .fill(isRunning ? Ink.accent : (isHovering ? Ink.surfaceHover : Color.clear))
+            )
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .onHover { isHovering = $0 }
+        .help(isRunning ? "Terminer la séance" : "Démarrer la séance et ouvrir l'écran dédié")
+        .accessibilityLabel(isRunning ? "Terminer la séance" : "Démarrer la séance")
+    }
+}
+
+// MARK: - Settlement
+
+/// The tick that says a transfer or a cheque has landed.
+///
+/// It sits directly on the payment it refers to — on the day rail, on the patient's
+/// record, in the ledger — because that is where the user is looking when they
+/// reconcile, and a separate screen would be one navigation too many.
+@MainActor
+struct SettlementTick: View {
+    let isSettled: Bool
+    var showsLabel = false
+    let action: () -> Void
+
+    @State private var isHovering = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: Space.sm) {
+                Image(systemName: isSettled ? "checkmark.circle.fill" : "circle.dashed")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(isSettled ? Ink.accent : Ink.warning)
+                    .symbolEffect(.bounce, value: isSettled)
+                if showsLabel {
+                    Text(isSettled ? "Reçu" : "Marquer reçu")
+                        .font(Typo.caption)
+                        .foregroundStyle(isSettled ? Ink.textSecondary : Ink.warning)
+                }
+            }
+            .padding(.horizontal, showsLabel ? Space.md : Space.xs)
+            .frame(height: 24)
+            .background(
+                RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
+                    .fill(isHovering ? Ink.surfaceHover : Color.clear)
+            )
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .onHover { isHovering = $0 }
+        .animation(Motion.respectful(Motion.quick, reduceMotion: reduceMotion), value: isSettled)
+        .help(isSettled ? "Remettre en attente de règlement" : "Marquer comme reçu")
+        .accessibilityLabel(isSettled ? "Reçu — cliquer pour remettre en attente" : "En attente — cliquer pour marquer reçu")
+    }
+}
+
+// MARK: - Progress
+
+/// The day as a ring. Gives the working day a shape and an end, which a bare
+/// counter does not.
+@MainActor
+struct DayProgressRing: View {
+    let done: Int
+    let total: Int
+    var diameter: CGFloat = 46
+
+    private var fraction: Double {
+        guard total > 0 else { return 0 }
+        return min(1, Double(done) / Double(total))
+    }
+
+    private var isComplete: Bool { total > 0 && done >= total }
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(Ink.surfaceSunken, lineWidth: 4)
+            Circle()
+                .trim(from: 0, to: fraction)
+                .stroke(
+                    isComplete ? Ink.accent : Ink.accent.opacity(0.85),
+                    style: StrokeStyle(lineWidth: 4, lineCap: .round)
+                )
+                .rotationEffect(.degrees(-90))
+                .animation(Motion.standard, value: fraction)
+
+            if isComplete {
+                Image(systemName: "checkmark")
+                    .font(.system(size: diameter * 0.34, weight: .semibold))
+                    .foregroundStyle(Ink.accent)
+            } else {
+                VStack(spacing: -2) {
+                    Text("\(done)")
+                        .font(.system(size: diameter * 0.34, weight: .semibold).monospacedDigit())
+                        .foregroundStyle(Ink.textPrimary)
+                    Text("/\(total)")
+                        .font(.system(size: diameter * 0.21, weight: .medium).monospacedDigit())
+                        .foregroundStyle(Ink.textTertiary)
+                }
+            }
+        }
+        .frame(width: diameter, height: diameter)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(isComplete ? "Journée terminée" : "\(done) rendez-vous traités sur \(total)")
+    }
+}

@@ -30,7 +30,10 @@ struct ConsultationRow: View {
             railMarker
             VStack(alignment: .leading, spacing: Space.md) {
                 mainLine
-                if showsPaymentStrip {
+                if item.needsPatient {
+                    AttachPatientPrompt(item: item)
+                        .transition(.opacity)
+                } else if showsPaymentStrip {
                     PaymentStrip(item: item)
                         .transition(
                             reduceMotion
@@ -130,47 +133,57 @@ struct ConsultationRow: View {
     @ViewBuilder
     private var trailing: some View {
         HStack(spacing: Space.md) {
-            switch status {
-            case .scheduled, .confirmed:
-                if isHovered || isSelected || needsAttentionNow {
-                    HStack(spacing: Space.sm) {
-                        Button("Présent") { model.mark(.attended, for: item) }
-                            .buttonStyle(.cadence(.primary, size: .small))
-                            .help("Marquer présent (P)")
-                        Button("Absent") { model.mark(.absent, for: item) }
-                            .buttonStyle(.cadence(.secondary, size: .small))
-                            .help("Marquer absent (A)")
+            if let payment = item.payment {
+                PaymentBadge(
+                    payment: payment,
+                    settings: model.settings,
+                    onToggleSettlement: {
+                        payment.isPending ? model.settle(payment) : model.unsettle(payment)
                     }
-                } else {
-                    StatusChip(status: .of(status))
+                )
+            }
+
+            if status == .cancelled {
+                StatusChip(status: .of(.cancelled))
+            } else {
+                if showsSessionButton {
+                    SessionButton(
+                        isRunning: status == .inProgress,
+                        elapsed: elapsedText,
+                        action: {
+                            if status == .inProgress {
+                                model.endSession(item)
+                            } else {
+                                model.startSession(item)
+                                model.destination = .session
+                            }
+                        }
+                    )
                 }
 
-            case .inProgress:
-                HStack(spacing: Space.md) {
-                    if let start = consultation.actualStart {
-                        Text(CadenceFormat.duration(model.now.timeIntervalSince(start)))
-                            .font(Typo.captionNumeric)
-                            .foregroundStyle(Ink.accent)
-                            .monospacedDigit()
-                    }
-                    Button("Terminer") { model.endSession(item) }
-                        .buttonStyle(.cadence(.primary, size: .small))
-                        .help("Terminer la séance et marquer présent")
-                }
-
-            case .attended:
-                if let payment = item.payment {
-                    PaymentBadge(payment: payment, settings: model.settings)
-                } else {
-                    StatusChip(status: .of(.attended))
-                }
-
-            case .absent, .cancelled:
-                StatusChip(status: .of(status))
+                AttendanceControl(
+                    status: status,
+                    onPresent: { model.mark(.attended, for: item) },
+                    onAbsent: { model.mark(.absent, for: item) },
+                    onClear: { model.mark(.scheduled, for: item) }
+                )
             }
 
             RowMenuButton(item: item, isVisible: isHovered || isSelected || consultation.isUnassigned)
         }
+    }
+
+    /// Only offered where it means something: a session cannot be started once the
+    /// patient has been marked absent, and there is nothing to stop afterwards.
+    private var showsSessionButton: Bool {
+        if status == .inProgress { return true }
+        guard status == .scheduled || status == .confirmed else { return false }
+        return isHovered || isSelected || isNext
+    }
+
+    private var elapsedText: String? {
+        guard status == .inProgress, let start = consultation.actualStart else { return nil }
+        return CadenceFormat.duration(model.now.timeIntervalSince(start))
     }
 
     private var subtitle: String? {
@@ -180,8 +193,9 @@ struct ConsultationRow: View {
         if let duration = consultation.actualDuration {
             parts.append("réel \(CadenceFormat.duration(duration))")
         }
-        if status == .attended, item.payment == nil, !parts.contains("À rattacher") {
-            parts.append("paiement à enregistrer")
+        if let payment = item.payment, payment.isPending,
+           let days = payment.daysOutstanding(now: model.now), days > 0 {
+            parts.append("en attente depuis \(days) j")
         }
         return parts.isEmpty ? nil : parts.joined(separator: " · ")
     }
@@ -237,24 +251,42 @@ struct ConsultationRow: View {
 struct PaymentBadge: View {
     let payment: Payment
     let settings: PracticeSettings
+    var onToggleSettlement: (() -> Void)? = nil
+
+    private var isPending: Bool { payment.isPending }
 
     var body: some View {
         HStack(spacing: Space.sm) {
             Image(systemName: settings.methodSymbol(payment.methodID))
                 .font(.system(size: 10, weight: .medium))
-                .foregroundStyle(Ink.accent)
+                .foregroundStyle(isPending ? Ink.warning : Ink.accent)
+
             Text(payment.money.formatted())
                 .font(Typo.bodyStrongNumeric)
                 .foregroundStyle(Ink.textPrimary)
+
             Text(settings.methodLabel(payment.methodID))
                 .font(Typo.caption)
                 .foregroundStyle(Ink.textSecondary)
+
+            if let onToggleSettlement {
+                SettlementTick(isSettled: !isPending, action: onToggleSettlement)
+                    .padding(.leading, -Space.xs)
+            }
         }
-        .padding(.horizontal, Space.md)
-        .frame(height: 24)
-        .background(RoundedRectangle(cornerRadius: Radius.chip, style: .continuous).fill(Ink.accentSoft))
+        .padding(.leading, Space.md)
+        .padding(.trailing, onToggleSettlement == nil ? Space.md : Space.xs)
+        .frame(height: 26)
+        .background(
+            RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
+                .fill(isPending ? Ink.warningSoft : Ink.accentSoft)
+        )
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Payé \(payment.money.formatted()) en \(settings.methodLabel(payment.methodID))")
+        .accessibilityLabel(
+            isPending
+                ? "\(payment.money.formatted()) en \(settings.methodLabel(payment.methodID)), en attente de règlement"
+                : "\(payment.money.formatted()) reçu en \(settings.methodLabel(payment.methodID))"
+        )
     }
 }
 
@@ -529,5 +561,43 @@ struct RowMenu: View {
             currencyCode: model.settings.currencyCode,
             methodID: item.advice.primary.methodID
         )
+    }
+}
+
+/// Shown when a session has been marked attended but the appointment came from the
+/// calendar and was never matched to a patient. Without this the row is a dead end:
+/// no payment can be recorded against nobody.
+@MainActor
+struct AttachPatientPrompt: View {
+    @EnvironmentObject private var model: AppModel
+    let item: DayItem
+
+    var body: some View {
+        HStack(spacing: Space.md) {
+            Image(systemName: "person.crop.circle.badge.questionmark")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(Ink.warning)
+            Text("Rattachez ce rendez-vous à un patient pour enregistrer le paiement.")
+                .font(Typo.caption)
+                .foregroundStyle(Ink.textPrimary)
+            Spacer(minLength: Space.md)
+
+            Menu("Associer à…") {
+                ForEach(model.patients) { patient in
+                    Button(patient.displayName) { model.assign(patientID: patient.id, to: item.consultation) }
+                }
+                if model.patients.isEmpty { Text("Aucun patient enregistré") }
+            }
+            .menuStyle(.borderlessButton)
+            .fixedSize()
+
+            Button("Créer « \(AppModel.suggestedName(from: item.consultation.title)) »") {
+                model.createPatientAndAssign(from: item.consultation)
+            }
+            .buttonStyle(.cadence(.primary, size: .small))
+        }
+        .padding(.horizontal, Space.lg)
+        .padding(.vertical, Space.md)
+        .background(RoundedRectangle(cornerRadius: Radius.control, style: .continuous).fill(Ink.warningSoft))
     }
 }

@@ -106,6 +106,7 @@ struct WorkspaceView: View {
     private var destinationView: some View {
         switch model.destination {
         case .today: TodayView()
+        case .session: SessionView()
         case .agenda: AgendaView()
         case .patients: PatientsView()
         case .finances: FinancesView()
@@ -197,7 +198,8 @@ struct SidebarView: View {
                         SidebarRow(
                             destination: destination,
                             badge: badge(for: destination),
-                            isSelected: model.destination == destination
+                            isSelected: model.destination == destination,
+                            isLive: destination == .session && model.runningItem != nil
                         )
                         .tag(destination)
                     }
@@ -223,10 +225,10 @@ struct SidebarView: View {
     private func badge(for destination: Destination) -> Int? {
         switch destination {
         case .today:
-            let pending = model.dayItems.filter { $0.needsAttention || $0.awaitsPayment }.count
+            let pending = model.dayItems.filter { $0.needsAttention || $0.awaitsPayment || $0.needsPatient }.count
             return pending > 0 && model.isShowingToday ? pending : nil
-        case .patients:
-            return model.unassignedToday.isEmpty ? nil : model.unassignedToday.count
+        case .finances:
+            return model.pendingPayments.isEmpty ? nil : model.pendingPayments.count
         default:
             return nil
         }
@@ -238,17 +240,25 @@ private struct SidebarRow: View {
     let destination: Destination
     let badge: Int?
     let isSelected: Bool
+    var isLive = false
 
     var body: some View {
         HStack(spacing: Space.md) {
             Image(systemName: destination.symbol)
                 .font(.system(size: 12.5, weight: .medium))
                 .frame(width: 18)
-                .foregroundStyle(isSelected ? Ink.accent : Ink.textSecondary)
+                .foregroundStyle(isLive ? Ink.accent : (isSelected ? Ink.accent : Ink.textSecondary))
+                .symbolEffect(.pulse, isActive: isLive)
             Text(destination.title)
                 .font(Typo.bodyStrong)
                 .foregroundStyle(Ink.textPrimary)
             Spacer(minLength: Space.sm)
+            if isLive {
+                Circle()
+                    .fill(Ink.accent)
+                    .frame(width: 6, height: 6)
+                    .accessibilityLabel("Séance en cours")
+            }
             if let badge {
                 Text("\(badge)")
                     .font(Typo.captionNumeric)

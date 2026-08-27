@@ -61,6 +61,18 @@ enum StatsPeriod: String, CaseIterable, Identifiable {
 struct FinancesView: View {
     @EnvironmentObject private var model: AppModel
 
+    enum Tab: String, CaseIterable, Identifiable {
+        case overview, transactions
+        var id: String { rawValue }
+        var title: String {
+            switch self {
+            case .overview: return "Synthèse"
+            case .transactions: return "Transactions"
+            }
+        }
+    }
+
+    @State private var tab: Tab = .overview
     @State private var period: StatsPeriod = .month
     @State private var anchor = Date()
     @State private var comparison: PeriodComparison?
@@ -75,22 +87,11 @@ struct FinancesView: View {
             Hairline()
             ScrollView {
                 VStack(alignment: .leading, spacing: Space.huge) {
-                    headline
-                    if statistics.planned > 0 || statistics.paymentCount > 0 {
-                        chart
-                        HStack(alignment: .top, spacing: Space.xl) {
-                            methodsCard
-                            attendanceCard
-                        }
+                    if tab == .transactions {
+                        TransactionsView(range: range, periodLabel: period.label(for: anchor))
                     } else {
-                        EmptyState(
-                            symbol: "chart.bar",
-                            title: "Aucune activité sur cette période",
-                            message: "Changez de période, ou enregistrez des consultations pour voir apparaître les chiffres."
-                        )
-                        .frame(height: 220)
+                        overview
                     }
-                    exports
                 }
                 .padding(Space.xxl)
             }
@@ -100,6 +101,28 @@ struct FinancesView: View {
         .onChange(of: period) { _, _ in load() }
         .onChange(of: anchor) { _, _ in load() }
         .onChange(of: model.dataRevision) { _, _ in load() }
+    }
+
+    @ViewBuilder
+    private var overview: some View {
+        VStack(alignment: .leading, spacing: Space.huge) {
+            headline
+            if statistics.planned > 0 || statistics.announcedCount > 0 {
+                chart
+                HStack(alignment: .top, spacing: Space.xl) {
+                    methodsCard
+                    attendanceCard
+                }
+            } else {
+                EmptyState(
+                    symbol: "chart.bar",
+                    title: "Aucune activité sur cette période",
+                    message: "Changez de période, ou enregistrez des consultations pour voir apparaître les chiffres."
+                )
+                .frame(height: 220)
+            }
+            exports
+        }
     }
 
     // MARK: Header
@@ -116,6 +139,15 @@ struct FinancesView: View {
             }
             Spacer(minLength: Space.lg)
 
+            Picker("", selection: $tab) {
+                ForEach(Tab.allCases) { value in
+                    Text(value.title).tag(value)
+                }
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            .frame(width: 200)
+
             Picker("", selection: $period) {
                 ForEach(StatsPeriod.allCases) { value in
                     Text(value.title).tag(value)
@@ -123,7 +155,7 @@ struct FinancesView: View {
             }
             .pickerStyle(.segmented)
             .labelsHidden()
-            .frame(width: 260)
+            .frame(width: 240)
 
             HStack(spacing: Space.xs) {
                 Button { shift(-1) } label: {
@@ -144,7 +176,7 @@ struct FinancesView: View {
     }
 
     private var subtitle: String {
-        guard statistics.planned > 0 || statistics.paymentCount > 0 else { return "Aucune activité enregistrée" }
+        guard statistics.planned > 0 || statistics.announcedCount > 0 else { return "Aucune activité enregistrée" }
         var parts = ["\(statistics.attended) consultation\(statistics.attended > 1 ? "s" : "")"]
         if statistics.absent > 0 { parts.append("\(statistics.absent) absence\(statistics.absent > 1 ? "s" : "")") }
         if statistics.uniquePatients > 0 { parts.append("\(statistics.uniquePatients) patient\(statistics.uniquePatients > 1 ? "s" : "")") }
@@ -179,6 +211,15 @@ struct FinancesView: View {
                     .map { Money(cents: $0, currencyCode: model.settings.currencyCode).formatted() } ?? "—",
                 note: "par consultation honorée"
             )
+            if statistics.hasPending {
+                Divider().frame(height: 58)
+                MetricTile(
+                    label: "En attente",
+                    value: statistics.pending(currencyCode: model.settings.currencyCode).formatted(),
+                    note: "\(statistics.pendingCount) règlement(s) annoncé(s)",
+                    tone: .warning
+                )
+            }
             Divider().frame(height: 58)
             evolutionTile
         }

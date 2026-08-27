@@ -4,13 +4,14 @@ import CadenceCore
 
 /// The five places the application can be. Deliberately few.
 enum Destination: String, CaseIterable, Identifiable, Hashable {
-    case today, agenda, patients, finances, settings
+    case today, session, agenda, patients, finances, settings
 
     var id: String { rawValue }
 
     var title: String {
         switch self {
         case .today: return "Aujourd'hui"
+        case .session: return "Séance"
         case .agenda: return "Agenda"
         case .patients: return "Patients"
         case .finances: return "Finances"
@@ -21,6 +22,7 @@ enum Destination: String, CaseIterable, Identifiable, Hashable {
     var symbol: String {
         switch self {
         case .today: return "sun.horizon"
+        case .session: return "record.circle"
         case .agenda: return "calendar"
         case .patients: return "person.2"
         case .finances: return "chart.bar"
@@ -31,10 +33,11 @@ enum Destination: String, CaseIterable, Identifiable, Hashable {
     var shortcut: KeyEquivalent {
         switch self {
         case .today: return "1"
-        case .agenda: return "2"
-        case .patients: return "3"
-        case .finances: return "4"
-        case .settings: return "5"
+        case .session: return "2"
+        case .agenda: return "3"
+        case .patients: return "4"
+        case .finances: return "5"
+        case .settings: return "6"
         }
     }
 }
@@ -308,6 +311,22 @@ final class AppModel: ObservableObject {
         )
     }
 
+    /// The session should never have been started. Puts the appointment back where
+    /// it was and clears the fabricated times — the misclick escape hatch.
+    func cancelSessionStart(_ item: DayItem) {
+        let before = item.consultation
+        var reverted = before
+        reverted.actualStart = nil
+        reverted.actualEnd = nil
+        reverted.status = before.status == .inProgress ? .scheduled : before.status
+        perform(
+            label: "Annulation du démarrage · \(item.title)",
+            confirmation: "Démarrage annulé · \(item.title)",
+            action: { try self.store.upsertConsultationSilently(reverted) },
+            revert: { try self.store.upsertConsultationSilently(before) }
+        )
+    }
+
     func endSession(_ item: DayItem) {
         let before = item.consultation
         perform(
@@ -508,6 +527,23 @@ final class AppModel: ObservableObject {
         } catch {
             report(error)
             return nil
+        }
+    }
+
+    /// Session notes save as they are typed, so they do not go through the undo
+    /// stack: fifty entries of "Modification du rendez-vous" would bury the actions
+    /// that matter. The audit trail is not touched either, for the same reason.
+    func saveSessionNotes(_ text: String, for consultation: Consultation) {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmed != (consultation.notes ?? "") else { return }
+        do {
+            var updated = consultation
+            updated.notes = trimmed.isEmpty ? nil : trimmed
+            updated.updatedAt = Date()
+            try store.upsertConsultationSilently(updated)
+            reload()
+        } catch {
+            report(error)
         }
     }
 

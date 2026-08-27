@@ -296,6 +296,10 @@ struct PaymentSettingsPane: View {
                 Text("Renommez, désactivez ou ajoutez ce que vous acceptez. Les paiements déjà enregistrés conservent leur moyen d'origine.")
                     .font(Typo.caption)
                     .foregroundStyle(Ink.textSecondary)
+                Text("« Reçu tout de suite » distingue l'argent en main d'un règlement annoncé. Un virement ou un chèque est enregistré pendant la séance, puis coché quand il arrive — il n'entre dans les recettes qu'à ce moment-là.")
+                    .font(Typo.caption)
+                    .foregroundStyle(Ink.textTertiary)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 VStack(spacing: 0) {
                     ForEach($draft.paymentMethods) { $method in
@@ -311,6 +315,12 @@ struct PaymentSettingsPane: View {
                                 .textFieldStyle(.plain)
                                 .font(Typo.body)
                             Spacer(minLength: Space.md)
+                            Toggle("Reçu tout de suite", isOn: $method.settlesImmediately)
+                                .toggleStyle(.checkbox)
+                                .font(Typo.caption)
+                                .help(method.settlesImmediately
+                                      ? "L'argent est en main dès l'enregistrement"
+                                      : "Sera enregistré en attente, puis coché à réception")
                             if draft.paymentMethods.count > 1 {
                                 Button {
                                     draft.paymentMethods.removeAll { $0.id == method.id }
