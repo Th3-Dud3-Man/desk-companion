@@ -8,6 +8,7 @@
 /home/user/desk-companion/Sources/CadenceCore/Domain/UndoStack.swift
 /home/user/desk-companion/Sources/CadenceCore/Export/ActivityReport.swift
 /home/user/desk-companion/Sources/CadenceCore/Export/CSVExport.swift
+/home/user/desk-companion/Sources/CadenceCore/Export/IncomeReport.swift
 /home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift
 /home/user/desk-companion/Sources/CadenceCore/Model/Enums.swift
 /home/user/desk-companion/Sources/CadenceCore/Model/Money.swift

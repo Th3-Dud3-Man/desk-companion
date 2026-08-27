@@ -354,6 +354,12 @@ struct FinancesView: View {
             Text("Les exports portent sur la période affichée et produisent un vrai fichier, prêt pour un tableur ou un comptable.")
                 .font(Typo.caption)
                 .foregroundStyle(Ink.textSecondary)
+            if statistics.hasPending {
+                Text("\(statistics.pendingCount) règlement(s) de la période ne sont pas encore encaissés. Pointez-les dans Transactions avant d'établir une synthèse de revenus.")
+                    .font(Typo.caption)
+                    .foregroundStyle(Ink.warning)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             HStack(spacing: Space.md) {
                 Button("Paiements (CSV)") {
                     model.requestExport(.payments, range: range, rangeLabel: period.label(for: anchor))
@@ -375,8 +381,33 @@ struct FinancesView: View {
                 Button("Rapport d'activité (PDF)") {
                     model.requestReport(range: range, title: "Activité · \(period.label(for: anchor))")
                 }
-                .buttonStyle(.cadencePrimary)
+                .buttonStyle(.cadenceSecondary)
+
+                Menu {
+                    ForEach(AppModel.IncomeWindow.allCases) { window in
+                        Button("\(window.title) · \(window.label())") {
+                            model.requestIncomeReport(range: window.range(), label: window.label())
+                        }
+                    }
+                    Divider()
+                    Button("Période affichée · \(period.label(for: anchor))") {
+                        model.requestIncomeReport(range: range, label: period.label(for: anchor))
+                    }
+                    Divider()
+                    Button("Imprimer le rapport d'activité…") {
+                        model.printReport(range: range, title: "Activité · \(period.label(for: anchor))")
+                    }
+                } label: {
+                    Label("Synthèse de revenus (banque)", systemImage: "building.columns")
+                }
+                .menuStyle(.borderlessButton)
+                .fixedSize()
             }
+
+            Text("La synthèse de revenus ne compte que les règlements effectivement encaissés, mois par mois — c'est le document à présenter à une banque. Elle indique séparément ce qui reste dû, et dit explicitement qu'elle n'est ni une attestation comptable ni une pièce certifiée.")
+                .font(Typo.caption)
+                .foregroundStyle(Ink.textTertiary)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .cadenceCard(padding: Space.xl)
     }

@@ -97,6 +97,12 @@ struct CadenceCommands: Commands {
             Divider()
             Button("Rapport d'activité en PDF…") { model?.requestReport() }
                 .disabled(model == nil)
+            Button("Synthèse de revenus (12 derniers mois)…") {
+                guard let model else { return }
+                let window = AppModel.IncomeWindow.trailingTwelveMonths
+                model.requestIncomeReport(range: window.range(), label: window.label())
+            }
+            .disabled(model == nil)
         }
 
         CommandGroup(replacing: .help) {

@@ -18,8 +18,28 @@ final class ExportReconciliationTests: CadenceTestCase {
         try? FileManager.default.removeItem(at: url)
 
         let store = try CadenceStore.open(at: url)
-        try DemoData.install(into: store, now: date(2026, 8, 25, 18, 0))
+        let now = date(2026, 8, 25, 18, 0)
+        try DemoData.install(into: store, now: now)
         XCTAssertGreaterThan(try store.allPatients().count, 0)
+
+        // The two documents, written next to the database so they can be inspected.
+        if let reports = ProcessInfo.processInfo.environment["CADENCE_SEED_REPORTS"] {
+            var settings = try store.settings()
+            settings.practiceName = "Cabinet du Parc — Hélène Vasseur, psychologue"
+            try store.saveSettings(settings)
+
+            let year = DateRange(
+                start: Calendar.cadence.date(byAdding: .month, value: -11,
+                                             to: DateRange.month(containing: now).start)!,
+                end: DateRange.month(containing: now).end
+            )
+            try store.incomeReport(for: year, generatedAt: now)
+                .write(toFile: reports + "/income.html", atomically: true, encoding: .utf8)
+            try store.activityReport(for: .month(containing: now),
+                                     title: "Activité · " + CadenceFormat.monthYear(now),
+                                     generatedAt: now)
+                .write(toFile: reports + "/activity.html", atomically: true, encoding: .utf8)
+        }
         store.close()
     }
 

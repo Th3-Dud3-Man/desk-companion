@@ -76,7 +76,10 @@ struct WorkspaceView: View {
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             SidebarView()
-                .navigationSplitViewColumnWidth(min: 186, ideal: Metrics.sidebarWidth, max: 250)
+                // Fixed, not a range: with a flexible width the split view answers
+                // pressure from the detail pane by shrinking the sidebar, which
+                // makes the menu jump about as you move between screens.
+                .navigationSplitViewColumnWidth(Metrics.sidebarWidth)
         } detail: {
             ZStack {
                 WorkSurface()

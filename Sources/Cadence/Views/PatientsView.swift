@@ -10,11 +10,13 @@ struct PatientsView: View {
     var body: some View {
         HStack(spacing: 0) {
             listColumn
-                .frame(width: 268)
+                .frame(minWidth: 224, idealWidth: 268, maxWidth: 288)
             Hairline().frame(width: 1).frame(maxHeight: .infinity)
             detailColumn
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, alignment: .topLeading)
+                .layoutPriority(1)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     // MARK: List
@@ -186,6 +188,8 @@ struct PatientRecord: View {
                     Text(patient.displayName)
                         .font(Typo.display)
                         .foregroundStyle(Ink.textPrimary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                     if patient.isArchived {
                         Text("Archivé")
                             .font(Typo.label)
@@ -211,9 +215,12 @@ struct PatientRecord: View {
                     if let email = patient.email { contactLine("envelope", email) }
                     if let slot = profile.usualSlotDescription { contactLine("clock", slot) }
                 }
+                .lineLimit(1)
+                .truncationMode(.tail)
             }
+            .frame(minWidth: 0, alignment: .leading)
 
-            Spacer(minLength: Space.lg)
+            Spacer(minLength: Space.md)
 
             HStack(spacing: Space.md) {
                 Button("Nouveau rendez-vous") {
@@ -246,12 +253,15 @@ struct PatientRecord: View {
             Text(text)
                 .font(Typo.caption)
                 .foregroundStyle(Ink.textSecondary)
+                .lineLimit(1)
+                .truncationMode(.tail)
         }
+        .layoutPriority(-1)
     }
 
     /// What Cadence has learned, stated plainly and with its evidence.
     private var habitCard: some View {
-        HStack(alignment: .top, spacing: Space.xxl) {
+        HStack(alignment: .top, spacing: Space.xl) {
             VStack(alignment: .leading, spacing: Space.sm) {
                 SectionLabel(text: "Paiement proposé")
                 HStack(alignment: .firstTextBaseline, spacing: Space.md) {
@@ -278,6 +288,8 @@ struct PatientRecord: View {
                 Text(profile.rhythm.label)
                     .font(Typo.bodyStrong)
                     .foregroundStyle(Ink.textPrimary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
                 if let first = profile.firstSeen {
                     Text("Suivi depuis le \(CadenceFormat.numericDate(first))")
                         .font(Typo.caption)
@@ -296,7 +308,7 @@ struct PatientRecord: View {
     }
 
     private var metrics: some View {
-        HStack(alignment: .top, spacing: Space.xl) {
+        HStack(alignment: .top, spacing: Space.lg) {
             MetricTile(label: "Consultations", value: "\(profile.attended)",
                        note: profile.upcoming > 0 ? "\(profile.upcoming) à venir" : nil, isCompact: true)
             MetricTile(label: "Absences", value: "\(profile.absent)",
@@ -431,7 +443,7 @@ struct PatientRecord: View {
     }
 
     private var payments: some View {
-        HStack(alignment: .top, spacing: Space.xl) {
+        HStack(alignment: .top, spacing: Space.lg) {
             distribution(title: "Montants", slices: profile.amountDistribution)
             distribution(title: "Moyens de paiement", slices: profile.methodDistribution)
         }

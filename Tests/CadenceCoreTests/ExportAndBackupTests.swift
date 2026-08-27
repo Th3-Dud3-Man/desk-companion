@@ -251,3 +251,137 @@ final class FormattingTests: CadenceTestCase {
         XCTAssertNotEqual(Patient.seed(for: "Jean Dupont"), Patient.seed(for: "Marie Curie"))
     }
 }
+
+/// The document handed to a lender. Its one job is to state received income
+/// truthfully, so the arithmetic is pinned down and money that has not arrived is
+/// held out of every total.
+final class IncomeReportTests: CadenceTestCase {
+
+    /// Twelve months ending August 2026, with a transfer still outstanding.
+    private func practice() throws -> (CadenceStore, DateRange, Date) {
+        let store = try makeMemoryStore()
+        var settings = try store.settings()
+        settings.practiceName = "Cabinet du Parc"
+        try store.saveSettings(settings)
+
+        let patient = try store.createPatient(displayName: "Alice Martin")
+        let now = date(2026, 8, 31, 18, 0)
+
+        // Four consultations a month, paid by card, from March to August.
+        for monthOffset in 0..<6 {
+            for week in 0..<4 {
+                let day = Calendar.cadence.date(
+                    byAdding: .day, value: -(monthOffset * 30 + week * 7), to: date(2026, 8, 25, 10, 0)
+                )!
+                let consultation = try store.createConsultation(
+                    patientID: patient.id, title: "Alice Martin",
+                    start: day, end: day.addingTimeInterval(3_000)
+                )
+                try store.setStatus(.attended, forConsultation: consultation.id)
+                _ = try store.recordPayment(
+                    consultationID: consultation.id, patientID: patient.id,
+                    amountCents: 7_000, methodID: "card", paidAt: day
+                )
+            }
+        }
+
+        // One transfer agreed in August that has not landed.
+        _ = try store.recordPayment(
+            consultationID: nil, patientID: patient.id, amountCents: 12_000,
+            methodID: "transfer", paidAt: date(2026, 8, 28, 10, 0), isSettled: false
+        )
+
+        let range = DateRange(start: date(2025, 9, 1), end: date(2026, 9, 1))
+        return (store, range, now)
+    }
+
+    func testMonthlyIncomeCoversEveryMonthOfTheWindow() throws {
+        let (store, range, _) = try practice()
+        let months = try store.monthlyIncome(in: range)
+        XCTAssertEqual(months.count, 12, "a twelve-month window has twelve rows, empty ones included")
+        XCTAssertEqual(months.first?.month, date(2025, 9, 1))
+        XCTAssertEqual(months.last?.month, date(2026, 8, 1))
+    }
+
+    func testOnlyMoneyThatArrivedIsCounted() throws {
+        let (store, range, now) = try practice()
+        let months = try store.monthlyIncome(in: range)
+        let total = months.reduce(0) { $0 + $1.receivedCents }
+
+        XCTAssertEqual(total, 24 * 7_000, "24 card payments, and not the outstanding transfer")
+
+        let html = plainSpaces(try store.incomeReport(for: range, generatedAt: now))
+        XCTAssertTrue(html.contains("120 €"), "the outstanding transfer must be named…")
+        XCTAssertTrue(html.contains("n'étaient pas encore encaissés"),
+                      "…and explicitly excluded from the totals")
+        XCTAssertTrue(html.contains(plainSpaces(Money(cents: total).formatted())),
+                      "and the headline must be the settled total")
+    }
+
+    func testTheMonthlyRowsSumToTheHeadlineTotal() throws {
+        let (store, range, now) = try practice()
+        let months = try store.monthlyIncome(in: range)
+        let input = IncomeReport.Input(
+            practiceName: "Cabinet du Parc", range: range, months: months, byMethod: [],
+            outstandingCents: 0, outstandingCount: 0, currencyCode: "EUR", generatedAt: now
+        )
+        XCTAssertEqual(input.totalReceivedCents, months.reduce(0) { $0 + $1.receivedCents })
+        XCTAssertEqual(input.totalConsultations, months.reduce(0) { $0 + $1.consultationCount })
+    }
+
+    func testAveragesIgnoreMonthsBeforeTheActivityStarted() throws {
+        let (store, range, now) = try practice()
+        let months = try store.monthlyIncome(in: range)
+        let input = IncomeReport.Input(
+            practiceName: "x", range: range, months: months, byMethod: [],
+            outstandingCents: 0, outstandingCount: 0, currencyCode: "EUR", generatedAt: now
+        )
+        XCTAssertLessThan(input.activeMonths.count, months.count, "the fixture has quiet months")
+        XCTAssertEqual(
+            input.monthlyAverageCents,
+            input.activeMonths.reduce(0) { $0 + $1.receivedCents } / input.activeMonths.count,
+            "averaging over months before the practice opened would understate the income"
+        )
+        XCTAssertGreaterThan(input.monthlyAverageCents, input.totalReceivedCents / months.count)
+    }
+
+    func testTheDocumentSaysWhatItIsAndIsNot() throws {
+        let (store, range, now) = try practice()
+        let html = try store.incomeReport(for: range, generatedAt: now)
+
+        XCTAssertTrue(html.contains("Synthèse de revenus"))
+        XCTAssertTrue(html.contains("Cabinet du Parc"))
+        XCTAssertTrue(html.contains("Établie le 31/08/2026"))
+        XCTAssertTrue(html.contains("Montants effectivement encaissés"))
+        XCTAssertTrue(html.contains("ni d'une attestation comptable"))
+        XCTAssertTrue(html.contains("Date et signature"))
+        XCTAssertFalse(html.contains("http://"), "nothing external is referenced")
+        XCTAssertFalse(html.contains("https://"))
+    }
+
+    func testThePracticeNameIsEscaped() throws {
+        let store = try makeMemoryStore()
+        var settings = try store.settings()
+        settings.practiceName = "Cabinet <b>&</b> Associés"
+        try store.saveSettings(settings)
+
+        let html = try store.incomeReport(for: .year(containing: date(2026, 6, 1)))
+        XCTAssertFalse(html.contains("<b>&</b>"))
+        XCTAssertTrue(html.contains("&lt;b&gt;"))
+        XCTAssertTrue(html.contains("&amp;"))
+    }
+
+    func testAPracticeWithNoActivityStillProducesAValidDocument() throws {
+        let store = try makeMemoryStore()
+        let year = DateRange.year(containing: date(2026, 6, 1))
+        let html = plainSpaces(try store.incomeReport(for: year))
+
+        XCTAssertTrue(html.hasPrefix("<!doctype html>"))
+        // Twelve rows of nothing, rather than a missing table: a lender reading a
+        // quiet year should see the quiet months, not an absence of information.
+        XCTAssertEqual(try store.monthlyIncome(in: year).count, 12)
+        XCTAssertTrue(html.contains("Janvier 2026"))
+        XCTAssertTrue(html.contains("0 €"))
+        XCTAssertTrue(html.contains("Aucun paiement sur la période."), "no payment methods to break down")
+    }
+}

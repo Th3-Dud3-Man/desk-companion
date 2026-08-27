@@ -19,7 +19,7 @@ struct SettingsView: View {
                 .listStyle(.sidebar)
                 .scrollContentBackground(.hidden)
             }
-            .frame(width: 208)
+            .frame(minWidth: 176, idealWidth: 208, maxWidth: 224)
 
             Hairline().frame(width: 1).frame(maxHeight: .infinity)
 
@@ -36,8 +36,10 @@ struct SettingsView: View {
                 .frame(maxWidth: 720, alignment: .leading)
             }
             .scrollContentBackground(.hidden)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .topLeading)
+            .layoutPriority(1)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private var sectionBinding: Binding<SettingsSection?> {

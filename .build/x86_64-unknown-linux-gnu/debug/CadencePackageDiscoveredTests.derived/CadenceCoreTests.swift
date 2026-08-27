@@ -115,6 +115,19 @@ fileprivate extension HabitEngineTests {
     ]
 }
 
+fileprivate extension IncomeReportTests {
+    @available(*, deprecated, message: "Not actually deprecated. Marked as deprecated to allow inclusion of deprecated tests (which test deprecated functionality) without warnings")
+    static nonisolated(unsafe) let __allTests__IncomeReportTests = [
+        ("testAPracticeWithNoActivityStillProducesAValidDocument", testAPracticeWithNoActivityStillProducesAValidDocument),
+        ("testAveragesIgnoreMonthsBeforeTheActivityStarted", testAveragesIgnoreMonthsBeforeTheActivityStarted),
+        ("testMonthlyIncomeCoversEveryMonthOfTheWindow", testMonthlyIncomeCoversEveryMonthOfTheWindow),
+        ("testOnlyMoneyThatArrivedIsCounted", testOnlyMoneyThatArrivedIsCounted),
+        ("testTheDocumentSaysWhatItIsAndIsNot", testTheDocumentSaysWhatItIsAndIsNot),
+        ("testTheMonthlyRowsSumToTheHeadlineTotal", testTheMonthlyRowsSumToTheHeadlineTotal),
+        ("testThePracticeNameIsEscaped", testThePracticeNameIsEscaped)
+    ]
+}
+
 fileprivate extension LedgerTests {
     @available(*, deprecated, message: "Not actually deprecated. Marked as deprecated to allow inclusion of deprecated tests (which test deprecated functionality) without warnings")
     static nonisolated(unsafe) let __allTests__LedgerTests = [
@@ -215,6 +228,7 @@ func __CadenceCoreTests__allTests() -> [XCTestCaseEntry] {
         testCase(ExportTests.__allTests__ExportTests),
         testCase(FormattingTests.__allTests__FormattingTests),
         testCase(HabitEngineTests.__allTests__HabitEngineTests),
+        testCase(IncomeReportTests.__allTests__IncomeReportTests),
         testCase(LedgerTests.__allTests__LedgerTests),
         testCase(PatientMatcherTests.__allTests__PatientMatcherTests),
         testCase(PatientProfileTests.__allTests__PatientProfileTests),

@@ -68,6 +68,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Export/IncomeReport.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift"
         },
         {
@@ -141,6 +145,7 @@
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/UndoStack.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/ActivityReport.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/CSVExport.swift.o",
+        "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/IncomeReport.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Enums.swift.o",
         "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Money.swift.o",
@@ -228,6 +233,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/IncomeReport.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/Entities.swift.o"
         },
         {
@@ -295,6 +304,7 @@
         "/home/user/desk-companion/Sources/CadenceCore/Domain/UndoStack.swift",
         "/home/user/desk-companion/Sources/CadenceCore/Export/ActivityReport.swift",
         "/home/user/desk-companion/Sources/CadenceCore/Export/CSVExport.swift",
+        "/home/user/desk-companion/Sources/CadenceCore/Export/IncomeReport.swift",
         "/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift",
         "/home/user/desk-companion/Sources/CadenceCore/Model/Enums.swift",
         "/home/user/desk-companion/Sources/CadenceCore/Model/Money.swift",
@@ -640,6 +650,7 @@
       "/home/user/desk-companion/Sources/CadenceCore/Domain/UndoStack.swift",
       "/home/user/desk-companion/Sources/CadenceCore/Export/ActivityReport.swift",
       "/home/user/desk-companion/Sources/CadenceCore/Export/CSVExport.swift",
+      "/home/user/desk-companion/Sources/CadenceCore/Export/IncomeReport.swift",
       "/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift",
       "/home/user/desk-companion/Sources/CadenceCore/Model/Enums.swift",
       "/home/user/desk-companion/Sources/CadenceCore/Model/Money.swift",
@@ -947,6 +958,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/home/user/desk-companion/Sources/CadenceCore/Export/IncomeReport.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/home/user/desk-companion/Sources/CadenceCore/Model/Entities.swift"
         },
         {
@@ -1132,6 +1147,10 @@
         {
           "kind" : "file",
           "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/HabitEngine.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/home/user/desk-companion/.build/x86_64-unknown-linux-gnu/debug/CadenceCore.build/IncomeReport.swift.o"
         },
         {
           "kind" : "file",

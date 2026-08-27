@@ -37,6 +37,10 @@ touches — `P` puis `⏎`.
   transactions de la période, filtrées par moyen de paiement et par état, avec le
   total de ce qui est affiché. On coche, on corrige, on supprime la ligne saisie
   deux fois.
+- **Synthèse de revenus.** Une fois le mois pointé, le document à présenter à une
+  banque : douze mois de revenus **réellement encaissés**, mois par mois, avec la
+  moyenne mensuelle et la régularité. Ce qui reste dû est indiqué à part, jamais
+  fondu dans le total.
 - **Agenda.** Les rendez-vous d'Apple Calendar *et* de Google Calendar arrivent tout
   seuls, sans OAuth et sans qu'aucune donnée ne quitte le Mac.
 - **Patients.** Une fiche par personne : historique, présences, absences, paiements,
