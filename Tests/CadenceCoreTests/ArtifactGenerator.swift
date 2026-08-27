@@ -17,13 +17,26 @@ final class ExportReconciliationTests: CadenceTestCase {
     func testTheReportTotalEqualsTheSumOfItsOwnLines() throws {
         let (store, month, now) = try populatedStore()
         let payments = try store.payments(in: month)
+        let settled = try store.settledPayments(in: month)
         let statistics = try store.statistics(for: month)
 
         XCTAssertGreaterThan(payments.count, 5, "the fixture must actually have activity")
+        XCTAssertGreaterThan(statistics.pendingCents, 0, "the fixture must exercise outstanding payments")
+
         XCTAssertEqual(
             statistics.revenueCents,
+            settled.reduce(0) { $0 + $1.amountCents },
+            "\"encaissé\" must be exactly the money that arrived during the period"
+        )
+        XCTAssertEqual(
+            statistics.announcedCents,
             payments.reduce(0) { $0 + $1.amountCents },
-            "the headline figure must be the sum of the payments listed underneath it"
+            "\"convenu\" must be exactly what the detail table lists"
+        )
+        XCTAssertEqual(
+            statistics.pendingCents,
+            payments.filter(\.isPending).reduce(0) { $0 + $1.amountCents },
+            "and what is outstanding must be the rest of it"
         )
         XCTAssertEqual(
             statistics.byMethod.reduce(0) { $0 + $1.totalCents },
@@ -64,7 +77,12 @@ final class ExportReconciliationTests: CadenceTestCase {
             guard columns.count > 3 else { return nil }
             return Int(columns[3].replacingOccurrences(of: ",", with: ""))
         }
-        XCTAssertEqual(exported.reduce(0, +), try store.statistics(for: month).revenueCents)
+        XCTAssertEqual(
+            exported.reduce(0, +),
+            try store.statistics(for: month).announcedCents,
+            "the export lists what was agreed in the period, so it sums to that figure"
+        )
+        XCTAssertTrue(text.contains("En attente"), "the export must say which payments have not arrived")
     }
 
     func testTheConsultationsExportCoversEverySlotInThePeriod() throws {
@@ -83,9 +101,9 @@ final class ExportReconciliationTests: CadenceTestCase {
         // say exactly what the payment strip would offer.
         let row = try XCTUnwrap(text.components(separatedBy: "\r\n").first { $0.hasPrefix("Jean Dupont;") })
         let columns = row.components(separatedBy: ";")
-        XCTAssertEqual(columns[9], "70,00", "usual amount")
-        XCTAssertEqual(columns[10], "Carte", "usual method")
-        XCTAssertEqual(columns[11], "oui", "habit established")
-        XCTAssertEqual(columns[14], "Chaque semaine", "rhythm")
+        XCTAssertEqual(columns[10], "70,00", "usual amount")
+        XCTAssertEqual(columns[11], "Carte", "usual method")
+        XCTAssertEqual(columns[12], "oui", "habit established")
+        XCTAssertEqual(columns[15], "Chaque semaine", "rhythm")
     }
 }

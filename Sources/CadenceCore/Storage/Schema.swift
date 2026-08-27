@@ -101,6 +101,16 @@ enum Schema {
             key   TEXT PRIMARY KEY NOT NULL,
             value TEXT NOT NULL
         );
+        """),
+
+        // A payment can be recorded before the money arrives — a transfer announced
+        // in the session, a cheque waiting to be paid in. `settled_at` is null until
+        // it actually lands. Everything recorded before this migration existed is
+        // treated as received, which is what it meant at the time.
+        (2, """
+        ALTER TABLE payment ADD COLUMN settled_at INTEGER;
+        UPDATE payment SET settled_at = paid_at;
+        CREATE INDEX payment_pending ON payment (paid_at) WHERE settled_at IS NULL;
         """)
     ]
 

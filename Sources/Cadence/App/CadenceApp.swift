@@ -35,8 +35,14 @@ final class AppBootstrap: ObservableObject {
     /// Swaps the live database for a snapshot and rebuilds the whole model around
     /// it. No restart is needed because nothing outside the model holds the store.
     func restore(from snapshot: URL) throws {
-        model?.store.close()
+        // Order matters. The running model owns a timer and a calendar observer that
+        // both touch the database; they have to be stopped before the file is
+        // swapped, or the next tick lands on a closed handle.
+        let outgoing = model
+        outgoing?.shutdown()
         state = .loading
+        outgoing?.store.close()
+
         try BackupManager.restore(from: snapshot, replacing: CadenceStore.defaultFileURL())
         start()
         model?.showToast("Sauvegarde restaurée", undoLabel: nil)

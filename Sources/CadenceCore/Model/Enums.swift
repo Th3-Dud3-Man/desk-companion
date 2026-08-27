@@ -83,18 +83,46 @@ public struct PaymentMethod: Hashable, Codable, Identifiable, Sendable {
     /// SF Symbol name used by the macOS layer. Kept here so the catalogue is one object.
     public var symbol: String
     public var isEnabled: Bool
+    /// Whether the money is in hand the moment the payment is recorded.
+    ///
+    /// Cash and card are done on the spot. A transfer is announced during the
+    /// session and arrives days later; a cheque still has to be paid in. Those are
+    /// recorded straight away and ticked off when they actually land, so nothing
+    /// is forgotten and the takings stay truthful in the meantime.
+    public var settlesImmediately: Bool
 
-    public init(id: String, label: String, symbol: String, isEnabled: Bool = true) {
+    public init(
+        id: String,
+        label: String,
+        symbol: String,
+        isEnabled: Bool = true,
+        settlesImmediately: Bool = true
+    ) {
         self.id = id
         self.label = label
         self.symbol = symbol
         self.isEnabled = isEnabled
+        self.settlesImmediately = settlesImmediately
+    }
+
+    /// Older stored catalogues have no `settlesImmediately` key; they predate the
+    /// idea, so everything in them settled immediately.
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        label = try container.decode(String.self, forKey: .label)
+        symbol = try container.decode(String.self, forKey: .symbol)
+        isEnabled = try container.decodeIfPresent(Bool.self, forKey: .isEnabled) ?? true
+        settlesImmediately = try container.decodeIfPresent(Bool.self, forKey: .settlesImmediately) ?? true
     }
 
     public static let cash = PaymentMethod(id: "cash", label: "Espèces", symbol: "banknote")
     public static let card = PaymentMethod(id: "card", label: "Carte", symbol: "creditcard")
-    public static let cheque = PaymentMethod(id: "cheque", label: "Chèque", symbol: "doc.text")
-    public static let transfer = PaymentMethod(id: "transfer", label: "Virement", symbol: "arrow.left.arrow.right")
+    public static let cheque = PaymentMethod(id: "cheque", label: "Chèque", symbol: "doc.text",
+                                             settlesImmediately: false)
+    public static let transfer = PaymentMethod(id: "transfer", label: "Virement",
+                                               symbol: "arrow.left.arrow.right",
+                                               settlesImmediately: false)
     public static let other = PaymentMethod(id: "other", label: "Autre", symbol: "ellipsis.circle")
 
     /// The catalogue a fresh install starts with.
@@ -116,6 +144,8 @@ public enum ActionKind: String, Codable, CaseIterable, Sendable {
     case paymentRecorded
     case paymentUpdated
     case paymentDeleted
+    case paymentSettled
+    case paymentUnsettled
     case calendarSynchronised
     case demoDataInstalled
     case demoDataRemoved
@@ -137,6 +167,8 @@ public enum ActionKind: String, Codable, CaseIterable, Sendable {
         case .paymentRecorded: return "Paiement enregistré"
         case .paymentUpdated: return "Paiement modifié"
         case .paymentDeleted: return "Paiement supprimé"
+        case .paymentSettled: return "Paiement encaissé"
+        case .paymentUnsettled: return "Paiement remis en attente"
         case .calendarSynchronised: return "Agenda synchronisé"
         case .demoDataInstalled: return "Données de démonstration installées"
         case .demoDataRemoved: return "Données de démonstration supprimées"

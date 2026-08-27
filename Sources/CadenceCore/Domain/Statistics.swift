@@ -34,9 +34,16 @@ public struct PeriodStatistics: Sendable {
     public let cancelled: Int
     public let pending: Int
 
+    /// Money actually received in the period, keyed on when it arrived.
     public let revenueCents: Int
     public let paymentCount: Int
     public let byMethod: [MethodTotal]
+    /// Agreed during the period, whatever became of it afterwards.
+    public let announcedCents: Int
+    public let announcedCount: Int
+    /// Agreed during the period and still owed.
+    public let pendingCents: Int
+    public let pendingCount: Int
     public let uniquePatients: Int
     /// Attended consultations with nothing recorded against them yet.
     public let unpaidAttended: Int
@@ -68,10 +75,18 @@ public struct PeriodStatistics: Sendable {
         Money(cents: revenueCents, currencyCode: currencyCode)
     }
 
+    public func pending(currencyCode: String = "EUR") -> Money {
+        Money(cents: pendingCents, currencyCode: currencyCode)
+    }
+
+    public var hasPending: Bool { pendingCount > 0 }
+
     public static func empty(range: DateRange) -> PeriodStatistics {
         PeriodStatistics(
             range: range, planned: 0, attended: 0, absent: 0, cancelled: 0, pending: 0,
-            revenueCents: 0, paymentCount: 0, byMethod: [], uniquePatients: 0,
+            revenueCents: 0, paymentCount: 0, byMethod: [],
+            announcedCents: 0, announcedCount: 0, pendingCents: 0, pendingCount: 0,
+            uniquePatients: 0,
             unpaidAttended: 0, measuredDurationAverage: nil, measuredDurationCount: 0
         )
     }
@@ -119,21 +134,35 @@ extension CadenceStore {
         let pending = (counts[.scheduled] ?? 0) + (counts[.confirmed] ?? 0) + (counts[.inProgress] ?? 0)
         let planned = attended + absent + pending          // cancelled slots are not "planned work"
 
-        // Revenue, keyed on when the money came in.
+        // Takings, keyed on when the money actually arrived.
         let totalsRow = try database.query(
             """
             SELECT COALESCE(SUM(amount_cents), 0) AS total, COUNT(*) AS n
-            FROM payment WHERE paid_at >= ? AND paid_at < ?;
+            FROM payment WHERE settled_at >= ? AND settled_at < ?;
             """, bounds
         ).first
         let revenueCents = totalsRow?.intValue("total") ?? 0
         let paymentCount = totalsRow?.intValue("n") ?? 0
 
+        // Agreed during the period, and what of it is still owed.
+        let announcedRow = try database.query(
+            """
+            SELECT COALESCE(SUM(amount_cents), 0) AS total, COUNT(*) AS n
+            FROM payment WHERE paid_at >= ? AND paid_at < ?;
+            """, bounds
+        ).first
+        let pendingRow = try database.query(
+            """
+            SELECT COALESCE(SUM(amount_cents), 0) AS total, COUNT(*) AS n
+            FROM payment WHERE paid_at >= ? AND paid_at < ? AND settled_at IS NULL;
+            """, bounds
+        ).first
+
         var byMethod: [MethodTotal] = []
         for row in try database.query(
             """
             SELECT method, COALESCE(SUM(amount_cents), 0) AS total, COUNT(*) AS n
-            FROM payment WHERE paid_at >= ? AND paid_at < ?
+            FROM payment WHERE settled_at >= ? AND settled_at < ?
             GROUP BY method ORDER BY total DESC;
             """, bounds
         ) {
@@ -186,6 +215,10 @@ extension CadenceStore {
             revenueCents: revenueCents,
             paymentCount: paymentCount,
             byMethod: byMethod,
+            announcedCents: announcedRow?.intValue("total") ?? 0,
+            announcedCount: announcedRow?.intValue("n") ?? 0,
+            pendingCents: pendingRow?.intValue("total") ?? 0,
+            pendingCount: pendingRow?.intValue("n") ?? 0,
             uniquePatients: uniquePatients,
             unpaidAttended: unpaidAttended,
             measuredDurationAverage: measuredAverage,
@@ -204,8 +237,9 @@ extension CadenceStore {
     /// Day-by-day takings and attendance, for the small chart on the statistics screen.
     public func dailyTotals(in range: DateRange, calendar: Calendar = .cadence) throws -> [DailyTotal] {
         var revenueByDay: [Date: Int] = [:]
-        for payment in try payments(in: range) {
-            let day = calendar.startOfDay(for: payment.paidAt)
+        for payment in try settledPayments(in: range) {
+            guard let settledAt = payment.settledAt else { continue }
+            let day = calendar.startOfDay(for: settledAt)
             revenueByDay[day, default: 0] += payment.amountCents
         }
 

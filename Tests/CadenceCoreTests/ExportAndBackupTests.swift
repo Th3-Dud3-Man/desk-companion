@@ -76,7 +76,7 @@ final class ExportTests: CadenceTestCase {
         XCTAssertTrue(text.contains("Chaque semaine"))
         // "Habitude établie" column says yes.
         let row = text.components(separatedBy: "\r\n").first { $0.contains("Jean Dupont") } ?? ""
-        XCTAssertEqual(row.components(separatedBy: ";")[11], "oui")
+        XCTAssertEqual(row.components(separatedBy: ";")[12], "oui")
     }
 
     func testEmptyPeriodStillProducesAValidFile() throws {

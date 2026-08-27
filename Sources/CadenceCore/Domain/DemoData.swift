@@ -154,12 +154,16 @@ public enum DemoData {
             guard !missed else { continue }
 
             let (amount, method) = persona.exceptions[session] ?? (persona.amountCents, persona.methodID)
+            // The most recent transfer and cheque are left outstanding, so the demo
+            // shows what a practice actually looks like mid-month.
+            let settlesLater = (method == "transfer" || method == "cheque")
             _ = try store.recordPayment(
                 consultationID: consultation.id,
                 patientID: patient.id,
                 amountCents: amount,
                 methodID: method,
                 paidAt: end,
+                isSettled: !(settlesLater && session == 0),
                 isDemo: true
             )
         }

@@ -287,3 +287,263 @@ final class DemoDataTests: CadenceTestCase {
         XCTAssertNotNil(try store.consultation(id: consultation.id))
     }
 }
+
+// MARK: - Payments that have not arrived yet
+
+/// A transfer is agreed in the room and lands days later. Cadence records it at
+/// once so it cannot be forgotten, keeps it out of the takings until it arrives,
+/// and lets the user tick it off in one gesture.
+final class PendingPaymentTests: CadenceTestCase {
+
+    private func makePatient(_ store: CadenceStore) throws -> Patient {
+        try store.createPatient(displayName: "Nadia Haddad")
+    }
+
+    func testTransfersAndChequesDoNotSettleImmediatelyByDefault() {
+        XCTAssertFalse(PaymentMethod.transfer.settlesImmediately)
+        XCTAssertFalse(PaymentMethod.cheque.settlesImmediately)
+        XCTAssertTrue(PaymentMethod.cash.settlesImmediately)
+        XCTAssertTrue(PaymentMethod.card.settlesImmediately)
+    }
+
+    func testAnOutstandingPaymentIsRecordedButNotCounted() throws {
+        let store = try makeMemoryStore()
+        let patient = try makePatient(store)
+        let day = date(2026, 8, 25, 14, 0)
+
+        let payment = try store.recordPayment(
+            consultationID: nil, patientID: patient.id, amountCents: 4_000,
+            methodID: "transfer", paidAt: day, isSettled: false
+        )
+
+        XCTAssertTrue(payment.isPending)
+        XCTAssertEqual(try store.outstandingTotal(), 4_000)
+        XCTAssertEqual(try store.outstandingCount(), 1)
+
+        let statistics = try store.statistics(for: .day(containing: day))
+        XCTAssertEqual(statistics.revenueCents, 0, "money that has not arrived is not takings")
+        XCTAssertEqual(statistics.pendingCents, 4_000)
+        XCTAssertEqual(statistics.announcedCents, 4_000)
+    }
+
+    func testTickingItOffMovesItIntoTheTakings() throws {
+        let store = try makeMemoryStore()
+        let patient = try makePatient(store)
+        let agreed = date(2026, 8, 25, 14, 0)
+        let received = date(2026, 8, 28, 9, 0)
+
+        let payment = try store.recordPayment(
+            consultationID: nil, patientID: patient.id, amountCents: 4_000,
+            methodID: "transfer", paidAt: agreed, isSettled: false
+        )
+        try store.settlePayment(payment.id, at: received)
+
+        let settled = try XCTUnwrap(try store.payment(id: payment.id))
+        XCTAssertFalse(settled.isPending)
+        XCTAssertEqual(settled.settledAt, received)
+        XCTAssertEqual(try store.outstandingTotal(), 0)
+
+        // It counts on the day it arrived, not the day it was agreed.
+        XCTAssertEqual(try store.statistics(for: .day(containing: agreed)).revenueCents, 0)
+        XCTAssertEqual(try store.statistics(for: .day(containing: received)).revenueCents, 4_000)
+        // But the consultation it belongs to is still that first day's work.
+        XCTAssertEqual(try store.statistics(for: .day(containing: agreed)).announcedCents, 4_000)
+    }
+
+    func testATickCanBeTakenBack() throws {
+        let store = try makeMemoryStore()
+        let patient = try makePatient(store)
+        let payment = try store.recordPayment(
+            consultationID: nil, patientID: patient.id, amountCents: 4_000,
+            methodID: "transfer", paidAt: date(2026, 8, 25), isSettled: false
+        )
+        try store.settlePayment(payment.id)
+        XCTAssertEqual(try store.outstandingCount(), 0)
+
+        try store.unsettlePayment(payment.id)
+        XCTAssertEqual(try store.outstandingCount(), 1, "a mistaken tick, or a cheque returned")
+        XCTAssertTrue(try XCTUnwrap(try store.payment(id: payment.id)).isPending)
+    }
+
+    func testTheOutstandingListIsOldestFirst() throws {
+        let store = try makeMemoryStore()
+        let patient = try makePatient(store)
+        for day in [25, 12, 19] {
+            _ = try store.recordPayment(
+                consultationID: nil, patientID: patient.id, amountCents: day * 100,
+                methodID: "transfer", paidAt: date(2026, 8, day), isSettled: false
+            )
+        }
+        let pending = try store.pendingPayments()
+        XCTAssertEqual(pending.map(\.amountCents), [1_200, 1_900, 2_500],
+                       "the one that has been waiting longest comes first")
+        XCTAssertEqual(pending.first?.daysOutstanding(now: date(2026, 8, 26)), 14)
+    }
+
+    func testAnOutstandingPaymentStillCountsAsSettlingTheConsultation() throws {
+        // The point is not to nag twice: a session with an announced transfer is not
+        // in the "à traiter" list, it is in the "en attente de règlement" one.
+        let store = try makeMemoryStore()
+        let patient = try makePatient(store)
+        let start = date(2026, 8, 25, 14, 0)
+        let consultation = try store.createConsultation(
+            patientID: patient.id, title: "Nadia Haddad", start: start, end: start.addingTimeInterval(3_000)
+        )
+        try store.setStatus(.attended, forConsultation: consultation.id)
+        _ = try store.recordPayment(
+            consultationID: consultation.id, patientID: patient.id, amountCents: 4_000,
+            methodID: "transfer", paidAt: start, isSettled: false
+        )
+
+        let statistics = try store.statistics(for: .day(containing: start))
+        XCTAssertEqual(statistics.unpaidAttended, 0)
+        XCTAssertEqual(statistics.pendingCount, 1)
+
+        let profile = try XCTUnwrap(try store.profile(forPatient: patient.id, now: start))
+        XCTAssertTrue(profile.unpaidConsultations.isEmpty)
+        XCTAssertEqual(profile.outstandingCents, 4_000)
+        XCTAssertEqual(profile.totalCollectedCents, 0, "not collected until it arrives")
+    }
+
+    func testTheHabitEngineLearnsFromAgreedPaymentsNotOnlyReceivedOnes() throws {
+        // What a patient habitually pays does not depend on the bank's timing.
+        let store = try makeMemoryStore()
+        let patient = try makePatient(store)
+        for week in 1...4 {
+            _ = try store.recordPayment(
+                consultationID: nil, patientID: patient.id, amountCents: 9_000,
+                methodID: "transfer",
+                paidAt: Calendar.cadence.date(byAdding: .day, value: -7 * week, to: date(2026, 8, 25))!,
+                isSettled: week > 1
+            )
+        }
+        let advice = HabitEngine.advise(
+            payments: try store.payments(forPatient: patient.id),
+            patient: patient, settings: try store.settings(), now: date(2026, 8, 25)
+        )
+        XCTAssertTrue(advice.isHabit)
+        XCTAssertEqual(advice.primary.amountCents, 9_000)
+        XCTAssertEqual(advice.primary.methodID, "transfer")
+    }
+
+    func testExistingPaymentsAreConsideredReceivedAfterTheMigration() throws {
+        // Anything recorded before settlement existed meant "received" at the time.
+        let store = try makeFileStore()
+        let patient = try makePatient(store)
+        _ = try store.recordPayment(
+            consultationID: nil, patientID: patient.id, amountCents: 7_000,
+            methodID: "card", paidAt: date(2026, 8, 25)
+        )
+        store.close()
+
+        let reopened = try makeFileStore()
+        XCTAssertEqual(try reopened.outstandingCount(), 0)
+        XCTAssertEqual(try reopened.statistics(for: .day(containing: date(2026, 8, 25))).revenueCents, 7_000)
+    }
+}
+
+// MARK: - The end-of-month ledger
+
+/// Going through the month's transactions, one payment method at a time, and
+/// correcting what is wrong. Deleting an entry recorded in error must take exactly
+/// that entry and nothing else.
+final class LedgerTests: CadenceTestCase {
+
+    private func populated() throws -> (CadenceStore, DateRange, [Payment]) {
+        let store = try makeMemoryStore()
+        let alice = try store.createPatient(displayName: "Alice Martin")
+        let bruno = try store.createPatient(displayName: "Bruno Petit")
+
+        var payments: [Payment] = []
+        payments.append(try store.recordPayment(consultationID: nil, patientID: alice.id,
+                                                amountCents: 7_000, methodID: "card",
+                                                paidAt: date(2026, 8, 4, 10, 0)))
+        payments.append(try store.recordPayment(consultationID: nil, patientID: bruno.id,
+                                                amountCents: 4_000, methodID: "transfer",
+                                                paidAt: date(2026, 8, 11, 10, 0), isSettled: false))
+        payments.append(try store.recordPayment(consultationID: nil, patientID: alice.id,
+                                                amountCents: 9_000, methodID: "transfer",
+                                                paidAt: date(2026, 8, 18, 10, 0)))
+        payments.append(try store.recordPayment(consultationID: nil, patientID: bruno.id,
+                                                amountCents: 6_000, methodID: "cash",
+                                                paidAt: date(2026, 8, 25, 10, 0)))
+        // Outside the month, so it must never appear.
+        _ = try store.recordPayment(consultationID: nil, patientID: alice.id,
+                                    amountCents: 5_000, methodID: "cash",
+                                    paidAt: date(2026, 7, 20, 10, 0))
+        return (store, .month(containing: date(2026, 8, 15)), payments)
+    }
+
+    func testTheLedgerCoversExactlyThePeriod() throws {
+        let (store, month, _) = try populated()
+        XCTAssertEqual(try store.ledger(in: month).count, 4)
+    }
+
+    func testFilteringByPaymentMethod() throws {
+        let (store, month, _) = try populated()
+        let transfers = try store.ledger(in: month, methodID: "transfer")
+        XCTAssertEqual(transfers.count, 2)
+        XCTAssertEqual(transfers.reduce(0) { $0 + $1.amountCents }, 13_000)
+
+        XCTAssertEqual(try store.ledger(in: month, methodID: "cash").count, 1)
+        XCTAssertEqual(try store.ledger(in: month, methodID: "cheque").count, 0)
+    }
+
+    func testFilteringBySettlementState() throws {
+        let (store, month, _) = try populated()
+        XCTAssertEqual(try store.ledger(in: month, settlement: .pending).count, 1)
+        XCTAssertEqual(try store.ledger(in: month, settlement: .settled).count, 3)
+
+        // The combination the user actually asks for: "the transfers I am still owed".
+        let owed = try store.ledger(in: month, methodID: "transfer", settlement: .pending)
+        XCTAssertEqual(owed.count, 1)
+        XCTAssertEqual(owed.first?.amountCents, 4_000)
+    }
+
+    func testOrdering() throws {
+        let (store, month, _) = try populated()
+        XCTAssertEqual(try store.ledger(in: month, order: .amountDescending).map(\.amountCents),
+                       [9_000, 7_000, 6_000, 4_000])
+        XCTAssertEqual(try store.ledger(in: month, order: .dateAscending).first?.amountCents, 7_000)
+        XCTAssertEqual(try store.ledger(in: month, order: .dateDescending).first?.amountCents, 6_000)
+    }
+
+    func testOnlyTheMethodsActuallyUsedAreOffered() throws {
+        let (store, month, _) = try populated()
+        XCTAssertEqual(Set(try store.methodsUsed(in: month)), ["card", "transfer", "cash"])
+    }
+
+    func testDeletingAnEntryRecordedInErrorTakesNothingElse() throws {
+        let (store, month, payments) = try populated()
+        let mistake = payments[1]
+
+        try store.deletePayment(mistake.id)
+
+        let remaining = try store.ledger(in: month)
+        XCTAssertEqual(remaining.count, 3)
+        XCTAssertFalse(remaining.contains { $0.id == mistake.id })
+        XCTAssertEqual(try store.outstandingCount(), 0, "it was the only outstanding one")
+        // The other transfer is untouched.
+        XCTAssertEqual(try store.ledger(in: month, methodID: "transfer").count, 1)
+        // And the takings drop by exactly nothing, because it had never arrived.
+        XCTAssertEqual(try store.statistics(for: month).revenueCents, 22_000)
+    }
+
+    func testDeletingASettledEntryRemovesItFromTheTakings() throws {
+        let (store, month, payments) = try populated()
+        let before = try store.statistics(for: month).revenueCents
+        try store.deletePayment(payments[0].id)
+        XCTAssertEqual(try store.statistics(for: month).revenueCents, before - 7_000)
+    }
+
+    func testTheFilteredTotalIsWhatTheScreenShows() throws {
+        let (store, month, _) = try populated()
+        for method in try store.methodsUsed(in: month) {
+            let rows = try store.ledger(in: month, methodID: method)
+            let total = rows.reduce(0) { $0 + $1.amountCents }
+            let settled = rows.filter { !$0.isPending }.reduce(0) { $0 + $1.amountCents }
+            let pending = rows.filter(\.isPending).reduce(0) { $0 + $1.amountCents }
+            XCTAssertEqual(settled + pending, total, "\(method): the split must account for everything")
+        }
+    }
+}

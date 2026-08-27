@@ -79,6 +79,17 @@ final class CalendarSyncService: ObservableObject {
         if let changeObserver { NotificationCenter.default.removeObserver(changeObserver) }
     }
 
+    /// Stops listening. Without this, a calendar notification arriving after the
+    /// store has been closed — during a restore — reaches a dead database handle.
+    func shutdown() {
+        if let changeObserver {
+            NotificationCenter.default.removeObserver(changeObserver)
+            self.changeObserver = nil
+        }
+        automaticSyncTask?.cancel()
+        automaticSyncTask = nil
+    }
+
     var hasEnabledCalendars: Bool { subscriptions.contains(where: \.isEnabled) }
 
     // MARK: Access

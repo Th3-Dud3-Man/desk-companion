@@ -89,15 +89,32 @@ public enum ActivityReport {
         }.joined()
 
         let paymentRows = input.payments.sorted { $0.paidAt < $1.paidAt }.map { payment in
-            """
+            let settlement = payment.isPending
+                ? "<span class=\"pending\">en attente</span>"
+                : "reçu"
+            return """
             <tr>
               <td>\(escape(CadenceFormat.numericDate(payment.paidAt)))</td>
               <td>\(escape(input.patientNames[payment.patientID] ?? "—"))</td>
               <td>\(escape(input.settings.methodLabel(payment.methodID)))</td>
+              <td>\(settlement)</td>
               <td class="num">\(money(payment.amountCents))</td>
             </tr>
             """
         }.joined()
+
+        let announcedTotal = input.payments.reduce(0) { $0 + $1.amountCents }
+
+        var pendingKPI = ""
+        if statistics.pendingCents > 0 {
+            pendingKPI = """
+            <div class="kpi">
+              <div class="kpi-label">En attente</div>
+              <div class="kpi-value warn">\(money(statistics.pendingCents))</div>
+              <div class="kpi-note">\(statistics.pendingCount) règlement(s) annoncé(s) non reçu(s)</div>
+            </div>
+            """
+        }
 
         let unpaidNote = statistics.unpaidAttended > 0
             ? "<p class=\"warn\">\(statistics.unpaidAttended) consultation(s) marquée(s) présente(s) sans paiement enregistré sur la période.</p>"
@@ -142,6 +159,9 @@ public enum ActivityReport {
           .cols { display: flex; gap: 22px; align-items: flex-start; }
           .cols > * { flex: 1; min-width: 0; }
           .warn { color: #8F6414; background: #F6EDD9; border-radius: 6px; padding: 7px 10px; font-size: 10px; }
+          .kpi-value.warn { background: none; padding: 0; font-size: 20px; border-radius: 0; }
+          .pending { color: #8F6414; }
+          .footnote { color: #93948C; font-size: 9.5px; margin-top: 6px; }
           footer { margin-top: 26px; padding-top: 8px; border-top: 1px solid #E3E1D9;
                    color: #93948C; font-size: 9px; }
           tfoot td { font-weight: 600; border-top: 1.5px solid #CFCCC2; border-bottom: none; background: none !important; }
@@ -180,6 +200,7 @@ public enum ActivityReport {
               <div class="kpi-value">\(average)</div>
               <div class="kpi-note">par consultation honorée</div>
             </div>
+            \(pendingKPI)
             \(evolution)
           </div>
 
@@ -202,12 +223,17 @@ public enum ActivityReport {
             </div>
           </div>
 
-          <h2>Détail des paiements</h2>
+          <h2>Détail des paiements convenus sur la période</h2>
           <table>
-            <thead><tr><th>Date</th><th>Patient</th><th>Moyen</th><th class="num">Montant</th></tr></thead>
-            <tbody>\(paymentRows.isEmpty ? "<tr><td colspan=\"4\">Aucun paiement sur la période.</td></tr>" : paymentRows)</tbody>
-            <tfoot><tr><td colspan="3">Total</td><td class="num">\(money(statistics.revenueCents))</td></tr></tfoot>
+            <thead><tr><th>Date</th><th>Patient</th><th>Moyen</th><th>Règlement</th><th class="num">Montant</th></tr></thead>
+            <tbody>\(paymentRows.isEmpty ? "<tr><td colspan=\"5\">Aucun paiement sur la période.</td></tr>" : paymentRows)</tbody>
+            <tfoot><tr><td colspan="4">Total convenu</td><td class="num">\(money(announcedTotal))</td></tr></tfoot>
           </table>
+          <p class="footnote">
+            « Encaissé » compte l'argent reçu pendant la période ; ce tableau liste les paiements
+            convenus pendant la période. Un virement convenu en fin de mois et reçu le mois suivant
+            apparaît donc ici, et dans les recettes du mois suivant.
+          </p>
 
           <footer>
             Document produit par Cadence à partir des données saisies localement. Il rend compte de

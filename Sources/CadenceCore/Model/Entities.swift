@@ -174,7 +174,11 @@ public struct Payment: Identifiable, Hashable, Sendable {
     public var amountCents: Int
     public var currencyCode: String
     public var methodID: String
+    /// When the payment was agreed — the moment of the consultation, normally.
     public var paidAt: Date
+    /// When the money actually arrived. `nil` while a transfer or a cheque is
+    /// still outstanding; the interface shows those until they are ticked off.
+    public var settledAt: Date?
     public var note: String?
     public var isDemo: Bool
     public var createdAt: Date
@@ -187,6 +191,7 @@ public struct Payment: Identifiable, Hashable, Sendable {
         currencyCode: String = "EUR",
         methodID: String,
         paidAt: Date = Date(),
+        settledAt: Date? = nil,
         note: String? = nil,
         isDemo: Bool = false,
         createdAt: Date = Date()
@@ -198,12 +203,24 @@ public struct Payment: Identifiable, Hashable, Sendable {
         self.currencyCode = currencyCode
         self.methodID = methodID
         self.paidAt = paidAt
+        self.settledAt = settledAt
         self.note = note
         self.isDemo = isDemo
         self.createdAt = createdAt
     }
 
     public var money: Money { Money(cents: amountCents, currencyCode: currencyCode) }
+
+    /// Recorded, but the money has not arrived yet.
+    public var isPending: Bool { settledAt == nil }
+
+    /// How long an outstanding payment has been waiting, in whole days.
+    public func daysOutstanding(now: Date = Date(), calendar: Calendar = .cadence) -> Int? {
+        guard isPending else { return nil }
+        let from = calendar.startOfDay(for: paidAt)
+        let to = calendar.startOfDay(for: now)
+        return calendar.dateComponents([.day], from: from, to: to).day
+    }
 }
 
 // MARK: - Audit trail

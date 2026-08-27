@@ -56,9 +56,12 @@ public struct PatientProfile: Sendable {
 
     /// Attended consultations that carry no payment — the "reste à traiter" list.
     public let unpaidConsultations: [Consultation]
+    /// Payments agreed with this patient that have not arrived yet.
+    public let outstandingPayments: [Payment]
 
     public var totalConsultations: Int { attended + absent + cancelled + upcoming }
     public var paymentCount: Int { payments.count }
+    public var outstandingCents: Int { outstandingPayments.reduce(0) { $0 + $1.amountCents } }
 
     public var attendanceRate: Double? {
         let denominator = attended + absent
@@ -124,7 +127,7 @@ extension CadenceStore {
             firstSeen: past.first?.scheduledStart,
             lastSeen: past.last?.scheduledStart,
             nextAppointment: try nextConsultation(forPatient: id, after: now),
-            totalCollectedCents: payments.reduce(0) { $0 + $1.amountCents },
+            totalCollectedCents: payments.filter { !$0.isPending }.reduce(0) { $0 + $1.amountCents },
             advice: HabitEngine.advise(payments: payments, patient: patient, settings: settings, now: now),
             amountDistribution: HabitEngine.amountDistribution(payments: payments, currencyCode: settings.currencyCode),
             methodDistribution: HabitEngine.methodDistribution(payments: payments, settings: settings),
@@ -132,7 +135,8 @@ extension CadenceStore {
             usualWeekday: RhythmAnalyser.mode(of: past.map { Calendar.cadence.component(.weekday, from: $0.scheduledStart) }),
             usualHour: RhythmAnalyser.mode(of: past.map { Calendar.cadence.component(.hour, from: $0.scheduledStart) }),
             measuredDurationAverage: measuredAverage,
-            unpaidConsultations: unpaid
+            unpaidConsultations: unpaid,
+            outstandingPayments: payments.filter(\.isPending).sorted { $0.paidAt < $1.paidAt }
         )
     }
 }

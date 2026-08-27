@@ -114,6 +114,20 @@ fileprivate extension HabitEngineTests {
     ]
 }
 
+fileprivate extension LedgerTests {
+    @available(*, deprecated, message: "Not actually deprecated. Marked as deprecated to allow inclusion of deprecated tests (which test deprecated functionality) without warnings")
+    static nonisolated(unsafe) let __allTests__LedgerTests = [
+        ("testDeletingASettledEntryRemovesItFromTheTakings", testDeletingASettledEntryRemovesItFromTheTakings),
+        ("testDeletingAnEntryRecordedInErrorTakesNothingElse", testDeletingAnEntryRecordedInErrorTakesNothingElse),
+        ("testFilteringByPaymentMethod", testFilteringByPaymentMethod),
+        ("testFilteringBySettlementState", testFilteringBySettlementState),
+        ("testOnlyTheMethodsActuallyUsedAreOffered", testOnlyTheMethodsActuallyUsedAreOffered),
+        ("testOrdering", testOrdering),
+        ("testTheFilteredTotalIsWhatTheScreenShows", testTheFilteredTotalIsWhatTheScreenShows),
+        ("testTheLedgerCoversExactlyThePeriod", testTheLedgerCoversExactlyThePeriod)
+    ]
+}
+
 fileprivate extension PatientMatcherTests {
     @available(*, deprecated, message: "Not actually deprecated. Marked as deprecated to allow inclusion of deprecated tests (which test deprecated functionality) without warnings")
     static nonisolated(unsafe) let __allTests__PatientMatcherTests = [
@@ -132,6 +146,20 @@ fileprivate extension PatientProfileTests {
     static nonisolated(unsafe) let __allTests__PatientProfileTests = [
         ("testAttendedButUnpaidSessionsAppearOnTheRecord", testAttendedButUnpaidSessionsAppearOnTheRecord),
         ("testProfileSummarisesEverythingTheRecordShows", testProfileSummarisesEverythingTheRecordShows)
+    ]
+}
+
+fileprivate extension PendingPaymentTests {
+    @available(*, deprecated, message: "Not actually deprecated. Marked as deprecated to allow inclusion of deprecated tests (which test deprecated functionality) without warnings")
+    static nonisolated(unsafe) let __allTests__PendingPaymentTests = [
+        ("testATickCanBeTakenBack", testATickCanBeTakenBack),
+        ("testAnOutstandingPaymentIsRecordedButNotCounted", testAnOutstandingPaymentIsRecordedButNotCounted),
+        ("testAnOutstandingPaymentStillCountsAsSettlingTheConsultation", testAnOutstandingPaymentStillCountsAsSettlingTheConsultation),
+        ("testExistingPaymentsAreConsideredReceivedAfterTheMigration", testExistingPaymentsAreConsideredReceivedAfterTheMigration),
+        ("testTheHabitEngineLearnsFromAgreedPaymentsNotOnlyReceivedOnes", testTheHabitEngineLearnsFromAgreedPaymentsNotOnlyReceivedOnes),
+        ("testTheOutstandingListIsOldestFirst", testTheOutstandingListIsOldestFirst),
+        ("testTickingItOffMovesItIntoTheTakings", testTickingItOffMovesItIntoTheTakings),
+        ("testTransfersAndChequesDoNotSettleImmediatelyByDefault", testTransfersAndChequesDoNotSettleImmediatelyByDefault)
     ]
 }
 
@@ -186,8 +214,10 @@ func __CadenceCoreTests__allTests() -> [XCTestCaseEntry] {
         testCase(ExportTests.__allTests__ExportTests),
         testCase(FormattingTests.__allTests__FormattingTests),
         testCase(HabitEngineTests.__allTests__HabitEngineTests),
+        testCase(LedgerTests.__allTests__LedgerTests),
         testCase(PatientMatcherTests.__allTests__PatientMatcherTests),
         testCase(PatientProfileTests.__allTests__PatientProfileTests),
+        testCase(PendingPaymentTests.__allTests__PendingPaymentTests),
         testCase(RhythmAnalyserTests.__allTests__RhythmAnalyserTests),
         testCase(StoreTests.__allTests__StoreTests),
         testCase(UndoStackTests.__allTests__UndoStackTests)

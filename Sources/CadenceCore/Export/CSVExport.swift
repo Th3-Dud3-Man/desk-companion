@@ -68,7 +68,7 @@ extension CadenceStore {
         writer.addRow([
             "Date", "Début prévu", "Fin prévue", "Patient", "Statut",
             "Début réel", "Fin réelle", "Durée réelle (min)",
-            "Montant", "Devise", "Moyen de paiement", "Payé le",
+            "Montant", "Devise", "Moyen de paiement", "Règlement", "Payé le",
             "Source", "Lieu", "Notes",
         ])
 
@@ -91,6 +91,7 @@ extension CadenceStore {
                 payment?.money.csvValue ?? "",
                 payment?.currencyCode ?? "",
                 payment.map { settings.methodLabel($0.methodID) } ?? "",
+                payment.map { $0.isPending ? "En attente" : "Reçu" } ?? "",
                 payment.map { CadenceFormat.numericDateTime($0.paidAt) } ?? "",
                 consultation.source == .calendar ? "Agenda" : "Cadence",
                 consultation.location ?? "",
@@ -107,7 +108,10 @@ extension CadenceStore {
         let patients = try patients(ids: Array(Set(payments.map(\.patientID))))
 
         var writer = CSVWriter()
-        writer.addRow(["Date", "Heure", "Patient", "Montant", "Devise", "Moyen de paiement", "Date de la consultation", "Note"])
+        writer.addRow([
+            "Date", "Heure", "Patient", "Montant", "Devise", "Moyen de paiement",
+            "Règlement", "Date de règlement", "Date de la consultation", "Note",
+        ])
 
         for payment in payments {
             let linked = try payment.consultationID.flatMap { try self.consultation(id: $0) }
@@ -118,6 +122,8 @@ extension CadenceStore {
                 payment.money.csvValue,
                 payment.currencyCode,
                 settings.methodLabel(payment.methodID),
+                payment.isPending ? "En attente" : "Reçu",
+                payment.settledAt.map(CadenceFormat.numericDate) ?? "",
                 linked.map { CadenceFormat.numericDate($0.scheduledStart) } ?? "",
                 payment.note ?? "",
             ])
@@ -134,7 +140,7 @@ extension CadenceStore {
         writer.addRow([
             "Nom", "E-mail", "Téléphone", "Archivé",
             "Consultations", "Présences", "Absences", "Taux de présence",
-            "Total encaissé", "Montant habituel", "Moyen habituel", "Habitude établie",
+            "Total encaissé", "En attente", "Montant habituel", "Moyen habituel", "Habitude établie",
             "Première consultation", "Dernière consultation", "Rythme", "Notes",
         ])
 
@@ -151,6 +157,7 @@ extension CadenceStore {
                 String(profile.absent),
                 rate,
                 Money(cents: profile.totalCollectedCents, currencyCode: settings.currencyCode).csvValue,
+                Money(cents: profile.outstandingCents, currencyCode: settings.currencyCode).csvValue,
                 profile.advice.primary.money.csvValue,
                 settings.methodLabel(profile.advice.primary.methodID),
                 profile.advice.isHabit ? "oui" : "non",

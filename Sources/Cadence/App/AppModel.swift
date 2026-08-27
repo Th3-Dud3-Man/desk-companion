@@ -49,7 +49,17 @@ struct DayItem: Identifiable, Equatable {
     var id: UUID { consultation.id }
     var title: String { patient?.displayName ?? consultation.title }
     var needsAttention: Bool { !consultation.status.isResolved }
-    var awaitsPayment: Bool { consultation.status == .attended && payment == nil }
+
+    /// A payment can only be recorded once the appointment belongs to someone.
+    /// Offering the strip on an unattached calendar event produced a payment with
+    /// no patient, which the database rightly refused.
+    var awaitsPayment: Bool { consultation.status == .attended && payment == nil && patient != nil }
+
+    /// Attended, but there is nobody to attribute it to yet.
+    var needsPatient: Bool { consultation.status == .attended && patient == nil }
+
+    /// Recorded, waiting for the money to arrive.
+    var isAwaitingSettlement: Bool { payment?.isPending == true }
 
     static func == (lhs: DayItem, rhs: DayItem) -> Bool {
         lhs.consultation == rhs.consultation
@@ -85,6 +95,10 @@ final class AppModel: ObservableObject {
     @Published private(set) var dayItems: [DayItem] = []
     @Published private(set) var dayStatistics: PeriodStatistics
     @Published private(set) var unassignedToday: [DayItem] = []
+    /// Everything agreed but not yet received, oldest first. Ticked off from the
+    /// day rail, the patient's record, or the Finances screen.
+    @Published private(set) var pendingPayments: [Payment] = []
+    @Published private(set) var outstandingCents = 0
 
     @Published var selectedPatientID: UUID?
     @Published private(set) var selectedProfile: PatientProfile?
@@ -209,6 +223,8 @@ final class AppModel: ObservableObject {
             dayItems = items
             unassignedToday = items.filter { $0.consultation.isUnassigned && $0.consultation.status != .cancelled }
             dayStatistics = try store.statistics(for: range, settings: settings)
+            pendingPayments = try store.pendingPayments()
+            outstandingCents = try store.outstandingTotal()
 
             if let selectedPatientID {
                 selectedProfile = try store.profile(forPatient: selectedPatientID, settings: settings)
@@ -312,12 +328,15 @@ final class AppModel: ObservableObject {
         }
         let consultationID = item.consultation.id
         let amount = Money(cents: suggestion.amountCents, currencyCode: settings.currencyCode)
+        let immediate = settlesImmediately(suggestion.methodID)
         var recordedID: UUID?
         var recorded: Payment?
 
         perform(
             label: "Paiement de \(amount.formatted()) · \(patient.displayName)",
-            confirmation: "\(amount.formatted()) · \(settings.methodLabel(suggestion.methodID)) enregistré",
+            confirmation: immediate
+                ? "\(amount.formatted()) · \(settings.methodLabel(suggestion.methodID)) encaissé"
+                : "\(amount.formatted()) · \(settings.methodLabel(suggestion.methodID)) en attente de règlement",
             action: {
                 let payment = try self.store.recordPayment(
                     consultationID: consultationID,
@@ -325,6 +344,7 @@ final class AppModel: ObservableObject {
                     amountCents: suggestion.amountCents,
                     methodID: suggestion.methodID,
                     currencyCode: self.settings.currencyCode,
+                    isSettled: self.settlesImmediately(suggestion.methodID),
                     note: note
                 )
                 recordedID = payment.id
@@ -342,6 +362,10 @@ final class AppModel: ObservableObject {
     /// Saves a payment the user composed by hand (another amount, a late-cancellation
     /// charge). Identical guarantees to the one-click path, including undo.
     func recordExistingPayment(_ payment: Payment, patientName: String) {
+        guard patient(id: payment.patientID) != nil else {
+            failure = "Ce paiement n'est rattaché à aucun patient connu. Associez d'abord le rendez-vous à un patient."
+            return
+        }
         let snapshot = payment
         perform(
             label: "Paiement de \(payment.money.formatted()) · \(patientName)",
@@ -349,6 +373,35 @@ final class AppModel: ObservableObject {
             action: { try self.store.recordPayment(snapshot) },
             revert: { try self.store.deletePaymentSilently(snapshot.id) },
             replay: { try self.store.restorePayment(snapshot) }
+        )
+    }
+
+    /// Whether recording this method means the money is already in hand.
+    func settlesImmediately(_ methodID: String) -> Bool {
+        settings.method(withID: methodID)?.settlesImmediately ?? true
+    }
+
+    /// The tick that says the transfer landed.
+    func settle(_ payment: Payment) {
+        let id = payment.id
+        let name = patient(id: payment.patientID)?.displayName ?? ""
+        perform(
+            label: "Encaissement de \(payment.money.formatted()) · \(name)",
+            confirmation: "\(payment.money.formatted()) encaissé",
+            action: { try self.store.settlePayment(id) },
+            revert: { try self.store.unsettlePayment(id) }
+        )
+    }
+
+    /// Puts it back on the outstanding list — a mistaken tick, or a cheque returned.
+    func unsettle(_ payment: Payment) {
+        let id = payment.id
+        let settledAt = payment.settledAt ?? Date()
+        perform(
+            label: "Remise en attente de \(payment.money.formatted())",
+            confirmation: "\(payment.money.formatted()) remis en attente",
+            action: { try self.store.unsettlePayment(id) },
+            revert: { try self.store.settlePayment(id, at: settledAt) }
         )
     }
 
@@ -583,6 +636,17 @@ final class AppModel: ObservableObject {
     func dismissToast() {
         toastDismissal?.cancel()
         toast = nil
+    }
+
+    /// Releases everything that keeps touching the database, so the store can be
+    /// closed safely. Called before a restore swaps the file underneath us.
+    func shutdown() {
+        clockTimer?.cancel()
+        clockTimer = nil
+        toastDismissal?.cancel()
+        toastDismissal = nil
+        calendarSync.onChange = nil
+        calendarSync.shutdown()
     }
 
     func report(_ error: Error) {
