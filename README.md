@@ -56,20 +56,15 @@ Tools** (gratuits, `xcode-select --install`). Rien d'autre : aucune dépendance 
 télécharger, aucun compte, aucun abonnement.
 
 ```bash
-git clone -b claude/macos-psychologist-app-qoht69 \
-    https://github.com/Th3-Dud3-Man/desk-companion.git
+git clone https://github.com/Th3-Dud3-Man/desk-companion.git
 cd desk-companion
 ./cadence install
 ```
 
-> **Le `-b` n'est pas optionnel.** Tout le code vit sur la branche
-> `claude/macos-psychologist-app-qoht69`. Un `git clone` sans cette option se
-> place sur la branche par défaut, qui est vide — vous vous retrouvez avec un
-> dossier sans fichiers et un `./cadence : no such file or directory`.
->
-> Si vous avez déjà cloné sans le `-b` :
+> Si un clone plus ancien vous laisse un dossier vide, c'est qu'il date d'avant la
+> publication sur `main` :
 > ```bash
-> git fetch origin && git checkout claude/macos-psychologist-app-qoht69
+> git fetch origin && git checkout main && git pull
 > ```
 
 `./cadence install` compile, assemble `Cadence.app`, y place l'icône, signe le
