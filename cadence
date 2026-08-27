@@ -53,7 +53,22 @@ cmd_update() {
     require_macos
     cd "$ROOT" || die "dossier introuvable"
 
-    step "Mise à jour depuis git"
+    git rev-parse --git-dir >/dev/null 2>&1 || die "Ce dossier n'est pas un dépôt git."
+
+    # Sans branche suivie, `git pull` n'a rien à tirer. C'est le cas typique d'un
+    # clone qui a atterri sur une branche par défaut vide.
+    local branch upstream
+    branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+    upstream="$(git rev-parse --abbrev-ref '@{upstream}' 2>/dev/null || true)"
+    if [[ -z "$upstream" ]]; then
+        bad "La branche « $branch » ne suit aucune branche distante."
+        note "Les branches disponibles :"
+        git branch -r --format='    %(refname:short)' 2>/dev/null | sed 's|origin/||'
+        note "Placez-vous sur la bonne : git checkout <branche>"
+        exit 1
+    fi
+
+    step "Mise à jour depuis git ($upstream)"
     if [[ -n "$(git status --porcelain 2>/dev/null)" ]]; then
         warn "Des modifications locales sont présentes ; elles sont conservées."
         note "git stash les met de côté si la mise à jour est refusée."
@@ -224,6 +239,21 @@ cmd_doctor() {
         ok "Swift $(swift --version 2>&1 | head -1 | sed 's/.*version \([0-9.]*\).*/\1/')"
     else
         warn "Swift introuvable — nécessaire pour construire (xcode-select --install)"
+    fi
+
+    step "Dépôt"
+    if git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1; then
+        local branch upstream
+        branch="$(git -C "$ROOT" rev-parse --abbrev-ref HEAD 2>/dev/null)"
+        upstream="$(git -C "$ROOT" rev-parse --abbrev-ref '@{upstream}' 2>/dev/null || true)"
+        if [[ -n "$upstream" ]]; then
+            ok "Branche $branch (suit $upstream)"
+        else
+            warn "Branche $branch — ne suit aucune branche distante, ./cadence update ne pourra pas tirer"
+        fi
+        note "Version : $(git -C "$ROOT" rev-parse --short HEAD 2>/dev/null)"
+    else
+        warn "Pas un dépôt git : ./cadence update ne fonctionnera pas"
     fi
 
     step "Application"
