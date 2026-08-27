@@ -155,6 +155,13 @@ c'est macOS qui gère le compte, Cadence lit ce que le système expose.
 | `⌘Z` / `⇧⌘Z` | Annuler / rétablir |
 | `⌘/` | Rappel des raccourcis |
 
+### La synthèse de revenus (pour la banque)
+
+Douze mois d'encaissements réels, mois par mois. Rendu produit par le code du
+dépôt à partir des données de démonstration :
+
+<img src="docs/images/synthese-revenus.png" width="620" alt="Synthèse de revenus sur douze mois">
+
 ### Le rapport d'activité
 
 Produit à partir des données réellement saisies, prêt à imprimer ou à transmettre.
