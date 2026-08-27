@@ -1,0 +1,362 @@
+#!/usr/bin/env bash
+#
+# Cadence — one command for everything you need to do to the application.
+#
+#   ./cadence update      met à jour depuis git, reconstruit et réinstalle
+#   ./cadence build       construit dans ./build
+#   ./cadence install     construit et installe dans /Applications
+#   ./cadence run         lance l'application
+#   ./cadence doctor      diagnostique la base de données et l'installation
+#   ./cadence backup      crée une sauvegarde tout de suite
+#   ./cadence backups     liste les sauvegardes
+#   ./cadence restore F   restaure une sauvegarde
+#   ./cadence data        ouvre le dossier des données dans le Finder
+#   ./cadence sql         ouvre la base dans sqlite3
+#   ./cadence test        exécute la suite de tests
+#   ./cadence uninstall   retire l'application (les données sont conservées)
+#
+# Tout est local : aucune de ces commandes n'envoie quoi que ce soit sur Internet,
+# à l'exception de `update`, qui récupère le code depuis git.
+
+set -uo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+APP_NAME="Cadence"
+# Surchargeable pour les tests ; en usage normal, l'emplacement standard de macOS.
+DATA_DIR="${CADENCE_DATA_DIR:-$HOME/Library/Application Support/Cadence}"
+DB="$DATA_DIR/cadence.sqlite3"
+INSTALLED="/Applications/$APP_NAME.app"
+
+# ── Presentation ──────────────────────────────────────────────────────────────
+if [[ -t 1 ]]; then
+    BOLD=$'\033[1m'; DIM=$'\033[2m'; GREEN=$'\033[32m'; RED=$'\033[31m'
+    AMBER=$'\033[33m'; RESET=$'\033[0m'
+else
+    BOLD=""; DIM=""; GREEN=""; RED=""; AMBER=""; RESET=""
+fi
+
+say()   { printf '%s\n' "$*"; }
+step()  { printf '%s▸%s %s\n' "$BOLD" "$RESET" "$*"; }
+ok()    { printf '  %s✓%s %s\n' "$GREEN" "$RESET" "$*"; }
+warn()  { printf '  %s!%s %s\n' "$AMBER" "$RESET" "$*"; }
+bad()   { printf '  %s✗%s %s\n' "$RED" "$RESET" "$*"; }
+note()  { printf '  %s%s%s\n' "$DIM" "$*" "$RESET"; }
+die()   { printf '%s✗%s %s\n' "$RED" "$RESET" "$*" >&2; exit 1; }
+
+require_macos() {
+    [[ "$(uname -s)" == "Darwin" ]] || die "Cette commande nécessite macOS."
+}
+
+# ── Commands ──────────────────────────────────────────────────────────────────
+
+cmd_update() {
+    require_macos
+    cd "$ROOT" || die "dossier introuvable"
+
+    step "Mise à jour depuis git"
+    if [[ -n "$(git status --porcelain 2>/dev/null)" ]]; then
+        warn "Des modifications locales sont présentes ; elles sont conservées."
+        note "git stash les met de côté si la mise à jour est refusée."
+    fi
+
+    local before
+    before="$(git rev-parse --short HEAD 2>/dev/null || echo inconnu)"
+
+    if ! git pull --ff-only 2>&1 | sed 's/^/  /'; then
+        bad "La mise à jour a échoué."
+        note "Le plus souvent : des modifications locales empêchent l'avance rapide."
+        note "Essayez : git stash && ./cadence update && git stash pop"
+        exit 1
+    fi
+
+    local after
+    after="$(git rev-parse --short HEAD 2>/dev/null || echo inconnu)"
+    if [[ "$before" == "$after" ]]; then
+        ok "Déjà à jour ($after)."
+    else
+        ok "Mis à jour : $before → $after"
+        git --no-pager log --oneline "$before..$after" 2>/dev/null | head -10 | sed 's/^/    /'
+    fi
+
+    cmd_install
+}
+
+cmd_build() {
+    require_macos
+    step "Construction"
+    "$ROOT/build.sh" --release || die "La construction a échoué."
+}
+
+cmd_install() {
+    require_macos
+    step "Construction et installation"
+    local was_running=0
+    pgrep -x "$APP_NAME" >/dev/null 2>&1 && was_running=1
+
+    if [[ $was_running -eq 1 ]]; then
+        note "Cadence est ouverte ; elle va être fermée puis relancée."
+        osascript -e "tell application \"$APP_NAME\" to quit" >/dev/null 2>&1
+        # Laisse le temps à la base d'être fermée proprement.
+        for _ in 1 2 3 4 5 6 7 8 9 10; do
+            pgrep -x "$APP_NAME" >/dev/null 2>&1 || break
+            sleep 0.4
+        done
+    fi
+
+    "$ROOT/build.sh" --release --install || die "La construction a échoué."
+    ok "Installée dans $INSTALLED"
+
+    if [[ $was_running -eq 1 ]]; then
+        open "$INSTALLED"
+        ok "Relancée."
+    else
+        note "Lancez-la avec : ./cadence run"
+    fi
+}
+
+cmd_run() {
+    require_macos
+    if [[ -d "$INSTALLED" ]]; then
+        open "$INSTALLED"
+    elif [[ -d "$ROOT/build/$APP_NAME.app" ]]; then
+        open "$ROOT/build/$APP_NAME.app"
+    else
+        die "Application introuvable. Lancez d'abord : ./cadence install"
+    fi
+}
+
+cmd_test() {
+    step "Tests"
+    (cd "$ROOT" && swift test)
+}
+
+cmd_data() {
+    require_macos
+    mkdir -p "$DATA_DIR"
+    open "$DATA_DIR"
+}
+
+cmd_sql() {
+    command -v sqlite3 >/dev/null 2>&1 || die "sqlite3 est introuvable."
+    [[ -f "$DB" ]] || die "Aucune base à $DB — lancez Cadence au moins une fois."
+    say "${DIM}Base : $DB${RESET}"
+    say "${DIM}Quelques requêtes utiles :${RESET}"
+    say "${DIM}  SELECT COUNT(*) FROM patient;${RESET}"
+    say "${DIM}  SELECT display_name FROM patient ORDER BY display_name;${RESET}"
+    say "${DIM}  SELECT * FROM payment WHERE settled_at IS NULL;${RESET}"
+    say "${DIM}  .quit pour sortir${RESET}"
+    sqlite3 "$DB"
+}
+
+cmd_backup() {
+    command -v sqlite3 >/dev/null 2>&1 || die "sqlite3 est introuvable."
+    [[ -f "$DB" ]] || die "Aucune base à $DB."
+    mkdir -p "$DATA_DIR/Backups"
+    local target="$DATA_DIR/Backups/cadence-$(date +%Y-%m-%d-%H%M%S).sqlite3"
+    # .backup traverse le journal WAL correctement, contrairement à une copie.
+    if sqlite3 "$DB" ".backup '$target'"; then
+        ok "Sauvegarde créée : $target"
+        note "$(du -h "$target" | cut -f1)"
+    else
+        die "La sauvegarde a échoué."
+    fi
+}
+
+cmd_backups() {
+    local dir="$DATA_DIR/Backups"
+    [[ -d "$dir" ]] || { warn "Aucune sauvegarde pour l'instant."; return; }
+    step "Sauvegardes dans $dir"
+    ls -lht "$dir"/*.sqlite3 2>/dev/null | awk '{printf "  %s %s %s  %s\n", $6, $7, $8, $9}' || warn "Aucune sauvegarde."
+}
+
+cmd_restore() {
+    local snapshot="${1:-}"
+    [[ -n "$snapshot" ]] || die "Usage : ./cadence restore <fichier.sqlite3>"
+    [[ -f "$snapshot" ]] || die "Fichier introuvable : $snapshot"
+    command -v sqlite3 >/dev/null 2>&1 || die "sqlite3 est introuvable."
+
+    if ! sqlite3 "$snapshot" "PRAGMA integrity_check;" | grep -q '^ok$'; then
+        die "Cette sauvegarde est illisible ; rien n'a été modifié."
+    fi
+
+    pgrep -x "$APP_NAME" >/dev/null 2>&1 && die "Fermez Cadence avant de restaurer."
+
+    local safety="$DATA_DIR/cadence-avant-restauration.sqlite3"
+    if [[ -f "$DB" ]]; then
+        cp "$DB" "$safety" && ok "État actuel conservé dans $safety"
+    fi
+    rm -f "$DB" "$DB-wal" "$DB-shm"
+    cp "$snapshot" "$DB" || die "La restauration a échoué."
+    ok "Restauré depuis $snapshot"
+}
+
+cmd_uninstall() {
+    require_macos
+    [[ -d "$INSTALLED" ]] || { warn "Cadence n'est pas installée dans /Applications."; return; }
+    osascript -e "tell application \"$APP_NAME\" to quit" >/dev/null 2>&1
+    rm -rf "$INSTALLED"
+    ok "Application retirée."
+    note "Vos données sont intactes dans $DATA_DIR"
+    note "Pour les supprimer aussi : rm -rf \"$DATA_DIR\""
+}
+
+# ── Doctor ────────────────────────────────────────────────────────────────────
+# Répond à « est-ce que l'accès à la base de données fonctionne ? » sans avoir à
+# lancer l'application.
+
+cmd_doctor() {
+    local problems=0
+
+    step "Système"
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        ok "macOS $(sw_vers -productVersion 2>/dev/null || echo '?')"
+        local major
+        major="$(sw_vers -productVersion 2>/dev/null | cut -d. -f1)"
+        if [[ -n "$major" && "$major" -lt 14 ]]; then
+            bad "Cadence demande macOS 14 ou plus récent."
+            problems=$((problems + 1))
+        fi
+    else
+        warn "Système non-macOS : seules les vérifications de la base s'appliquent."
+    fi
+
+    if command -v swift >/dev/null 2>&1; then
+        ok "Swift $(swift --version 2>&1 | head -1 | sed 's/.*version \([0-9.]*\).*/\1/')"
+    else
+        warn "Swift introuvable — nécessaire pour construire (xcode-select --install)"
+    fi
+
+    step "Application"
+    if [[ -d "$INSTALLED" ]]; then
+        ok "Installée : $INSTALLED"
+        if codesign --verify "$INSTALLED" >/dev/null 2>&1; then
+            ok "Signature valide"
+        else
+            warn "Signature absente ou invalide — macOS peut redemander l'accès aux calendriers"
+        fi
+        local quarantine
+        quarantine="$(xattr -p com.apple.quarantine "$INSTALLED" 2>/dev/null || true)"
+        [[ -n "$quarantine" ]] && warn "Le bundle est en quarantaine : xattr -dr com.apple.quarantine \"$INSTALLED\""
+    else
+        warn "Non installée dans /Applications (./cadence install)"
+    fi
+    pgrep -x "$APP_NAME" >/dev/null 2>&1 && note "Cadence est en cours d'exécution."
+
+    step "Données"
+    say "  Dossier : $DATA_DIR"
+    if [[ ! -d "$DATA_DIR" ]]; then
+        warn "Le dossier n'existe pas encore — il est créé au premier lancement."
+        say ""
+        say "Aucune base à examiner. Lancez Cadence une fois, puis relancez ./cadence doctor"
+        return
+    fi
+
+    if [[ -w "$DATA_DIR" ]]; then
+        ok "Dossier accessible en écriture"
+    else
+        bad "Dossier NON accessible en écriture — c'est ce qui empêche Cadence d'enregistrer"
+        note "Corriger : chmod u+rwx \"$DATA_DIR\""
+        problems=$((problems + 1))
+    fi
+
+    if [[ ! -f "$DB" ]]; then
+        warn "Aucun fichier de base — il est créé au premier lancement."
+        return
+    fi
+
+    say "  Fichier : $DB ($(du -h "$DB" 2>/dev/null | cut -f1))"
+    if [[ -w "$DB" ]]; then
+        ok "Base accessible en écriture"
+    else
+        bad "Base NON accessible en écriture"
+        problems=$((problems + 1))
+    fi
+
+    [[ -f "$DB-wal" ]] && note "Journal WAL présent ($(du -h "$DB-wal" | cut -f1)) — normal."
+
+    if ! command -v sqlite3 >/dev/null 2>&1; then
+        warn "sqlite3 introuvable : impossible d'examiner le contenu."
+        return
+    fi
+
+    step "Intégrité"
+    local integrity
+    integrity="$(sqlite3 "$DB" "PRAGMA integrity_check;" 2>&1 | head -1)"
+    if [[ "$integrity" == "ok" ]]; then
+        ok "Structure saine"
+    else
+        bad "Problème d'intégrité : $integrity"
+        note "Restaurez la dernière sauvegarde : ./cadence backups puis ./cadence restore <fichier>"
+        problems=$((problems + 1))
+    fi
+
+    local fk
+    fk="$(sqlite3 "$DB" "PRAGMA foreign_key_check;" 2>&1 | head -3)"
+    if [[ -z "$fk" ]]; then
+        ok "Références cohérentes"
+    else
+        bad "Références incohérentes :"
+        printf '    %s\n' "$fk"
+        problems=$((problems + 1))
+    fi
+
+    local version
+    version="$(sqlite3 "$DB" "PRAGMA user_version;" 2>/dev/null)"
+    say "  Version du schéma : ${version:-?}"
+
+    step "Contenu"
+    local patients consultations payments pending outstanding
+    patients="$(sqlite3 "$DB" "SELECT COUNT(*) FROM patient;" 2>/dev/null || echo '?')"
+    consultations="$(sqlite3 "$DB" "SELECT COUNT(*) FROM consultation;" 2>/dev/null || echo '?')"
+    payments="$(sqlite3 "$DB" "SELECT COUNT(*) FROM payment;" 2>/dev/null || echo '?')"
+    pending="$(sqlite3 "$DB" "SELECT COUNT(*) FROM payment WHERE settled_at IS NULL;" 2>/dev/null || echo '0')"
+    outstanding="$(sqlite3 "$DB" "SELECT COALESCE(SUM(amount_cents),0)/100.0 FROM payment WHERE settled_at IS NULL;" 2>/dev/null || echo '0')"
+    say "  Patients : $patients"
+    say "  Consultations : $consultations"
+    say "  Paiements : $payments"
+    [[ "$pending" != "0" ]] && say "  En attente de règlement : $pending (${outstanding} €)"
+
+    local demo
+    demo="$(sqlite3 "$DB" "SELECT COUNT(*) FROM patient WHERE is_demo = 1;" 2>/dev/null || echo 0)"
+    [[ "$demo" != "0" ]] && note "$demo patients de démonstration présents (retirables dans Réglages › Données)."
+
+    step "Sauvegardes"
+    local count
+    count="$(ls "$DATA_DIR/Backups"/*.sqlite3 2>/dev/null | wc -l | tr -d ' ')"
+    if [[ "$count" == "0" ]]; then
+        warn "Aucune sauvegarde — elles sont créées au premier lancement de chaque jour."
+    else
+        ok "$count sauvegarde(s), la plus récente : $(ls -t "$DATA_DIR/Backups"/*.sqlite3 2>/dev/null | head -1 | xargs basename)"
+    fi
+
+    say ""
+    if [[ $problems -eq 0 ]]; then
+        printf '%s✓ Tout va bien.%s\n' "$GREEN" "$RESET"
+    else
+        printf '%s✗ %d problème(s) à corriger — voir ci-dessus.%s\n' "$RED" "$problems" "$RESET"
+        exit 1
+    fi
+}
+
+cmd_help() {
+    # Le bloc de commentaires en tête du fichier est l'aide : une seule source.
+    awk 'NR > 1 { if ($0 !~ /^#/) exit; sub(/^# ?/, ""); print }' "$ROOT/cadence"
+}
+
+# ── Dispatch ──────────────────────────────────────────────────────────────────
+case "${1:-help}" in
+    update)          cmd_update ;;
+    build)           cmd_build ;;
+    install)         cmd_install ;;
+    run)             cmd_run ;;
+    doctor)          cmd_doctor ;;
+    backup)          cmd_backup ;;
+    backups)         cmd_backups ;;
+    restore)         shift; cmd_restore "${1:-}" ;;
+    data|open-data)  cmd_data ;;
+    sql)             cmd_sql ;;
+    test)            cmd_test ;;
+    uninstall)       cmd_uninstall ;;
+    help|-h|--help)  cmd_help ;;
+    *)               printf 'Commande inconnue : %s\n\n' "$1"; cmd_help; exit 2 ;;
+esac

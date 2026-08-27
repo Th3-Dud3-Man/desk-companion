@@ -151,13 +151,22 @@ struct DayHeader: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.md) {
-            HStack(alignment: .firstTextBaseline, spacing: Space.lg) {
+            HStack(alignment: .center, spacing: Space.xl) {
+                // The day as a ring: it fills as the morning goes and closes with a
+                // tick. A counter alone gives the day no shape and no end.
+                DayProgressRing(
+                    done: model.dayStatistics.attended + model.dayStatistics.absent,
+                    total: model.dayStatistics.planned,
+                    diameter: 46
+                )
+                .opacity(model.dayStatistics.planned == 0 ? 0.35 : 1)
+
                 VStack(alignment: .leading, spacing: 1) {
                     Text(CadenceFormat.dayLong(model.selectedDay).capitalizedFirst)
                         .font(Typo.display)
                         .foregroundStyle(Ink.textPrimary)
                     Text(headline)
-                        .font(Typo.body)
+                        .font(isDayComplete ? Typo.bodyStrong : Typo.body)
                         .foregroundStyle(headlineTone)
                         .contentTransition(.opacity)
                 }
@@ -195,6 +204,10 @@ struct DayHeader: View {
                 }
             }
 
+            if let running = model.runningItem {
+                RunningSessionBanner(item: running)
+            }
+
             if !model.unassignedToday.isEmpty {
                 UnassignedBanner(items: model.unassignedToday)
             }
@@ -208,6 +221,16 @@ struct DayHeader: View {
         .padding(.bottom, Space.lg)
     }
 
+    /// Everything resolved, nothing left to record. Worth saying out loud: it is
+    /// the moment the application is trying to get the user to.
+    private var isDayComplete: Bool {
+        model.isShowingToday
+            && model.dayStatistics.planned > 0
+            && model.dayStatistics.pending == 0
+            && model.itemsAwaitingPayment.isEmpty
+            && model.unassignedToday.isEmpty
+    }
+
     /// One line that answers "where am I in my day?".
     private var headline: String {
         guard model.isShowingToday else {
@@ -218,17 +241,31 @@ struct DayHeader: View {
             let elapsed = running.consultation.actualStart.map { CadenceFormat.duration(model.now.timeIntervalSince($0)) }
             return "En consultation · \(running.title)" + (elapsed.map { " · depuis \($0)" } ?? "")
         }
+        if isDayComplete {
+            let takings = model.dayStatistics.revenue(currencyCode: model.settings.currencyCode).formatted()
+            let sessions = model.dayStatistics.attended
+            return "Journée bouclée · \(sessions) consultation\(sessions > 1 ? "s" : "") · \(takings) encaissés"
+        }
         if let next = model.nextItem {
             return "Prochain · \(CadenceFormat.time(next.consultation.scheduledStart)) \(next.title) · \(CadenceFormat.relative(next.consultation.scheduledStart, from: model.now))"
         }
         let waiting = model.itemsAwaitingPayment.count
-        if waiting > 0 { return "Journée terminée · \(waiting) paiement(s) à enregistrer" }
+        if waiting > 0 {
+            return "Il reste \(waiting) paiement\(waiting > 1 ? "s" : "") à enregistrer"
+        }
+        if !model.unassignedToday.isEmpty {
+            return "Il reste \(model.unassignedToday.count) rendez-vous à rattacher"
+        }
         return model.dayItems.isEmpty ? "Aucun rendez-vous" : "Journée terminée"
     }
 
     private var headlineTone: Color {
         if model.runningItem != nil { return Ink.accent }
-        if model.isShowingToday && !model.itemsAwaitingPayment.isEmpty && model.nextItem == nil { return Ink.warning }
+        if isDayComplete { return Ink.accent }
+        if model.isShowingToday && model.nextItem == nil
+            && (!model.itemsAwaitingPayment.isEmpty || !model.unassignedToday.isEmpty) {
+            return Ink.warning
+        }
         return Ink.textSecondary
     }
 }
@@ -289,5 +326,54 @@ extension String {
     var capitalizedFirst: String {
         guard let first else { return self }
         return String(first).uppercased() + dropFirst()
+    }
+}
+
+/// A session running in the background of the day view. One click takes the user to
+/// the screen built for it.
+@MainActor
+struct RunningSessionBanner: View {
+    @EnvironmentObject private var model: AppModel
+    let item: DayItem
+
+    var body: some View {
+        Button {
+            model.destination = .session
+        } label: {
+            HStack(spacing: Space.lg) {
+                Circle()
+                    .fill(Ink.accent)
+                    .frame(width: 8, height: 8)
+                    .accessibilityHidden(true)
+
+                Text("Séance en cours · \(item.title)")
+                    .font(Typo.bodyStrong)
+                    .foregroundStyle(Ink.textPrimary)
+
+                if let start = item.consultation.actualStart {
+                    Text(CadenceFormat.duration(model.now.timeIntervalSince(start)))
+                        .font(Typo.captionNumeric)
+                        .foregroundStyle(Ink.accent)
+                }
+
+                Spacer(minLength: Space.md)
+
+                Text("Ouvrir l'écran de séance")
+                    .font(Typo.caption)
+                    .foregroundStyle(Ink.accent)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundStyle(Ink.accent)
+            }
+            .padding(.horizontal, Space.lg)
+            .padding(.vertical, Space.md)
+            .background(
+                RoundedRectangle(cornerRadius: Radius.control, style: .continuous)
+                    .fill(Ink.accentSoft)
+            )
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .help("Ouvrir la séance en cours (⌘2)")
     }
 }

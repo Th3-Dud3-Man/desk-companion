@@ -6,6 +6,23 @@ import XCTest
 /// than merely checked for being non-empty.
 final class ExportReconciliationTests: CadenceTestCase {
 
+    /// Writes a populated database where `CADENCE_SEED_DB` points, so continuous
+    /// integration can run `./cadence doctor` against something real rather than
+    /// against an empty folder.
+    func testSeedDatabaseForTooling() throws {
+        guard let path = ProcessInfo.processInfo.environment["CADENCE_SEED_DB"] else { return }
+        let url = URL(fileURLWithPath: path)
+        try FileManager.default.createDirectory(
+            at: url.deletingLastPathComponent(), withIntermediateDirectories: true
+        )
+        try? FileManager.default.removeItem(at: url)
+
+        let store = try CadenceStore.open(at: url)
+        try DemoData.install(into: store, now: date(2026, 8, 25, 18, 0))
+        XCTAssertGreaterThan(try store.allPatients().count, 0)
+        store.close()
+    }
+
     /// Builds the sample practice and returns a month with real activity in it.
     private func populatedStore() throws -> (CadenceStore, DateRange, Date) {
         let now = date(2026, 8, 25, 18, 0)

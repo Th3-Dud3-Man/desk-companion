@@ -56,6 +56,27 @@ jobs:
           codesign --verify --verbose "$APP"
           echo "Bundle size: $(du -sh "$APP" | cut -f1)"
 
+      # The command-line tool is a deliverable too, and `doctor` is what the user
+      # reaches for when something is wrong. It gets exercised against a real
+      # database rather than trusted.
+      - name: Check the cadence command
+        run: |
+          set -euo pipefail
+          bash -n cadence
+          ./cadence help > /dev/null
+          export CADENCE_DATA_DIR="$RUNNER_TEMP/cadence-data"
+          CADENCE_SEED_DB="$CADENCE_DATA_DIR/cadence.sqlite3" \
+            swift test --filter testSeedDatabaseForTooling
+          test -f "$CADENCE_DATA_DIR/cadence.sqlite3"
+          ./cadence doctor | tee /tmp/doctor.txt
+          grep -q "Structure saine" /tmp/doctor.txt
+          grep -q "Références cohérentes" /tmp/doctor.txt
+          grep -q "Patients : 8" /tmp/doctor.txt
+          ./cadence backup
+          ./cadence backups
+          ./cadence restore "$(ls -t "$CADENCE_DATA_DIR/Backups"/*.sqlite3 | head -1)"
+          ./cadence doctor > /dev/null
+
       - name: Package the artifact
         run: ditto -c -k --keepParent build/Cadence.app build/Cadence.zip
 

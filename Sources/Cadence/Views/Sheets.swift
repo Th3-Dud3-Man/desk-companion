@@ -536,7 +536,8 @@ struct ShortcutsSheet: View {
 
     private let groups: [ShortcutGroup] = [
         ShortcutGroup(id: "Navigation", shortcuts: [
-            Shortcut(keys: "⌘1 … ⌘5", action: "Aller à une section"),
+            Shortcut(keys: "⌘1 … ⌘6", action: "Aller à une section"),
+            Shortcut(keys: "⌘2", action: "Séance en cours"),
             Shortcut(keys: "⌘T", action: "Revenir à aujourd'hui"),
             Shortcut(keys: "⌥⌘← / ⌥⌘→", action: "Jour précédent / suivant"),
             Shortcut(keys: "⌘K", action: "Recherche et actions"),
@@ -547,11 +548,13 @@ struct ShortcutsSheet: View {
             Shortcut(keys: "A", action: "Marquer absent"),
             Shortcut(keys: "⏎", action: "Valider le paiement proposé"),
             Shortcut(keys: "⎋", action: "Désélectionner"),
+            Shortcut(keys: "clic", action: "Recliquer sur Présent ou Absent annule le statut"),
         ]),
         ShortcutGroup(id: "Général", shortcuts: [
             Shortcut(keys: "⌘N", action: "Nouveau rendez-vous"),
             Shortcut(keys: "⇧⌘N", action: "Nouveau patient"),
             Shortcut(keys: "⌘R", action: "Synchroniser l'agenda"),
+            Shortcut(keys: "⌘⏎", action: "Terminer la séance en cours"),
             Shortcut(keys: "⌘Z / ⇧⌘Z", action: "Annuler / rétablir"),
             Shortcut(keys: "⌘,", action: "Réglages"),
         ]),

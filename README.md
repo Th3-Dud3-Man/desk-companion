@@ -24,9 +24,19 @@ touches — `P` puis `⏎`.
 
 - **Aujourd'hui.** Un rail chronologique de la journée, une ligne « maintenant », le
   prochain rendez-vous annoncé en clair. Présent, absent, démarrer, terminer.
+- **Séance en cours.** Un écran dédié : un chronomètre à la seconde, qui est dans
+  le bureau, une note qui s'enregistre seule, et un bouton pour terminer — qui
+  fait apparaître le paiement sur place.
 - **Paiement habituel.** Une statistique locale, expliquée à l'écran, qui identifie
   la combinaison montant + moyen de paiement de chaque patient et sait rester
   silencieuse quand elle ne sait pas encore.
+- **Règlements en attente.** Un virement s'annonce pendant la séance et arrive
+  des jours plus tard : il est enregistré tout de suite pour ne pas être oublié,
+  reste hors des recettes, et se coche d'un clic quand il tombe.
+- **Registre des transactions.** Le pointage de fin de mois : toutes les
+  transactions de la période, filtrées par moyen de paiement et par état, avec le
+  total de ce qui est affiché. On coche, on corrige, on supprime la ligne saisie
+  deux fois.
 - **Agenda.** Les rendez-vous d'Apple Calendar *et* de Google Calendar arrivent tout
   seuls, sans OAuth et sans qu'aucune donnée ne quitte le Mac.
 - **Patients.** Une fiche par personne : historique, présences, absences, paiements,
@@ -55,11 +65,44 @@ cd desk-companion
 hoc — ce qui permet à macOS de retenir l'autorisation d'accès au calendrier d'une
 reconstruction à l'autre — puis l'installe dans `/Applications` et la lance.
 
+## Piloter Cadence en une commande
+
+Tout se fait avec le script `./cadence` :
+
 ```
-./build.sh            construit dans ./build/Cadence.app
-./build.sh --debug    build de développement
-./build.sh --install  copie aussi dans /Applications
-./build.sh --run      lance l'application
+./cadence update      met à jour depuis git, reconstruit, réinstalle et relance
+./cadence install     construit et installe dans /Applications
+./cadence run         lance l'application
+./cadence doctor      diagnostique la base de données et l'installation
+./cadence backup      crée une sauvegarde tout de suite
+./cadence backups     liste les sauvegardes
+./cadence restore F   restaure une sauvegarde
+./cadence data        ouvre le dossier des données dans le Finder
+./cadence sql         ouvre la base dans sqlite3
+./cadence test        exécute la suite de tests
+./cadence uninstall   retire l'application (les données sont conservées)
+```
+
+`update` ferme Cadence si elle tourne, récupère la dernière version, reconstruit,
+réinstalle et relance — en une commande.
+
+`doctor` répond à la question « est-ce que mes données vont bien ? » sans lancer
+l'application : droits d'accès, intégrité du fichier, cohérence des références,
+version du schéma, ce qu'il contient, et l'état des sauvegardes.
+
+```
+$ ./cadence doctor
+▸ Données
+  ✓ Dossier accessible en écriture
+  ✓ Base accessible en écriture
+▸ Intégrité
+  ✓ Structure saine
+  ✓ Références cohérentes
+▸ Contenu
+  Patients : 34
+  Consultations : 512
+  En attente de règlement : 2 (130 €)
+✓ Tout va bien.
 ```
 
 Chaque commit est également compilé par l'intégration continue sur un vrai runner
@@ -89,10 +132,11 @@ c'est macOS qui gère le compte, Cadence lit ce que le système expose.
 
 | | |
 |---|---|
-| `⌘1` … `⌘5` | Aujourd'hui · Agenda · Patients · Finances · Réglages |
+| `⌘1` … `⌘6` | Aujourd'hui · Séance · Agenda · Patients · Finances · Réglages |
 | `⌘K` | Recherche et actions |
 | `↑` `↓` | Se déplacer dans la journée |
-| `P` / `A` | Marquer présent / absent |
+| `P` / `A` | Marquer présent / absent (recliquer annule) |
+| `⌘⏎` | Terminer la séance en cours |
 | `⏎` | Valider le paiement proposé |
 | `⌘T` | Revenir à aujourd'hui |
 | `⌥⌘←` `⌥⌘→` | Jour précédent / suivant |
